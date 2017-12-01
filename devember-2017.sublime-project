@@ -1,0 +1,13 @@
+{
+    "folders":
+    [
+        {
+            "path": "."
+        }
+    ],
+    "settings":
+    {
+        "rulers": [80],
+        "wrap_width": 80
+    }
+}
