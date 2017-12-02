@@ -1,0 +1,33 @@
+%YAML 1.2
+---
+name: Help
+scope: text.hyperhelp
+hidden: true
+variables:
+  key_binding: '<[^>\s]*>>?'
+  code_markup: '`[^`]*`'
+  hyperlink: '(\|)([^| ]+)(\|)'
+  anchor: '(\*)([^*\| ]+)(\*)'
+  hidden_anchor: '(\*\|)([^* ]+)(\|\*)'
+
+contexts:
+  main:
+    - match: '{{key_binding}}'
+      scope: variable.language meta.keybind
+    - match: '{{code_markup}}'
+      scope: markup.raw meta.code
+    - match: '{{hyperlink}}'
+      captures:
+        1: storage
+        2: storage meta.link
+        3: storage
+    - match: '{{anchor}}'
+      captures:
+        1: string.unquoted
+        2: string.unquoted meta.anchor
+        3: string.unquoted
+    - match: '{{hidden_anchor}}'
+      captures:
+        1: string.unquoted
+        2: string.unquoted meta.anchor.hidden
+        3: string.unquoted

@@ -1,0 +1,20 @@
+The main body of the help file is just plain text, like this stuff here.
+
+You can create a key binding by including it in < and > characters. No white
+space is allowed, so <Shift+PageUp> is OK, but <Shift+Page Up> is not. It is
+also possible to use the > character in the binding, like <Alt+>>.
+
+Simple raw code blocks like markdown are implemented, so you can create
+`inline code blocks` if you like. Note that this is currently `not allowed to
+wrap across lines`.
+
+In order to create a link, you wrap text in a |pipe|. Spaces are |not allowed|
+in the pipe section, so you have to use |snake_case| or |this.style| to include
+multiple words.
+
+Links and other navigation jumps to an *anchor*, which works the same way as a
+|link| does (apart from semantic differences).
+
+There is a second style of anchor called the *|hidden|* anchor, which will still
+function as an anchor but not be visually displayed as such. Here it is still
+visible because the support code has not yet been written.
