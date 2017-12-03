@@ -8,6 +8,17 @@ from .view import find_help_view, update_help_view
 ###----------------------------------------------------------------------------
 
 
+def plugin_loaded():
+    """
+    On plugin load, find all help views and make sure that their link text is
+    underlined.
+    """
+    for window in sublime.windows():
+        help_view = find_help_view(window)
+        if help_view is not None:
+            _post_process_links(help_view)
+
+
 def display_help(help_res):
     """
     Display the provided help resource in the help view, creating it if needed.
