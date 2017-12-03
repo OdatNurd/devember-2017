@@ -4,6 +4,7 @@ import sublime_plugin
 from .core import log, hh_syntax
 from .view import find_help_view, update_help_view
 
+
 ###----------------------------------------------------------------------------
 
 
@@ -32,7 +33,6 @@ def display_help(help_res):
         current_file = view.settings().get("_hh_file")
 
         if help_file == current_file and help_pkg == current_pkg:
-            print("Shortcut; help is already visible")
             return view
 
     try:
@@ -40,9 +40,53 @@ def display_help(help_res):
     except:
         return log("Unable to load help file '%s'" % help_file, status=True)
 
-    update_help_view(help_txt, help_pkg, help_file,
-                     hh_syntax("HyperHelp.sublime-syntax"))
+    view = update_help_view(help_txt, help_pkg, help_file,
+                            hh_syntax("HyperHelp.sublime-syntax"))
+    _post_process_links(view)
+    _post_process_anchors(view)
 
 
+def _post_process_anchors(help_view):
+    """
+    Find all of the hidden anchors in the help view and remove the text that
+    marks them as anchors, so they just appear as plain text. The position of
+    these anchors is stored in a setting in the view for later retreival.
+    """
+    help_view.set_read_only(False)
+
+    regions = help_view.find_by_selector("meta.anchor.hidden")
+    anchors = []
+    adj = 4 * (len(regions) - 1)
+    for pos in reversed(regions):
+        # Adjust the positions of all anchors relative to their position in
+        # the document, since they all move backwards as we process them. Those
+        # closer to the bottom of the document move more.
+        anchor = help_view.substr(pos)
+        adjusted_pos = sublime.Region(pos.a - adj - 2, pos.b - adj - 2)
+        anchors.append([anchor, adjusted_pos])
+        adj -= 4
+
+        # Remove the marker
+        help_view.sel().clear()
+        help_view.sel().add(sublime.Region(pos.a - 2, pos.b + 2))
+        help_view.run_command("insert", {"characters": anchor})
+
+    # Temporarily mark all hidden regions for verification
+    help_view.add_regions("_hh_i_nav", [x[1] for x in anchors], "string.unquoted")
+
+    # Convert regions to arrays so we can store them in a setting.
+    setting = [[a[0], [a[1].a, a[1].b]] for a in reversed(anchors)]
+    help_view.settings().set("_hh_i_nav", setting)
+
+    help_view.set_read_only(True)
+
+
+def _post_process_links(help_view):
+    """
+    Find all of the links in the provided help view and underline them.
+    """
+    regions = help_view.find_by_selector("meta.link")
+    help_view.add_regions("_hh_links", regions, "storage",
+        flags=sublime.DRAW_SOLID_UNDERLINE|sublime.DRAW_NO_FILL|sublime.DRAW_NO_OUTLINE)
 
 ###----------------------------------------------------------------------------
