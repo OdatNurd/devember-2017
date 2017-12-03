@@ -18,6 +18,12 @@ def plugin_loaded():
         if help_view is not None:
             _post_process_links(help_view)
 
+            # Temporarily mark all hidden regions for verification
+            anchors = help_view.settings().get("_hh_i_nav")
+            help_view.add_regions("_hh_i_nav",
+                [sublime.Region(a[1][0], a[1][1]) for a in anchors],
+                "string.unquoted")
+
 
 def display_help(help_res):
     """
