@@ -1,0 +1,12 @@
+{
+    // Help files are standardized on 80 characters wide, but they should not
+    // wrap.
+    "wrap_width": 80,
+    "word_wrap": false,
+    "rulers": [],
+
+    // Remove visual clutter from the help view
+    "fade_fold_buttons": true,
+    "match_selection": false,
+    "draw_indent_guides": false,
+}
