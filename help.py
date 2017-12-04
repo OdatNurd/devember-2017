@@ -18,12 +18,6 @@ def plugin_loaded():
         if help_view is not None:
             _post_process_links(help_view)
 
-            # Temporarily mark all hidden regions for verification
-            anchors = help_view.settings().get("_hh_i_nav")
-            help_view.add_regions("_hh_i_nav",
-                [sublime.Region(a[1][0], a[1][1]) for a in anchors],
-                "string.unquoted")
-
 
 def display_help(help_res):
     """
@@ -88,12 +82,16 @@ def _post_process_anchors(help_view):
         help_view.sel().add(sublime.Region(pos.a - 2, pos.b + 2))
         help_view.run_command("insert", {"characters": anchor})
 
-    # Temporarily mark all hidden regions for verification
-    help_view.add_regions("_hh_i_nav", [x[1] for x in anchors], "string.unquoted")
+    # The full nav list is the list of hidden anchors plus the list of regular
+    # anchors, sorted by position in the buffer. We need to convert regions to
+    # arrays of points because regions are not iterable and can't be stored in
+    # settings.
+    regions = help_view.find_by_selector("meta.anchor")
+    nav_list = ([[a[0], [a[1].a, a[1].b]] for a in reversed(anchors)] +
+                [[help_view.substr(r), [r.a, r.b]] for r in regions])
 
-    # Convert regions to arrays so we can store them in a setting.
-    setting = [[a[0], [a[1].a, a[1].b]] for a in reversed(anchors)]
-    help_view.settings().set("_hh_i_nav", setting)
+    help_view.settings().set("_hh_nav", sorted(nav_list,
+                                               key=lambda item: item[1][0]))
 
     help_view.set_read_only(True)
 
@@ -105,5 +103,6 @@ def _post_process_links(help_view):
     regions = help_view.find_by_selector("meta.link")
     help_view.add_regions("_hh_links", regions, "storage",
         flags=sublime.DRAW_SOLID_UNDERLINE|sublime.DRAW_NO_FILL|sublime.DRAW_NO_OUTLINE)
+
 
 ###----------------------------------------------------------------------------
