@@ -65,4 +65,28 @@ def update_help_view(help_content, help_pkg, help_file,
     return help_view
 
 
+def focus_on(help_view, position):
+    """
+    Focus this help view on the given position, which can be a single point,
+    a region, or an array of two numbers (treated as a region).
+    """
+    if isinstance(position, int):
+        position = sublime.Region(position)
+    elif isinstance(position, list):
+        position = sublime.Region(position[1], position[0])
+    else:
+        position = sublime.Region(position.end(), position.begin())
+
+    help_view.show_at_center(position)
+    help_view.sel().clear()
+    help_view.sel().add(position)
+
+    # Hack to make the view update properly. See:
+    #    https://github.com/SublimeTextIssues/Core/issues/485
+    #
+    # In particular this is needed because changing the selection without a
+    # view object is not actually supposed to work.
+    help_view.add_regions("_hh_rk", [], "", "", sublime.HIDDEN)
+    help_view.erase_regions("_hh_rk")
+
 ###----------------------------------------------------------------------------
