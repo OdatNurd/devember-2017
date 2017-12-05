@@ -24,5 +24,21 @@ class HyperHelpEventListener(sublime_plugin.EventListener):
 
         return None
 
+    def on_text_command(self, view, command, args):
+        """
+        Listen for the drag_select command with arguments that tell us that the
+        user double clicked, see if they're double clicking on a link so we
+        know if we should try to follow it or not.
+        """
+        if command == "drag_select" and args.get("by", None) == "words":
+            event = args["event"]
+            point = view.window_to_text((event["x"], event["y"]))
+
+            if view.match_selector(point, "text.hyperhelp meta.link"):
+                view.run_command("hyper_help_navigate", {"nav": "follow_link"})
+                return ("noop")
+
+        return None
+
 
 ###----------------------------------------------------------------------------
