@@ -1,22 +1,126 @@
-The *|main|* body of the help file is just plain text, like this stuff here.
+*|Intro|*
+=====
 
-You can create a *|key|* binding by including it in < and > characters. No
-white space is allowed, so <Shift+PageUp> is OK, but <Shift+Page Up> is not.
-It is also possible to use the > character in the binding, like <Alt+>>.
+This package provides a very simple help system for use inside of Sublime
+Text, with a goal of being focused on content over presentation (that is,
+with little |markup|) and an ease of |integration| with packages.
 
-Simple raw *|code|* blocks like markdown are implemented, so you can create
-`inline code blocks` if you like. Note that this is currently `not allowed to
-wrap across lines`.
+The main body of most help files is just plain text, which is simply readable
+and allows for the standard operations users are used to in Sublime text, such
+as being able to search inside the help, copy help information out, and so on.
 
-In order to create a *|link|*, you wrap text in a |pipe|. Spaces are
-|not allowed| in the pipe section, so you have to use |snake_case| or
-|this.style| to include multiple words.
+For this reason HTML markup (via phantoms) is not supported currently,
+although support for simple inline images is planned.
 
-Links and other navigation jumps to an *anchor*, which works the same way as a
-|link| does (apart from semantic differences).
 
-There is a second style of anchor called the *|hidden|* anchor, which will
-still function as an anchor but not be visually displayed as such.
+*|Style	Conventions|*
+=================
 
-Currently all hidden anchors are modified to appear as plain text, but marked
-with a region for verification that everything is working as expected.
+HyperHelp imposes some limitations on the layout of your help in order to
+ensure that all help is presented in as consistent a manner as possible.
+
+Word wrap is disabled, so all help should optimally be presentable in no more
+than 80 characters. Although you are free to make your help as wide or as
+narrow as you like, a single style is more cohesive for the user.
+
+Indenting via tabs is discouraged (due to holy wars on the One True Tab Width)
+by forcing tabs to be a single character and disabling tab-to-space
+translations in help files.
+
+This ensures that your help lays out the way you intended it to regardless of
+the tab style employed by the end user of your help. Additionally although
+various constructs do not allow spaces inside of them (for example |anchors|),
+tabs are allowed.
+
+
+*|Markup|*
+======
+
+Along with plain text, some simple markup is allowed in help files. This is
+very light, since the idea is to get your help information across and not
+show off your design and layout skills.
+
+By design all markup is simple and contextual due to how syntax highlighting
+in Sublime works. The goal is to provide only visual markup with as little
+extraneous text as possible.
+
+The allowable help markup includes the following items:
+
+
+    *|Key	Bindings|*
+    ------------
+
+    Simple key bindings are supported, which are highlighted in the view to
+    call attention to them. Key bindings are denoted by placing the binding
+    inside of < and > characters, such as:
+
+        <Shift+Page	Up>
+        <Command+P>
+        <Alt+Shift+>>
+
+
+    Key bindings do not support interior space characters, but `Tab`
+    characters are allowed.
+
+
+    *|Code	Blocks|*
+    -----------
+
+    Simple code blocks such as those in markdown are implemented as a way
+    to help you draw some simple contextual highlighting around key terms and
+    elements.
+
+    `Code Blocks` may contain whitespace, but must always start and end on the
+    same line in order to be considered valid.
+
+
+    *Anchors*
+    ---------
+
+    Anchors represent points of interest in help documents. HyperHelp natively
+    allows you to jump through all of the anchors in the current help document
+    by use of the <Tab> and <Shift+Tab> key bindings.
+
+    Additionally, pressing <Enter> on a |link| will jump the cursor to the
+    matching anchor point, even if it is in a different help document. This
+    action is also available by a <Double	Left	Click> on a link.
+
+    Anchors are defined by wrapping text in asterisks, such as the heading of
+    this section of the documentation. Such anchors remain visible in the
+    document to provide visual clues that it is a point of interest.
+
+    Spaces are not allowed inside of anchor text, although `Tab` characters
+    are. Alternatively you may also use other conventions as you see fit, such
+    as *snake_case* or *periods.as_spaces* (or some other method that does not
+    include whitespace).
+
+    To allow for points of interest in documents that are not visually
+    distinct, you can wrap the text of the anchor in pipe characters, such as
+    `*|this sample|*`. Such anchors are treated the same as other anchors, but
+    are not visually distinct.
+
+    The other section headers in this part of the help are hidden anchors.
+
+
+    *|Link|*s
+    -----
+
+    Links are defined by wrapping the link text in pipe characters. The text
+    in a link must match an anchor somewhere in the current help document or
+    in some other help document.
+
+    Links follow the same rules as |anchors| do in that white space is not
+    allowed in link text.
+
+    Some sample links are the above link to the Anchor section of the help,
+    as well as this link to the |markup| section or the top level |Intro|
+    section.
+
+
+*|Integration|*
+===========
+
+HyperHelp is designed to be easy to integrate into your package so that you
+can focus on writing help and not worry about the interior details.
+
+More help on this will be developed as the package matures.
