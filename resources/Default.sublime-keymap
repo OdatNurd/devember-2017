@@ -25,5 +25,21 @@
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp" },
             { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
         ],
+    },
+    {
+        "keys": ["enter"], "command": "hyper_help_navigate", "args": {
+            "nav": "follow_link"
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp" }
+        ]
+    },
+    {
+        "keys": ["keypad_enter"], "command": "hyper_help_navigate", "args": {
+            "nav": "follow_link"
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp" }
+        ]
     }
 ]
