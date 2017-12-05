@@ -1,6 +1,7 @@
 import sublime
 import sublime_plugin
 
+from .core import log
 from .view import focus_on
 from .help import display_help
 
@@ -32,11 +33,13 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
     """
     Perform navigation from within a help file
     """
-    available_nav = ["find_anchor"]
+    available_nav = ["find_anchor", "follow_link"]
 
     def run(self, edit, nav, prev=False):
         if nav == "find_anchor":
             return self.anchor_nav(prev)
+
+        return self.follow_link()
 
     def is_enabled(self, nav, prev=False):
         return nav in self.available_nav
@@ -56,5 +59,16 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
 
         focus_on(self.view, fallback[1])
 
+    def follow_link(self):
+        point = self.view.sel()[0].begin()
+        if self.view.match_selector(point, "text.hyperhelp meta.link"):
+            topic = self.view.substr(self.view.extract_scope(point))
+
+            anchors = self.view.settings().get("_hh_nav", [])
+            for anchor in anchors:
+                if topic == anchor[0]:
+                    return focus_on(self.view, anchor[1])
+
+            return log("Unable to find help topic '%s'" , topic, status=True)
 
 ###----------------------------------------------------------------------------
