@@ -31,7 +31,8 @@
             "nav": "follow_link"
         },
         "context": [
-            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp" }
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp meta.link" },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
         ]
     },
     {
@@ -39,7 +40,8 @@
             "nav": "follow_link"
         },
         "context": [
-            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp" }
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp meta.link" },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
         ]
     }
 ]
