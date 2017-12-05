@@ -62,11 +62,11 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
     def follow_link(self):
         point = self.view.sel()[0].begin()
         if self.view.match_selector(point, "text.hyperhelp meta.link"):
-            topic = self.view.substr(self.view.extract_scope(point))
+            topic = self.view.substr(self.view.extract_scope(point)).casefold()
 
             anchors = self.view.settings().get("_hh_nav", [])
             for anchor in anchors:
-                if topic == anchor[0]:
+                if topic == anchor[0].casefold():
                     return focus_on(self.view, anchor[1])
 
             return log("Unable to find help topic '%s'" , topic, status=True)
