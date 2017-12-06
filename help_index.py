@@ -66,7 +66,11 @@ def _import_topics(package, topics, help_topic_dict):
                 log("Skipping duplicate topic %s in %s:%s",
                     name, package, help_source)
             else:
-                topics[name] = {"topic": name, "caption": caption }
+                topics[name] = {
+                    "topic": name,
+                    "caption": caption,
+                    "file": help_source
+                }
 
     return topics
 
