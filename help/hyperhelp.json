@@ -1,0 +1,90 @@
+{
+    // An informational name for the help that this this index is providing.
+    "description": "HyperHelp System Documentation",
+
+    // The path inside of the package folder that all of the help files are
+    // stored in. This is relative to the root folder of the package that
+    // contains this resource file.
+    //
+    // This is optional; if it's not provided, the package location of this
+    // resource file is used as the document root.
+    "doc_root": "help/",
+
+    // A dictionary object that represents all of the help files that are
+    // indexed inside of this package.
+    "help_files": {
+        // The key in the dictionary is the name of the help file relative to
+        // the document root and the value is a list that contains the help
+        // information stored in this file.
+        "sample.txt": [
+            // The first item in the help list is the descriptive name of this
+            // help file.
+            "HyperHelp Sample Help File",
+
+            // Subsequent items are dictionaries that indicate a topic that
+            // appears in this help file and a descriptive caption for that
+            // item.
+            {
+                "topic": "intro",
+                "caption": "HyperHelp Introduction"
+            },
+            {
+                "topic": "style conventions",
+                "caption": "Help File Style Conventions"
+            },
+            {
+                "topic": "markup",
+                "caption": "HyperHelp Markup"
+            },
+            {
+                "topic": "key bindings",
+                "caption": "HyperHelp Markup - Key Bindings"
+            },
+            {
+                "topic": "code blocks",
+                "caption": "HyperHelp Markup - Code Blocks"
+            },
+            {
+                "topic": "anchors",
+                "caption": "HyperHelp Markup - Anchors"
+            },
+            {
+                "topic": "link",
+                "caption": "HyperHelp Markup - Links"
+            },
+            {
+                "topic": "integration",
+                "caption": "Integrating Hyperhelp in your Package"
+            }
+        ]
+    },
+
+    // A dictionary object that represents the table of contents in this help
+    // file. This is a list that contains a list of the topics that should
+    // appear, in order.
+    //
+    // Topics can be specified as full dictionaries as in the help files to
+    // alter the caption for use in the table of contents. The object can also
+    // exclude the caption in order to re-use the existing caption.
+    //
+    // Objects can contain a children key to create a hierarchical help
+    // contents.
+    "help_contents": [
+        "intro",
+        "style conventions",
+        {
+            "topic": "markup",
+            "children": [
+                {
+                    "topic": "markup",
+                    "caption": "HyperHelp Markup - Overview"
+                },
+                "key bindings",
+                "code blocks",
+                "anchors",
+                "link"
+            ]
+        },
+        "integration",
+    ]
+}
