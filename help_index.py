@@ -203,7 +203,7 @@ def _load_help_index(package, index_res):
     """
     Given a package name and the resource filename of the hyperhelp json file,
     load the help index and return it. The return value is None on failure or
-    HelpData on success
+    HelpData on success.
     """
     try:
         log("Loading help index for package '%s'", package)
@@ -250,6 +250,23 @@ def _load_help_index(package, index_res):
     return HelpData(package, index_res, description, doc_root, topic_list,
         _get_file_metadata(help_files),
         _get_toc_metadata(help_toc, topic_list, package))
+
+
+def _scan_help_packages(help_list=None):
+    """
+    Scan for packages with a help index and load them. If a help list is
+    provided, only the help for packages not already in the list will be
+    loaded.
+    """
+    help_list = dict() if help_list is None else help_list
+    for index_file in sublime.find_resources("hyperhelp.json"):
+        pkg_name = path.split(index_file)[0].split("/")[1]
+        if pkg_name not in help_list:
+            result = _load_help_index(pkg_name, index_file)
+            if result is not None:
+                help_list[result.package] = result
+
+    return help_list
 
 
 ###----------------------------------------------------------------------------
