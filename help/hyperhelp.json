@@ -1,29 +1,31 @@
 {
-    // An informational name for the help that this this index is providing.
+    // Optional; A descriptive string that describes what this help is for.
+    //
+    // If not given, a default will be used instead.
     "description": "HyperHelp System Documentation",
 
-    // The path inside of the package folder that all of the help files are
-    // stored in. This is relative to the root folder of the package that
-    // contains this resource file.
+    // Optional; The path inside the package containing this index where the
+    // help files are stored.
     //
-    // This is optional; if it's not provided, the package location of this
-    // resource file is used as the document root.
+    // If not given, the package location of the help index is used.
     "doc_root": "help/",
 
-    // A dictionary object that represents all of the help files that are
-    // indexed inside of this package.
+    // Required; A dictionary that represents all of the help files that can be
+    // referenced from within this package.
     "help_files": {
-        // The key in the dictionary is the name of the help file relative to
-        // the document root and the value is a list that contains the help
-        // information stored in this file.
+        // Required: The name of the help file (relative to the document root)
+        // that this entry is for.
         "sample.txt": [
-            // The first item in the help list is the descriptive name of this
-            // help file.
+            // Required; The title of the help file, for use in various display
+            // locations.
             "HyperHelp Sample Help File",
 
-            // Subsequent items are dictionaries that indicate a topic that
-            // appears in this help file and a descriptive caption for that
-            // item.
+            // Required: One or more dictionaries that indicate a topic that
+            // appears in this help file along with a descriptive caption for
+            // the item.
+            //
+            // The topic is required, but the caption is optional; a default
+            // will be created if it is missing.
             {
                 "topic": "intro",
                 "caption": "HyperHelp Introduction"
@@ -59,16 +61,22 @@
         ]
     },
 
-    // A dictionary object that represents the table of contents in this help
-    // file. This is a list that contains a list of the topics that should
-    // appear, in order.
+    // Optional; A dictionary that represents the table of contents for this
+    // help package.
     //
-    // Topics can be specified as full dictionaries as in the help files to
-    // alter the caption for use in the table of contents. The object can also
-    // exclude the caption in order to re-use the existing caption.
+    // This is a list of the topics that can appear, in order. This is either a
+    // string to represent a topic that exists in the help file, or an object
+    // that represents a help topic.
     //
-    // Objects can contain a children key to create a hierarchical help
-    // contents.
+    // In this structure, the caption key is optional and will inherit the main
+    // topic caption from the help_files entry, so you only need to specify it
+    // if you want to use a different caption in the table of contents.
+    //
+    // The object can also contain a "children" key that specifies a similar
+    // list of topics in order to create a hierarchical table of contents.
+    //
+    // If this key is not present, a default is created which contains all of
+    // the available help topics.
     "help_contents": [
         "intro",
         "style conventions",

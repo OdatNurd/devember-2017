@@ -5,6 +5,9 @@ import sublime_plugin
 import posixpath as path
 from collections import OrderedDict, namedtuple
 
+from .validictory import validate
+from .validictory import SchemaError, ValidationError
+
 from .core import log
 
 
@@ -24,6 +27,84 @@ HelpData = namedtuple("HelpData", [
 ###----------------------------------------------------------------------------
 
 
+# The schema to validate that a help file entry in the "help_files" key of the
+# help index is properly formattted.
+help_file_schema = {
+    "type": "object",
+    "required": True,
+
+    # Any key is allowed, but all must have values which are arrays. The first
+    # item in the array must be a string and the remainder must be topic
+    # dictionaries.
+    "additionalProperties": {
+        "type": "array",
+        "items": [ { "type": "string", "required": True } ],
+
+        "additionalItems": {
+            "type": "object",
+            "properties": {
+                "topic":   { "type": "string", "required": True  },
+                "caption": { "type": "string", "required": False }
+            },
+            "additionalProperties": False
+        }
+    }
+}
+
+# The schema to validate that the help table of contents in the "help_contents"
+# key of the help index is properly formattted.
+#
+# NOTE: This recursively references itself in the children element. See the
+# following line of code.
+help_contents_schema = {
+    "type": "array",
+    "required": False,
+
+    # Items must be topic dictionaries or strings. Topic dictionaries require
+    # a topic key but may also contain a caption key and a children key which
+    # is an array that is recursively identical to this one.
+    #
+    # Values that are strings are expanded to be topic dictionaries with no
+    # children and an inherited caption.
+    "items": {
+        "type": [
+            {"type": "string", "required": True },
+            {
+                "type": "object",
+                "required": True,
+                "properties": {
+                    "topic":   { "type": "string", "required": True },
+                    "caption": { "type": "string", "required": False },
+
+                    # This is recursive; see below
+                    "children": "help_contents_schema"
+                },
+                "additionalProperties": False
+            }
+        ]
+    }
+}
+
+# The second type of item is a dictionary with a property that has the same
+# format as the top level key.
+help_contents_schema["items"]["type"][1]["properties"]["children"] = help_contents_schema
+
+# The overall schema used to validate a hyperhelp index file.
+index_schema = {
+    "type": "object",
+    "properties": {
+        "description": { "type": "string", "required": False },
+        "doc_root":    { "type": "string", "required": False },
+
+        "help_files":    help_file_schema,
+        "help_contents": help_contents_schema
+    }
+}
+
+
+###----------------------------------------------------------------------------
+
+
 def _import_topics(package, topics, help_topic_dict):
     """
     Parse out a dictionary of help topics from the help index and store all
@@ -33,31 +114,10 @@ def _import_topics(package, topics, help_topic_dict):
     for help_source in help_topic_dict:
         topic_list = help_topic_dict[help_source]
 
-        # Help file entry must be a list.
-        if not isinstance(topic_list, list):
-            return log("Help index information not a list in %s:%s",
-                       package, help_source)
-
-        # First item must be a string that is the help file title
-        if not isinstance(topic_list[0], str):
-            return log("First entry not a help file title string in %s:%s",
-                       package, help_source)
-
         # Skip the first entry since it's the name of the help file
         for topic_entry in topic_list[1:]:
-            if not isinstance(topic_entry, dict):
-                return log("Help entry not a dictionary in %s:%s",
-                           package, help_source)
-
-            name = topic_entry.get("topic", None)
-            caption = topic_entry.get("caption", None)
-
-            if name is None:
-                return log("Help topic missing topic text in %s:%s",
-                            package, help_source)
-
-            if caption is None:
-                caption = "Topic %s in help file %s" % (name, help_source)
+            name = topic_entry.get("topic")
+            caption = topic_entry.get("caption", "Topic %s in help file %s" % (name, help_source))
 
             # Turn spaces in the topic name into tabs so they match what's in
             # the buffer at run time. Saves forcing tabs in the index.
@@ -96,14 +156,27 @@ def _load_help_index(package, index_res):
     HelpData on success
     """
     try:
-        log("Loading help index for package %s", package)
+        log("Loading help index for package '%s'", package)
         json = sublime.load_resource(index_res)
         raw_dict = sublime.decode_value(json)
     except:
-        return log("Unable to load help index information from %s", package)
+        return log("Unable to load help index information for '%s'", package)
+
+    try:
+        validate(raw_dict, index_schema)
+
+    # The schema provided is itself broken.
+    except SchemaError as error:
+        return log("Invalid help validation schema: %s", error)
+
+    # One of the fields failed to validate. This generates extremely messy
+    # output, but this can be fixed later.
+    except ValidationError as error:
+        return log("Error validating help index for '%s' in %s: %s",
+                   package, error.fieldname, error)
 
     # Top level index keys
-    description = raw_dict.pop("description", "No description provided")
+    description = raw_dict.pop("description", "Help for %s" % package)
     doc_root = raw_dict.pop("doc_root", None)
     help_files = raw_dict.pop("help_files", dict())
     help_toc = raw_dict.pop("help_contents", None)
@@ -114,16 +187,18 @@ def _load_help_index(package, index_res):
 
     # If there is no document root, set it from the index resource; otherwise
     # ensure that it's normalized to appear in the appropriate package.
-    if doc_root is None:
+    if not doc_root:
         doc_root = path.split(index_res)[0]
     else:
         doc_root = path.normpath("Packages/%s/%s" % (package, doc_root))
 
-    # Gather the unique list of topics. If any fail, no help is allowed.
+    # Gather the unique list of topics.
     topic_list = dict()
-    if _import_topics(package, topic_list, help_files):
-        return HelpData(package, index_res, description, doc_root,
-            _get_file_metadata(help_files), topic_list, help_toc)
+    _import_topics(package, topic_list, help_files)
+
+    # Everything has succeeded.
+    return HelpData(package, index_res, description, doc_root,
+        _get_file_metadata(help_files), topic_list, help_toc)
 
 
 ###----------------------------------------------------------------------------
