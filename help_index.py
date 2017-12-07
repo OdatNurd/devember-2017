@@ -19,8 +19,8 @@ from .core import log
 # This tells us all of the information we need about the help for a package at
 # load time so that we don't need to look it up later.
 HelpData = namedtuple("HelpData", [
-    "package", "index_file", "description", "doc_root",
-    "help_files", "help_topics", "help_toc"
+    "package", "index_file", "description", "doc_root", "help_topics",
+    "help_files", "help_toc"
 ])
 
 
@@ -149,6 +149,56 @@ def _get_file_metadata(help_topic_dict):
     return retVal
 
 
+def _get_toc_metadata(help_toc_list, topics, package):
+    """
+    Given the table of contents key from the help index and the complete list of
+    known topics, return back a table of contents. This will extrapolate a list
+    even if the incoming list is empty or non-existant.
+    """
+    if not help_toc_list:
+        return [topics.get(topic) for topic in sorted(topics.keys())]
+
+    def lookup_topic_entry(entry):
+        """
+        Expand a toc entry from the index into a full topic object.
+        """
+        if isinstance(entry, str):
+            return entry, topics.get(entry.replace(" ", "\t"), None)
+
+        topic = entry["topic"]
+        base_obj = topics.get(topic.replace(" ", "\t"), None)
+        if base_obj is None:
+            return topic, None
+
+        entry["file"] = base_obj["file"]
+        entry["caption"] = entry.get("caption", base_obj["caption"])
+
+        return topic, entry
+
+    def expand_topic_list(item_list):
+        """
+        Expand an array of help topics that make up part of a table of contents
+        into an array of full topic objects recursively.
+        """
+        retVal = list()
+
+        for item in item_list:
+            topic, info = lookup_topic_entry(item)
+            if info is None:
+                log("TOC for '%s' is missing topic '%s'; skipping", package, topic)
+                continue
+
+            child_topics = info.get("children", None)
+            if child_topics:
+                info["children"] = expand_topic_list(child_topics)
+
+            retVal.append(info)
+
+        return retVal
+
+    return expand_topic_list(help_toc_list)
+
+
 def _load_help_index(package, index_res):
     """
     Given a package name and the resource filename of the hyperhelp json file,
@@ -197,8 +247,9 @@ def _load_help_index(package, index_res):
     _import_topics(package, topic_list, help_files)
 
     # Everything has succeeded.
-    return HelpData(package, index_res, description, doc_root,
-        _get_file_metadata(help_files), topic_list, help_toc)
+    return HelpData(package, index_res, description, doc_root, topic_list,
+        _get_file_metadata(help_files),
+        _get_toc_metadata(help_toc, topic_list, package))
 
 
 ###----------------------------------------------------------------------------
