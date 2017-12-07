@@ -3,7 +3,7 @@ import sublime_plugin
 
 from .common import log
 from .view import focus_on
-from .help import display_help
+from .core import display_help
 
 
 ###----------------------------------------------------------------------------
@@ -70,5 +70,6 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
                     return focus_on(self.view, anchor[1])
 
             return log("Unable to find help topic '%s'" , topic, status=True)
+
 
 ###----------------------------------------------------------------------------
