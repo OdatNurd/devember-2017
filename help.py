@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 
-from .core import log, hh_syntax
+from .common import log, hh_syntax
 from .view import find_help_view, update_help_view
 
 

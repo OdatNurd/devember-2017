@@ -8,7 +8,7 @@ from collections import OrderedDict, namedtuple
 from .validictory import validate
 from .validictory import SchemaError, ValidationError
 
-from .core import log
+from .common import log
 
 
 ###----------------------------------------------------------------------------

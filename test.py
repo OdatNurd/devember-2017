@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 
-from .core import log
+from .common import log
 from .help import display_help
 from .help_index import _load_help_index
 

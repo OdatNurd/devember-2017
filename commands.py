@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 
-from .core import log
+from .common import log
 from .view import focus_on
 from .help import display_help
 
