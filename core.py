@@ -10,6 +10,20 @@ from .help import _post_process_links, _post_process_anchors
 ###----------------------------------------------------------------------------
 
 
+def plugin_loaded():
+    """
+    On plugin load, find all help views and make sure that their link text is
+    underlined.
+    """
+    for window in sublime.windows():
+        help_view = find_help_view(window)
+        if help_view is not None:
+            _post_process_links(help_view)
+
+
+###----------------------------------------------------------------------------
+
+
 def help_index_list(reload=False, package=None):
     """
     Obtain or reload the help index information for all packages. This demand

@@ -1,21 +1,8 @@
 import sublime
 import sublime_plugin
 
-from .view import find_help_view
-
 
 ###----------------------------------------------------------------------------
-
-
-def plugin_loaded():
-    """
-    On plugin load, find all help views and make sure that their link text is
-    underlined.
-    """
-    for window in sublime.windows():
-        help_view = find_help_view(window)
-        if help_view is not None:
-            _post_process_links(help_view)
 
 
 def _post_process_anchors(help_view):
