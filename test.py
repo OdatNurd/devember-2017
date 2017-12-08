@@ -30,8 +30,8 @@ def _help_load_index():
 
 class HelpTestCommand(sublime_plugin.WindowCommand):
     def run(self):
-        # _test_help()
-        _help_load_index()
+        _test_help()
+        # _help_load_index()
 
 
 ###----------------------------------------------------------------------------

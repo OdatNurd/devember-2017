@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 name: Help
-scope: text.hyperhelp
+scope: text.hyperhelp.help
 hidden: true
 variables:
   key_binding: '<[^> ]*>\t?>?'
