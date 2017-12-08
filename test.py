@@ -10,7 +10,7 @@ from .core import load_help_index, display_help_file
 
 def _test_help():
     help_index = load_help_index("Packages/hyperhelp/help/hyperhelp.json")
-    display_help_file(help_index, "sample.txt")
+    display_help_file(help_index, "index.txt")
 
 
 def _help_load_index():
@@ -30,8 +30,8 @@ def _help_load_index():
 
 class HelpTestCommand(sublime_plugin.WindowCommand):
     def run(self):
-        # _test_help()
-        _help_load_index()
+        _test_help()
+        # _help_load_index()
 
 
 ###----------------------------------------------------------------------------

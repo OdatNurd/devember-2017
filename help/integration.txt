@@ -1,0 +1,8 @@
+*|Integration|*
+===========
+
+HyperHelp is designed to be easy to integrate into your package so that you
+can focus on writing help and not worry about the interior details.
+
+More help on this will be developed as the package matures. For now all there
+is to see here is this link back to the |intro|.

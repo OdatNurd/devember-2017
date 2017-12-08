@@ -123,4 +123,4 @@ The allowable help markup includes the following items:
 HyperHelp is designed to be easy to integrate into your package so that you
 can focus on writing help and not worry about the interior details.
 
-More help on this will be developed as the package matures.
+More information can be found in |integration.txt|.

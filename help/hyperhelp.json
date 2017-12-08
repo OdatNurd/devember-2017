@@ -15,7 +15,7 @@
     "help_files": {
         // Required: The name of the help file (relative to the document root)
         // that this entry is for.
-        "sample.txt": [
+        "index.txt": [
             // Required; The title of the help file, for use in various display
             // locations.
             "HyperHelp Sample Help File",
@@ -58,6 +58,13 @@
                 "topic": "integration",
                 "caption": "Integrating Hyperhelp in your Package"
             }
+        ],
+        "integration.txt": [
+            "Developer Info: Integrating HyperHelp",
+            {
+                "topic": "integration.txt",
+                "caption": "Integrating HyperHelp into your Package"
+            }
         ]
     },
 
@@ -93,6 +100,6 @@
                 "link"
             ]
         },
-        "integration",
+        "integration.txt",
     ]
 }
