@@ -24,6 +24,14 @@ def plugin_loaded():
 ###----------------------------------------------------------------------------
 
 
+def load_help_index(index_resource):
+    """
+    Given an index resource that points to a hyperhelp.json file, load the help
+    index and return back a normalized version. Returns None on error.
+    """
+    return _load_help_index(index_resource)
+
+
 def help_index_list(reload=False, package=None):
     """
     Obtain or reload the help index information for all packages. This demand
@@ -62,7 +70,7 @@ def reload_help_index(help_list, package):
     else:
         log("Reloading help index for package '%s'", package)
 
-        result = _load_help_index(pkg_info.package, pkg_info.index_file)
+        result = _load_help_index(pkg_info.index_file)
         if result is not None:
             help_list[result.package] = result
 

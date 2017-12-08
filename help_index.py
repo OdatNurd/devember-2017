@@ -199,12 +199,17 @@ def _get_toc_metadata(help_toc_list, topics, package):
     return expand_topic_list(help_toc_list)
 
 
-def _load_help_index(package, index_res):
+def _load_help_index(index_res):
     """
     Given a package name and the resource filename of the hyperhelp json file,
     load the help index and return it. The return value is None on failure or
     HelpData on success.
     """
+    if not index_res.casefold().startswith("packages/"):
+        return log("Index resource is not in a package: %s", index_res)
+
+    package = path.split(index_res)[0].split("/")[1]
+
     try:
         log("Loading help index for package '%s'", package)
         json = sublime.load_resource(index_res)
@@ -262,7 +267,7 @@ def _scan_help_packages(help_list=None):
     for index_file in sublime.find_resources("hyperhelp.json"):
         pkg_name = path.split(index_file)[0].split("/")[1]
         if pkg_name not in help_list:
-            result = _load_help_index(pkg_name, index_file)
+            result = _load_help_index(index_file)
             if result is not None:
                 help_list[result.package] = result
 

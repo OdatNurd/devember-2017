@@ -14,7 +14,7 @@ def _test_help():
 
 
 def _help_load_index():
-    info = _load_help_index("hyperhelp", "Packages/hyperhelp/help/hyperhelp.json")
+    info = _load_help_index("Packages/hyperhelp/help/hyperhelp.json")
     if info:
         from pprint import pformat
 
@@ -30,8 +30,8 @@ def _help_load_index():
 
 class HelpTestCommand(sublime_plugin.WindowCommand):
     def run(self):
-        _test_help()
-        # _help_load_index()
+        # _test_help()
+        _help_load_index()
 
 
 ###----------------------------------------------------------------------------
