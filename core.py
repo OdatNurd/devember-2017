@@ -3,9 +3,56 @@ import sublime
 from .common import log, hh_syntax
 from .view import find_help_view, update_help_view
 
+from .help_index import _load_help_index, _scan_help_packages
 from .help import _post_process_links, _post_process_anchors
 
+
 ###----------------------------------------------------------------------------
+
+
+def help_index_list(reload=False, package=None):
+    """
+    Obtain or reload the help index information for all packages. This demand
+    loads the indexes on first access and can optionally reload all package
+    indexes or only a single one, as desired.
+    """
+    initial_load = False
+    if not hasattr(help_index_list, "index"):
+        initial_load = True
+        help_index_list.index = _scan_help_packages()
+
+    if reload and not initial_load:
+        help_index_list.index = reload_help_index(help_index_list.index, package)
+
+    return help_index_list.index
+
+
+def reload_help_index(help_list, package):
+    """
+    Reload the help index for the provided package from within the given help
+    list, updating the help list to record the new data.
+
+    If no package name is provided, the help list provided is ignored and all
+    help indexes are reloaded and returned in a new help list.
+
+    Attempts to reload a package that is not in the given help list has no
+    effect.
+    """
+    if package is None:
+        log("Recanning all help index files")
+        return _scan_help_packages()
+
+    pkg_info = help_list.get(package, None)
+    if pkg_info is None:
+        log("Package '%s' was not previously loaded; cannot reload", package)
+    else:
+        log("Reloading help index for package '%s'", package)
+
+        result = _load_help_index(pkg_info.package, pkg_info.index_file)
+        if result is not None:
+            help_list[result.package] = result
+
+    return help_list
 
 
 def display_help(help_res):
