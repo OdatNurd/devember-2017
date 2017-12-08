@@ -3,7 +3,8 @@ import sublime_plugin
 
 from .common import log
 from .view import focus_on
-from .core import display_help
+from .core import help_index_list, display_help_file, reload_help_file
+from .core import show_help_topic
 
 
 ###----------------------------------------------------------------------------
@@ -15,14 +16,7 @@ class HyperHelpReloadHelpCommand(sublime_plugin.TextCommand):
     currently being displayed in the view.
     """
     def run(self, edit):
-        settings = self.view.settings()
-        pkg = settings.get("_hh_pkg")
-        file = settings.get("_hh_file")
-
-        res_file = "Packages/%s/help/%s" % (pkg, file)
-
-        settings.set("_hh_file", "")
-        display_help(res_file)
+        reload_help_file(help_index_list(), self.view)
 
     def is_enabled(self):
         settings = self.view.settings()
@@ -42,7 +36,9 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
         return self.follow_link()
 
     def is_enabled(self, nav, prev=False):
-        return nav in self.available_nav
+        settings = self.view.settings()
+        return (nav in self.available_nav and
+                settings.has("_hh_pkg") and settings.has("_hh_file"))
 
     def anchor_nav(self, prev):
         anchors = self.view.settings().get("_hh_nav")
@@ -62,14 +58,10 @@ class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
     def follow_link(self):
         point = self.view.sel()[0].begin()
         if self.view.match_selector(point, "text.hyperhelp meta.link"):
-            topic = self.view.substr(self.view.extract_scope(point)).casefold()
+            topic = self.view.substr(self.view.extract_scope(point))
 
-            anchors = self.view.settings().get("_hh_nav", [])
-            for anchor in anchors:
-                if topic == anchor[0].casefold():
-                    return focus_on(self.view, anchor[1])
-
-            return log("Unable to find help topic '%s'" , topic, status=True)
+            package = self.view.settings().get("_hh_pkg")
+            show_help_topic(package, topic)
 
 
 ###----------------------------------------------------------------------------

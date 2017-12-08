@@ -3,18 +3,18 @@ import sublime_plugin
 
 from .common import log
 
-from .core import display_help
-from .help_index import _load_help_index
+from .core import load_help_index, display_help_file
 
 ###----------------------------------------------------------------------------
 
 
 def _test_help():
-    display_help("Packages/hyperhelp/help/sample.txt")
+    help_index = load_help_index("Packages/hyperhelp/help/hyperhelp.json")
+    display_help_file(help_index, "sample.txt")
 
 
 def _help_load_index():
-    info = _load_help_index("Packages/hyperhelp/help/hyperhelp.json")
+    info = load_help_index("Packages/hyperhelp/help/hyperhelp.json")
     if info:
         from pprint import pformat
 

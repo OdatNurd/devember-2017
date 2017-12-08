@@ -1,10 +1,11 @@
 import sublime
 
 from .common import log, hh_syntax
-from .view import find_help_view, update_help_view
+from .view import find_help_view, update_help_view, focus_on
 
 from .help_index import _load_help_index, _scan_help_packages
-from .help import _post_process_links, _post_process_anchors
+from .help import _post_process_links, _resource_for_help
+from .help import _load_help_file, _display_help_file, _reload_help_file
 
 
 ###----------------------------------------------------------------------------
@@ -77,42 +78,82 @@ def reload_help_index(help_list, package):
     return help_list
 
 
-def display_help(help_res):
+def help_file_resource(pkg_info, help_file):
     """
-    Display the provided help resource in the help view, creating it if needed.
-    If the view is already displaying this resource, the view is focused but
-    nothing else happens.
-
-    The help view is returned back, unless the help file could not be loaded.
+    Get the resource name that references the help file in the given help
+    package. The help file should be relative to the document root of the
+    package.
     """
-    parts = help_res.split("/")
-    if len(parts) < 3:
-        return log("Unable to load help file", status=True)
+    return _resource_for_help(pkg_info, help_file)
 
-    help_pkg = parts[1]
-    help_file = parts[-1]
 
-    view = find_help_view()
-    window = view.window() if view is not None else sublime.active_window()
+def load_help_file(pkg_info, help_file):
+    """
+    Load the contents of a help file contained in the provided help package.
+    The help file should be relative to the document root of the package.
 
-    if view is not None:
-        window.focus_view(view)
+    Returns None if the help file cannot be loaded.
+    """
+    return _load_help_file(pkg_info, help_file)
 
-        current_pkg = view.settings().get("_hh_pkg")
-        current_file = view.settings().get("_hh_file")
 
-        if help_file == current_file and help_pkg == current_pkg:
-            return view
+def display_help_file(pkg_info, help_file):
+    """
+    Load and display the help file contained in the provided help package. The
+    heop file should be relative to the document root of the package.
 
-    try:
-        help_txt = sublime.load_resource(help_res)
-    except:
-        return log("Unable to load help file '%s'" % help_file, status=True)
+    The help will be displayed in the help view of the current window, which
+    will be created if it does not exist.
 
-    view = update_help_view(help_txt, help_pkg, help_file,
-                            hh_syntax("HyperHelp.sublime-syntax"))
-    _post_process_links(view)
-    _post_process_anchors(view)
+    Does nothing if the help view is already displaying this file.
+
+    Returns None if the help file could not be found/loaded or the help view
+    on success.
+    """
+    return _display_help_file(pkg_info, help_file)
+
+
+def reload_help_file(help_list, help_view):
+    """
+    Reload the help file currently being displayed in the given view to pick
+    up changes made since it was displayed. The information on the package and
+    help file should be contained in the provided help list.
+
+    Returns True if the file was reloaded successfully or False if not.
+    """
+    return _reload_help_file(help_list, help_view)
+
+
+def show_help_topic(package, topic):
+    """
+    Attempt to display the help for the provided topic in the given package
+    (both strings). This will transparently create a new help view if needed, as
+    well as loading the appropriate help file before jumping to the topic.
+
+    The return value is True if the topic was displayed or False otherwise.
+    """
+    pkg_info = help_index_list().get(package, None)
+    if pkg_info is None:
+        return False
+
+    inner_topic = topic.replace(" ", "\t").casefold()
+    help_file = pkg_info.help_topics.get(inner_topic, {}).get("file", None)
+    if help_file is None:
+        log("Unknown help topic '%s", topic, status=True)
+        return False
+
+    help_view = display_help_file(pkg_info, help_file)
+    if help_view is None:
+        log("Unable to load help file '%s'", help_file, status=True)
+        return False
+
+    anchors = help_view.settings().get("_hh_nav", [])
+    for anchor in anchors:
+        if inner_topic == anchor[0].casefold():
+            focus_on(help_view, anchor[1])
+            return True
+
+    log("Unable to find topic '%s' in help file '%s'", topic, help_file)
 
 
 ###----------------------------------------------------------------------------
