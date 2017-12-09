@@ -13,6 +13,13 @@
         ]
     },
     {
+        "keys": ["?"], "command": "hyperhelp_contents",
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
+        ]
+    },
+    {
         "keys": ["tab"], "command": "hyperhelp_navigate", "args": {
             "nav": "find_anchor",
             "prev": false,

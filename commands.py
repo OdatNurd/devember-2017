@@ -12,13 +12,21 @@ from .core import show_help_topic, display_help_file, reload_help_file
 ###----------------------------------------------------------------------------
 
 
+def _current_help_package(view=None):
+    view = view or find_help_view()
+    return (view.settings().get("_hh_pkg") if view is not None else None)
+
+
+###----------------------------------------------------------------------------
+
+
 class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
     """
     Display the provided help topic inside the given package. If package is
     None, infer it from the currently active help view.
     """
     def run(self, package=None, topic="index.txt"):
-        package = package or self.current_help_package()
+        package = package or _current_help_package()
         topic = topic or "index.txt"
 
         if package is None:
@@ -27,9 +35,77 @@ class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
 
         show_help_topic(package, topic)
 
-    def current_help_package(self):
-        view = find_help_view()
-        return (view.settings().get("_hh_pkg") if view is not None else None)
+
+class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
+    """
+    Display the table of contents for the package provided. If no packge is
+    given,the user will be prompted to supply one.
+    """
+    def run(self, package=None, prompt=False):
+        package = package or _current_help_package()
+        if package is None or prompt:
+            return self.select_package()
+
+        pkg_info = help_index_list().get(package, None)
+        if pkg_info is None:
+            return log("Cannot display table of contents; unknown package '%s",
+                       package, status=True)
+
+        self.show_toc(pkg_info, pkg_info.help_toc, [])
+
+    def select_package(self):
+        help_list = help_index_list()
+        if not help_list:
+            return log("No packages with help are  installed", status=True)
+
+        pkg_list = sorted([key for key in help_list])
+        captions = [[help_list[key].package,
+                     help_list[key].description]
+            for key in pkg_list]
+
+        def pick_package(index):
+            if index >= 0:
+                self.run(captions[index][0])
+
+        sublime.active_window().show_quick_panel(
+            captions,
+            on_select=lambda index: pick_package(index))
+
+    def show_toc(self, pkg_info, items, stack):
+        captions = [[item["caption"], item["topic"].replace("\t", " ") +
+            (" ({} topics)".format(len(item["children"])) if "children" in item else "")]
+            for item in items]
+
+        if not captions and not stack:
+            return log("No help topics defined for package '%s'",
+                       pkg_info.packages_path, status=True)
+
+        if stack:
+            captions.insert(0, ["..", "Go back"])
+
+        sublime.active_window().show_quick_panel(
+            captions,
+            on_select=lambda index: self.select(pkg_info, items, stack, index))
+
+    def select(self, pkg_info, items, stack, index):
+        if index >= 0:
+            # When the stack isn't empty, the first item takes us back.
+            if index == 0 and len(stack) > 0:
+                items = stack.pop()
+                return self.show_toc(pkg_info, items, stack)
+
+            # Compenstate for the "go back" item when the stack's not empty
+            if len(stack) > 0:
+                index -= 1
+
+            entry = items[index]
+            children = entry.get("children", None)
+
+            if children is not None:
+                stack.append(items)
+                return self.show_toc(pkg_info, children, stack)
+
+            show_help_topic(pkg_info.package, entry["topic"])
 
 
 class HyperhelpReloadHelpCommand(sublime_plugin.TextCommand):
