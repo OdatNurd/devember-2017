@@ -3,7 +3,13 @@
         "keys": ["f5"], "command": "hyperhelp_reload_help",
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
-            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
+        ]
+    },
+    {
+        "keys": ["f5"], "command": "hyperhelp_reload_index",
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.index" }
         ]
     },
     {
@@ -13,7 +19,7 @@
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
-            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ],
     },
     {
@@ -23,7 +29,7 @@
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
-            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ],
     },
     {
@@ -32,7 +38,7 @@
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help meta.link" },
-            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ]
     },
     {
@@ -41,7 +47,7 @@
         },
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help meta.link" },
-            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ]
     }
 ]
