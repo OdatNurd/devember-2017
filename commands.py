@@ -10,20 +10,22 @@ from .core import show_help_topic
 ###----------------------------------------------------------------------------
 
 
-class HyperHelpReloadHelpCommand(sublime_plugin.TextCommand):
+class HyperhelpReloadHelpCommand(sublime_plugin.TextCommand):
     """
     If the current view is a hyperhelp help view, this will reload the file
     currently being displayed in the view.
     """
     def run(self, edit):
-        reload_help_file(help_index_list(), self.view)
+        help_file = self.view.settings().get("_hh_file", None)
+        if reload_help_file(help_index_list(), self.view):
+            log("Reloaded help file '%s'", help_file, status=True)
 
     def is_enabled(self):
         settings = self.view.settings()
         return settings.has("_hh_pkg") and settings.has("_hh_file")
 
 
-class HyperHelpNavigateCommand(sublime_plugin.TextCommand):
+class HyperhelpNavigateCommand(sublime_plugin.TextCommand):
     """
     Perform navigation from within a help file
     """

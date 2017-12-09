@@ -35,7 +35,7 @@ class HyperHelpEventListener(sublime_plugin.EventListener):
             point = view.window_to_text((event["x"], event["y"]))
 
             if view.match_selector(point, "text.hyperhelp meta.link"):
-                view.run_command("hyper_help_navigate", {"nav": "follow_link"})
+                view.run_command("hyperhelp_navigate", {"nav": "follow_link"})
                 return ("noop")
 
         return None

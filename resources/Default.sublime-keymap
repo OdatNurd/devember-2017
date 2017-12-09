@@ -1,13 +1,13 @@
 [
     {
-        "keys": ["f5"], "command": "hyper_help_reload_help",
+        "keys": ["f5"], "command": "hyperhelp_reload_help",
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
             { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false },
         ]
     },
     {
-        "keys": ["tab"], "command": "hyper_help_navigate", "args": {
+        "keys": ["tab"], "command": "hyperhelp_navigate", "args": {
             "nav": "find_anchor",
             "prev": false,
         },
@@ -17,7 +17,7 @@
         ],
     },
     {
-        "keys": ["shift+tab"], "command": "hyper_help_navigate", "args": {
+        "keys": ["shift+tab"], "command": "hyperhelp_navigate", "args": {
             "nav": "find_anchor",
             "prev": true,
         },
@@ -27,7 +27,7 @@
         ],
     },
     {
-        "keys": ["enter"], "command": "hyper_help_navigate", "args": {
+        "keys": ["enter"], "command": "hyperhelp_navigate", "args": {
             "nav": "follow_link"
         },
         "context": [
@@ -36,7 +36,7 @@
         ]
     },
     {
-        "keys": ["keypad_enter"], "command": "hyper_help_navigate", "args": {
+        "keys": ["keypad_enter"], "command": "hyperhelp_navigate", "args": {
             "nav": "follow_link"
         },
         "context": [
