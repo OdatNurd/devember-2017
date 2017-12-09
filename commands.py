@@ -4,12 +4,32 @@ import sublime_plugin
 import os
 
 from .common import log
-from .view import focus_on
+from .view import focus_on, find_help_view
 from .core import help_index_list, reload_help_index
 from .core import show_help_topic, display_help_file, reload_help_file
 
 
 ###----------------------------------------------------------------------------
+
+
+class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
+    """
+    Display the provided help topic inside the given package. If package is
+    None, infer it from the currently active help view.
+    """
+    def run(self, package=None, topic="index.txt"):
+        package = package or self.current_help_package()
+        topic = topic or "index.txt"
+
+        if package is None:
+            return log("Cannot display topic '%s'; cannot determine package",
+                topic, status=True)
+
+        show_help_topic(package, topic)
+
+    def current_help_package(self):
+        view = find_help_view()
+        return (view.settings().get("_hh_pkg") if view is not None else None)
 
 
 class HyperhelpReloadHelpCommand(sublime_plugin.TextCommand):
