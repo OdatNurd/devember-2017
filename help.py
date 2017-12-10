@@ -212,6 +212,9 @@ def _post_process_anchors(help_view):
         help_view.sel().add(sublime.Region(pos.a - 2, pos.b + 2))
         help_view.run_command("insert", {"characters": anchor})
 
+    # Leave the buffer at the top of the file when we're done, by default.
+    help_view.run_command("move_to", {"to": "bof"})
+
     # The full nav list is the list of hidden anchors plus the list of regular
     # anchors, sorted by position in the buffer. We need to convert regions to
     # arrays of points because regions are not iterable and can't be stored in
