@@ -49,8 +49,7 @@ def update_help_view(help_content, help_pkg, help_file,
         help_view = new_help_view(syntax, window)
     else:
         help_view.set_read_only(False)
-        help_view.sel().clear()
-        help_view.sel().add(sublime.Region(0, help_view.size()))
+        help_view.run_command("select_all")
         help_view.run_command("left_delete")
 
         if window.active_view() != help_view:
