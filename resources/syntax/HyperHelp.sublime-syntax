@@ -2,6 +2,7 @@
 ---
 name: Help
 scope: text.hyperhelp.help
+first_line_match: '^%hyperhelp'
 hidden: true
 variables:
   key_binding: '<[^> ]*>\t?>?'
@@ -10,9 +11,31 @@ variables:
   anchor: '(\*)([^*\| ]+)(\*)'
   hidden_anchor: '(\*\|)([^* ]+)(\|\*)'
   separator: '([=-])\1{3,}'
+  author_header: '^(%)(hyperhelp)'
+  header_keypair: '\b([a-z]+)(=)(")([^"]*)(")'
 
 contexts:
   main:
+    - match: '{{author_header}}'
+      captures:
+        1: punctuation.definition.directive
+        2: keyword.other.directive meta.directive
+      push: header_keypairs
+    - match: '$'
+      set: body
+  header_keypairs:
+    - match: '{{header_keypair}}'
+      captures:
+        1: storage.type.class meta.key
+        2: keyword.operator
+        3: string.quoted.double
+        4: string.quoted.double meta.value
+        5: string.quoted.double
+    - match: '\S'
+      scope: invalid.illegal.hyperhelp.header
+    - match: '$'
+      set: main
+  body:
     - match: '{{key_binding}}'
       scope: variable.language meta.keybind
     - match: '{{code_markup}}'
