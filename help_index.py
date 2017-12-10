@@ -132,6 +132,15 @@ def _import_topics(package, topics, help_topic_dict):
                     "file": help_source
                 }
 
+        # All help sources should be in the topic list so you can jump to a
+        # file by name.
+        if help_source not in topics:
+            topics[help_source] = {
+                "topic": help_source,
+                "caption": "Help file %s" % help_source,
+                "file": help_source
+            }
+
     return topics
 
 
