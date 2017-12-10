@@ -1,8 +1,24 @@
 import sublime
 import sublime_plugin
 
+from collections import namedtuple
+import re
+import time
+
 from .view import find_help_view, update_help_view
 from .common import log, hh_syntax
+
+
+###----------------------------------------------------------------------------
+
+
+# A representation of the data that was contained in a hyperhelp help document
+# header. This is used to construct a more human readable header.
+HeaderData = namedtuple("HeaderData", ["file", "title", "date"])
+
+_header_prefix_re = re.compile(r'^%hyperhelp(\b|$)')
+_header_keypair_re = re.compile(r'\b([a-z]+)\b="([^"]*)"')
+
 
 ###----------------------------------------------------------------------------
 
@@ -61,6 +77,7 @@ def _display_help_file(pkg_info, help_file):
         view = update_help_view(help_text, pkg_info.package, help_file,
                                 hh_syntax("HyperHelp.sublime-syntax"))
 
+        _post_process_header(view)
         _post_process_links(view)
         _post_process_anchors(view)
 
@@ -98,6 +115,77 @@ def _reload_help_file(help_list, help_view):
 
     log("Unable to reload the current help topic")
     return False
+
+
+def _parse_header(help_file, header_line):
+    """
+    Given the first line of a help file, check to see if it looks like a help
+    source file, and if so parse the header and return the parsed values back.
+    """
+    if not _header_prefix_re.match(header_line):
+        return None
+
+    title = "No Title Provided"
+    date = 0.0
+
+    for match in re.findall(_header_keypair_re, header_line):
+        if match[0] == "title":
+            title = match[1]
+        elif match[0] == "date":
+            try:
+                date = time.mktime(time.strptime(match[1], "%Y-%m-%d"))
+            except:
+                date = 0.0
+                log("Ignoring invalid file date '%s' in '%s'",
+                    match[1], help_file)
+        else:
+            log("Ignoring unknown header key '%s' in '%s'",
+                match[1], help_file)
+
+    return HeaderData(help_file, title, date)
+
+
+def _post_process_header(help_view):
+    """
+    Check if the help file contains a formatted header line. If it does it is
+    replaced with a version that more explicitly describes the help. This
+    includes a link to the top level of the help file itself.
+    """
+    help_file = help_view.settings().get("_hh_file")
+    first_line = help_view.substr(help_view.full_line(0))
+
+    header = _parse_header(help_file, first_line)
+    if header is None:
+        return
+
+    _hdr_width = 80
+    _time_fmt = help_view.settings().get("hyperhelp_date_format", "%x")
+
+    file_target = "*%s*" % help_file
+    title = header.title
+    date_str = "Not Available"
+
+    if header.date != 0:
+        date_str = time.strftime(_time_fmt, time.localtime(header.date))
+
+    # Take into account two extra spaces on either side of the title
+    max_title_len = _hdr_width - len(file_target) - len(date_str) - 4
+    if len(title) > max_title_len:
+        title = title[:max_title_len-1] + '\u2026'
+
+    header_line = "%s  %s  %s\n%s\n" % (
+        file_target,
+        "%s" % title.center(max_title_len, " "),
+        date_str,
+        ("=" * _hdr_width)
+    )
+
+    help_view.sel().clear()
+    help_view.sel().add(help_view.full_line(0))
+    help_view.set_read_only(False)
+    help_view.run_command("insert", {"characters": header_line})
+    help_view.set_read_only(True)
+
 
 def _post_process_anchors(help_view):
     """

@@ -13,6 +13,7 @@ variables:
   separator: '([=-])\1{3,}'
   author_header: '^(%)(hyperhelp)'
   header_keypair: '\b([a-z]+)(=)(")([^"]*)(")'
+  expanded_header: '^{{anchor}}\s+(.*)\s{2,}(.*)'
 
 contexts:
   main:
@@ -21,7 +22,15 @@ contexts:
         1: punctuation.definition.directive
         2: keyword.other.directive meta.directive
       push: header_keypairs
-    - match: '$'
+    - match: '{{expanded_header}}'
+      captures:
+        1: string.unquoted
+        2: string.unquoted meta.anchor
+        3: string.unquoted
+        4: storage.type.class meta.title
+        5: variable.language meta.date
+      set: body
+    - match: ''
       set: body
   header_keypairs:
     - match: '{{header_keypair}}'

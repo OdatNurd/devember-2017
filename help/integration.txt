@@ -1,4 +1,5 @@
-%hyperhelp
+%hyperhelp title="Integrating HyperHelp" date="2017-12-09"
+
 *|Integration|*
 ===========
 
