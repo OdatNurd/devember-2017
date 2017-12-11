@@ -1,0 +1,35 @@
+[
+   // {
+   //      "id": "help",
+   //      "children":
+   //      [
+            {
+                "id": "hyperhelp",
+                "caption": "HyperHelp",
+                "mnemonic": "y",
+                "children": [
+                    {
+                        "caption": "Help on Help",
+                        "command": "hyperhelp_topic",
+                        "args": {
+                            "package": "hyperhelp",
+                            "topic": "index.txt"
+                        }
+                    },
+                    {
+                        "caption": "Packages with Help",
+                        "command": "hyperhelp_contents",
+                        "args": { "prompt": true }
+                    },
+
+                    { "caption": "-" },
+
+                    {
+                        "caption": "Table of Contents for current Help",
+                        "command": "hyperhelp_contents",
+                    }
+                ]
+            }
+    //     ]
+    // }
+]
