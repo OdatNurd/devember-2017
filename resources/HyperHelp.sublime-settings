@@ -16,6 +16,7 @@
     //
     // WARNING: You should not alter these settings in your own user settings
     // or you may break help files.
+    "detect_indentation": false,
     "tab_size": 1,
     "translate_tabs_to_spaces": false
 }
