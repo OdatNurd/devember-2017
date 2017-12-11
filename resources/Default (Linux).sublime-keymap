@@ -1,3 +1,9 @@
 [
-    { "keys": ["super+t"], "command": "help_test" }
+    {
+        "keys": ["super+h"], "command": "show_overlay",
+        "args": {
+            "overlay": "command_palette",
+            "text" : "HyperHelp: "
+        }
+    },
 ]
