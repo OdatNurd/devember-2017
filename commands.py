@@ -145,12 +145,13 @@ class HyperhelpReloadIndexCommand(sublime_plugin.TextCommand):
         package = os.path.split(filename)[0].split(os.sep)[0]
 
         if package not in help_index_list():
-            log("Index not previously reloaded; reloading indexes", status=True)
+            log("Package index for '%s' not previously loaded; reloading all indexes",
+                package, status=True)
             package = None
         else:
             log("Reloading help index for package '%s'", package, status=True)
 
-        reload_help_index(help_index_list(), package)
+        help_index_list(reload=True, package=package)
 
     def is_enabled(self):
         return (self.view.match_selector(0, "text.hyperhelp.index") and
