@@ -12,7 +12,7 @@ and allows for the standard operations users are used to in Sublime text, such
 as being able to search inside the help, copy help information out, and so on.
 
 For this reason HTML markup (via phantoms) is not supported currently,
-although support for simple inline images is planned.
+although support for simple in-line images is planned.
 
 
 *|Style	Conventions|*
@@ -91,9 +91,12 @@ The allowable help markup includes the following items:
     this section of the documentation. Such anchors remain visible in the
     document to provide visual clues that it is a point of interest.
 
-    Spaces are not allowed inside of anchor text, although `Tab` characters
-    are. Alternatively you may also use other conventions as you see fit, such
-    as *snake_case* or *periods.as_spaces* (or some other method that does not
+    Spaces are not allowed inside of anchor text, although `Tab` characters are
+    allowed. Note that only interior tabs are supported; an anchor with a
+    leading or trailing tab is not allowed.
+
+    Alternatively you may also use other conventions as you see fit, such as
+    *snake_case* or *periods.as_spaces* (or some other method that does not
     include whitespace).
 
     To allow for points of interest in documents that are not visually
@@ -112,11 +115,35 @@ The allowable help markup includes the following items:
     in some other help document.
 
     Links follow the same rules as |anchors| do in that white space is not
-    allowed in link text.
+    allowed in link text but tabs are (except leading and trailing tabs).
 
     Some sample links are the above link to the Anchor section of the help,
     as well as this link to the |markup| section or the top level |Intro|
     section.
+
+
+    *|Separators|*
+    ----------
+
+    Separators allow you to draw lines and boxes in help, such as to underline
+    section headings (as is done in this sample help).
+
+    Vertical separators consist of a `|` character that is preceded or succeeded
+    with a tab character. This distinguishes them from the characters used to
+    define links, which are not allowed to have leading or trailing tab
+    characters.
+
+    Horizontal separators consist of four or more consecutive `=` or `-`
+    characters. Additionally the sequence can begin with an `+` character and
+    end with a `+` or `|` character.
+
+    This allows you to do things like underline section headers (as in this sample
+    help file) or draw boxes:
+
+
+        +------------|----------+
+        |	Sample Box	| Column 2	|
+        +============+==========+
 
 
 *|Integration|*

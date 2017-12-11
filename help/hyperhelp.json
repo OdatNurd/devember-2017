@@ -55,6 +55,10 @@
                 "caption": "HyperHelp Markup - Links"
             },
             {
+                "topic": "separators",
+                "caption": "Hyperhelp Markup - Visual Separators"
+            },
+            {
                 "topic": "integration",
                 "caption": "Integrating Hyperhelp in your Package"
             }
@@ -92,12 +96,28 @@
             "children": [
                 {
                     "topic": "markup",
-                    "caption": "HyperHelp Markup - Overview"
+                    "caption": "Overview"
                 },
-                "key bindings",
-                "code blocks",
-                "anchors",
-                "link"
+                {
+                    "topic": "key bindings",
+                    "caption": "Key Bindings"
+                },
+                {
+                    "topic": "code blocks",
+                    "caption": "Code Blocks"
+                },
+                {
+                    "topic": "anchors",
+                    "caption": "Anchors"
+                },
+                {
+                    "topic": "link",
+                    "caption": "Links"
+                },
+                {
+                    "topic": "separators",
+                    "caption": "Visual Separators"
+                },
             ]
         },
         "integration.txt",
