@@ -53,6 +53,14 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
 
         self.show_toc(pkg_info, pkg_info.help_toc, [])
 
+    def is_enabled(self, package=None, prompt=False):
+        if prompt == False:
+            package = package or _current_help_package()
+            if package is None:
+                return False
+
+        return True
+
     def select_package(self):
         help_list = help_index_list()
         if not help_list:
