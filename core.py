@@ -150,7 +150,7 @@ def show_help_topic(package, topic):
     anchors = help_view.settings().get("_hh_nav", [])
     for anchor in anchors:
         if inner_topic == anchor[0].casefold():
-            focus_on(help_view, anchor[1])
+            focus_on(help_view, anchor[1], at_center=True)
             return True
 
     log("Unable to find topic '%s' in help file '%s'", topic, help_file)

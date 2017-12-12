@@ -64,10 +64,13 @@ def update_help_view(help_content, help_pkg, help_file,
     return help_view
 
 
-def focus_on(help_view, position):
+def focus_on(help_view, position, at_center=False):
     """
     Focus this help view on the given position, which can be a single point,
-    a region, or an array of two numbers (treated as a region).
+    a region, or an array of two numbers (treated as a region). The optional
+    argument controls whether the focused point is forced to the middle of the
+    window or if the window will minimally scroll to reveal the area with some
+    context lines.
     """
     if isinstance(position, int):
         position = sublime.Region(position)
@@ -76,7 +79,11 @@ def focus_on(help_view, position):
     else:
         position = sublime.Region(position.end(), position.begin())
 
-    help_view.show_at_center(position)
+    if at_center:
+        help_view.show_at_center(position)
+    else:
+        help_view.show(position, True)
+
     help_view.sel().clear()
     help_view.sel().add(position)
 
