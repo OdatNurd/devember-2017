@@ -1,13 +1,13 @@
 [
     {
-        "keys": ["f5"], "command": "hyperhelp_reload_help",
+        "keys": ["f5"], "command": "hyperhelp_author_reload_help",
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
             { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ]
     },
     {
-        "keys": ["f5"], "command": "hyperhelp_reload_index",
+        "keys": ["f5"], "command": "hyperhelp_author_reload_index",
         "context": [
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.index" }
         ]
@@ -61,6 +61,7 @@
     // Auto pair characters in key bindings.
     { "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<$0>"}, "context":
         [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
             { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
             { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
             { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|$)", "match_all": true }
@@ -149,7 +150,7 @@
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
             { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
             { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-            { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|$)", "match_all": true }
+            { "key": "following_text", "operator": "regex_contains", "operand": "^(?:\t| |\\)|]|\\}|\\||$)", "match_all": true }
         ]
     },
     { "keys": ["*"], "command": "wrap_block", "args": {"begin": "*", "end": "*"}, "context":
