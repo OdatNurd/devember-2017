@@ -1,5 +1,7 @@
 import sublime
 
+from .view import find_help_view
+
 
 ###----------------------------------------------------------------------------
 
@@ -27,6 +29,18 @@ def hh_syntax(base_file):
         return syn_list[0]
 
     log("Unable to locate unique syntax '%s'", base_file)
+
+
+def current_help_package(view=None, window=None):
+    """
+    Obtain the package that contains the currently displayed help file or None
+    if help is not visible.
+
+    Looks in the help view provided, or the help view in the passed in window,
+    or the help view in the currently active window.
+    """
+    view = view or find_help_view(window)
+    return (view.settings().get("_hh_pkg") if view is not None else None)
 
 
 ###----------------------------------------------------------------------------

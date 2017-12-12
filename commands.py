@@ -3,18 +3,10 @@ import sublime_plugin
 
 import os
 
-from .common import log
+from .common import log, current_help_package
 from .view import focus_on, find_help_view
 from .core import help_index_list, reload_help_index
 from .core import show_help_topic, display_help_file, reload_help_file
-
-
-###----------------------------------------------------------------------------
-
-
-def _current_help_package(view=None):
-    view = view or find_help_view()
-    return (view.settings().get("_hh_pkg") if view is not None else None)
 
 
 ###----------------------------------------------------------------------------
@@ -26,7 +18,7 @@ class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
     None, infer it from the currently active help view.
     """
     def run(self, package=None, topic="index.txt"):
-        package = package or _current_help_package()
+        package = package or current_help_package()
         topic = topic or "index.txt"
 
         if package is None:
@@ -42,7 +34,7 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
     given,the user will be prompted to supply one.
     """
     def run(self, package=None, prompt=False):
-        package = package or _current_help_package()
+        package = package or current_help_package()
         if package is None or prompt:
             return self.select_package()
 
@@ -55,7 +47,7 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
 
     def is_enabled(self, package=None, prompt=False):
         if prompt == False:
-            package = package or _current_help_package()
+            package = package or current_help_package()
             if package is None:
                 return False
 
