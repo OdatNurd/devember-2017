@@ -1,0 +1,6 @@
+{
+    // When set to True, every time you save a HyperHelp source file, the date
+    // header will be checked to see if it is the current date or not, and if
+    // not it will be updated to the current date.
+    "update_header_on_save": true
+}
