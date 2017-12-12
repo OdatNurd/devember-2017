@@ -43,14 +43,20 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
 
     def create_file(self, package, file):
         if not file:
-            return log("No help file givenl skipping creation", status=True)
+            return log("No help file given; skipping creation", status=True)
 
         pkg_info = help_index_list().get(package)
-        help_path = os.path.join(sublime.packages_path(), pkg_info.doc_root)
+        local_path = os.path.join(sublime.packages_path(),
+                                 pkg_info.doc_root,
+                                 file)
+
+        help_file = os.path.split(local_path)
+
+        os.makedirs(help_file[0], exist_ok=True)
 
         view = self.window.new_file()
-        view.settings().set("default_dir", help_path)
-        view.set_name(file)
+        view.settings().set("default_dir", help_file[0])
+        view.set_name(help_file[1])
         view.assign_syntax(hh_syntax("HyperHelp.sublime-syntax"))
 
         template = _reformat(
