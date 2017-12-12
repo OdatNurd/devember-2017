@@ -252,9 +252,9 @@ def _load_help_index(index_res):
     # If there is no document root, set it from the index resource; otherwise
     # ensure that it's normalized to appear in the appropriate package.
     if not doc_root:
-        doc_root = path.split(index_res)[0]
+        doc_root = path.split(index_res[9:])[0]
     else:
-        doc_root = path.normpath("Packages/%s/%s" % (package, doc_root))
+        doc_root = path.normpath("%s/%s" % (package, doc_root))
 
     # Gather the unique list of topics.
     topic_list = dict()

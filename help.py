@@ -29,7 +29,7 @@ def _resource_for_help(pkg_info, help_file):
     package. The help file should be relative to the document root of the
     package.
     """
-    return "%s/%s" % (pkg_info.doc_root, help_file)
+    return "Packages/%s/%s" % (pkg_info.doc_root, help_file)
 
 
 def _load_help_file(pkg_info, help_file):
