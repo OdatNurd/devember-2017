@@ -43,4 +43,31 @@ def current_help_package(view=None, window=None):
     return (view.settings().get("_hh_pkg") if view is not None else None)
 
 
+def help_package_prompt(help_list, on_select, on_cancel=None):
+    """
+    Given a list of loaded help indexes, prompt the user to select one of the
+    packages. on_select is invoked with the name of the selected package,
+    while on_cancel is invoked if the user cancels the selection.
+    """
+    if not help_list:
+        return log("No packages with help are installed", status=True)
+
+    pkg_list = sorted([key for key in help_list])
+    captions = [[help_list[key].package,
+                 help_list[key].description]
+        for key in pkg_list]
+
+    def pick_package(index):
+        package = None if index < 0 else captions[index][0]
+
+        if index >= 0:
+            return on_select(package) if on_select is not None else None
+
+        return on_cancel() if on_cancel is not None else None
+
+    sublime.active_window().show_quick_panel(
+        captions,
+        on_select=lambda index: pick_package(index))
+
+
 ###----------------------------------------------------------------------------

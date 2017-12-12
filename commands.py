@@ -3,7 +3,7 @@ import sublime_plugin
 
 import os
 
-from .common import log, current_help_package
+from .common import log, current_help_package, help_package_prompt
 from .view import focus_on
 from .core import help_index_list
 from .core import show_help_topic
@@ -36,7 +36,8 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
     def run(self, package=None, prompt=False):
         package = package or current_help_package()
         if package is None or prompt:
-            return self.select_package()
+            return help_package_prompt(help_index_list(),
+                                       on_select=lambda pkg: self.run(pkg))
 
         pkg_info = help_index_list().get(package, None)
         if pkg_info is None:
@@ -52,24 +53,6 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
                 return False
 
         return True
-
-    def select_package(self):
-        help_list = help_index_list()
-        if not help_list:
-            return log("No packages with help are installed", status=True)
-
-        pkg_list = sorted([key for key in help_list])
-        captions = [[help_list[key].package,
-                     help_list[key].description]
-            for key in pkg_list]
-
-        def pick_package(index):
-            if index >= 0:
-                self.run(captions[index][0])
-
-        sublime.active_window().show_quick_panel(
-            captions,
-            on_select=lambda index: pick_package(index))
 
     def show_toc(self, pkg_info, items, stack):
         captions = [[item["caption"], item["topic"].replace("\t", " ") +
