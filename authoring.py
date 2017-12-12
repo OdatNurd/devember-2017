@@ -2,24 +2,12 @@ import sublime
 import sublime_plugin
 
 import os
-import textwrap
 import datetime
 
 from .common import log, hh_syntax, current_help_package, help_package_prompt
+from .authoring_common import format_template
 from .core import help_index_list
 from .core import reload_help_file
-
-
-###----------------------------------------------------------------------------
-
-
-def _reformat(template):
-    """
-    Reformat the passed in text to not be indented, so that we can easily
-    inline strings. Swiped almost wholesale from Detaul/new_templates.py
-    except that I don't like extra trailing newlines.
-    """
-    return textwrap.dedent(template).lstrip().rstrip()
 
 
 ###----------------------------------------------------------------------------
@@ -59,7 +47,7 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
         view.set_name(help_file[1])
         view.assign_syntax(hh_syntax("HyperHelp.sublime-syntax"))
 
-        template = _reformat(
+        template = format_template(
             """
             %%hyperhelp title="${1:Title}" date="${2:%s}"
 
