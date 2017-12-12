@@ -5,7 +5,7 @@ import sublime_plugin
 ###----------------------------------------------------------------------------
 
 
-class HyperHelpEventListener(sublime_plugin.EventListener):
+class HyperhelpEventListener(sublime_plugin.EventListener):
     def on_query_context(self, view, key, operator, operand, match_all):
         """
         Provide custom key binding contexts for binding keys in hyperhelp
