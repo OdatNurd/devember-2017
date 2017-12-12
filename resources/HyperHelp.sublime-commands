@@ -1,5 +1,5 @@
 [
     { "caption": "HyperHelp: Help on Help", "command": "hyperhelp_topic", "args": { "package": "hyperhelp", "topic": "index.txt" } },
     { "caption": "HyperHelp: Packages with Help", "command": "hyperhelp_contents", "args": { "prompt": true } },
-    { "caption": "HyperHelp: View Table of Contents", "command": "hyperhelp_contents" }
+    { "caption": "HyperHelp: View Table of Contents", "command": "hyperhelp_contents", "args": { "prompt": false } }
 ]
