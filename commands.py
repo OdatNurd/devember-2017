@@ -30,8 +30,9 @@ class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
 
 class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
     """
-    Display the table of contents for the package provided. If no packge is
-    given,the user will be prompted to supply one.
+    Display the table of contents for the package provided. If no package is
+    given and one cannot be inferred from the current help view, the user will
+    be prompted to supply one. The prompt always occurs if the argument asks.
     """
     def run(self, package=None, prompt=False):
         package = package or current_help_package()

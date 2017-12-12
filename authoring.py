@@ -2,13 +2,65 @@ import sublime
 import sublime_plugin
 
 import os
+import textwrap
+import datetime
 
-from .common import log, current_help_package
+from .common import log, hh_syntax, current_help_package, help_package_prompt
 from .core import help_index_list
 from .core import reload_help_file
 
 
 ###----------------------------------------------------------------------------
+
+
+def _reformat(template):
+    """
+    Reformat the passed in text to not be indented, so that we can easily
+    inline strings. Swiped almost wholesale from Detaul/new_templates.py
+    except that I don't like extra trailing newlines.
+    """
+    return textwrap.dedent(template).lstrip().rstrip()
+
+
+###----------------------------------------------------------------------------
+
+
+class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
+    """
+    Create a new help file in the package provided. If no package is given and
+    one cannot be inferred from the current help view, the user will be
+    prompted to supply one. The prompt always occurs if the argument asks.
+    """
+    def run(self, package=None, prompt=False):
+        package = package or current_help_package(window=self.window)
+        if package is None or prompt:
+            return help_package_prompt(help_index_list(),
+                                       on_select=lambda pkg: self.run(pkg))
+
+        self.window.show_input_panel("New Help File", "",
+                                     lambda file: self.create_file(package, file),
+                                     None, None)
+
+    def create_file(self, package, file):
+        if not file:
+            return log("No help file givenl skipping creation", status=True)
+
+        pkg_info = help_index_list().get(package)
+        help_path = os.path.join(sublime.packages_path(), pkg_info.doc_root)
+
+        view = self.window.new_file()
+        view.settings().set("default_dir", help_path)
+        view.set_name(file)
+        view.assign_syntax(hh_syntax("HyperHelp.sublime-syntax"))
+
+        template = _reformat(
+            """
+            %%hyperhelp title="${1:Title}" date="${2:%s}"
+
+            $0
+            """ % datetime.date.today().strftime("%Y-%m-%d"))
+
+        view.run_command("insert_snippet", {"contents": template})
 
 
 class HyperhelpAuthorReloadHelpCommand(sublime_plugin.TextCommand):
