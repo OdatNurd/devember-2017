@@ -3,14 +3,50 @@ import sublime_plugin
 
 import os
 import datetime
+import re
 
 from .common import log, hh_syntax, current_help_package, help_package_prompt
-from .authoring_common import format_template
+from .authoring_common import format_template, is_authoring_source
 from .core import help_index_list
 from .core import reload_help_file
 
 
 ###----------------------------------------------------------------------------
+
+
+# Match a help header line focusing on the date field.
+_header_date_re = re.compile(r'^(%hyperhelp.*\bdate=")(\d{4}-\d{2}-\d{2})(".*)')
+
+
+###----------------------------------------------------------------------------
+
+
+class HyperhelpAuthorUpdateHeader(sublime_plugin.TextCommand):
+    """
+    If the current file is a help file that contains a header with a last
+    modified date field, this will update the date field to be the current
+    date. Quiet controls if the status line shows status about this or not.
+    """
+    def run(self, edit, quiet=False):
+        now = datetime.date.today().strftime("%Y-%m-%d")
+
+        h_line = self.view.line(0)
+        header = self.view.substr(h_line)
+
+        msg = "Help file date header is already current"
+        match = _header_date_re.match(header)
+        if match and match.group(2) != now:
+            header = match.expand(r'\g<1>%s\g<3>' % now)
+            self.view.replace(edit, h_line, header)
+
+            msg = "Help file date header updated to the most recent date"
+
+        if not quiet:
+            log(msg, status=True)
+
+
+    def is_enabled(self, quiet=False):
+        return is_authoring_source(self.view)
 
 
 class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
