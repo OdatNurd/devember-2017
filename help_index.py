@@ -152,7 +152,7 @@ def _get_file_metadata(help_topic_dict):
     Assumes the help dictionary has already been validated.
     """
     retVal = OrderedDict()
-    for file in help_topic_dict:
+    for file in sorted(help_topic_dict.keys()):
         retVal[file] = help_topic_dict[file][0]
 
     return retVal
