@@ -83,6 +83,7 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
         os.makedirs(help_file[0], exist_ok=True)
 
         view = self.window.new_file()
+        view.settings().set("_hh_auth", True)
         view.settings().set("default_dir", help_file[0])
         view.set_name(help_file[1])
         apply_authoring_settings(view)
