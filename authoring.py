@@ -7,6 +7,7 @@ import re
 
 from .common import log, hh_syntax, current_help_package, help_package_prompt
 from .authoring_common import format_template, is_authoring_source
+from .authoring_common import local_help_filename, open_local_help
 from .core import help_index_list
 from .core import reload_help_file
 
@@ -61,7 +62,11 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
             return help_package_prompt(help_index_list(),
                                        on_select=lambda pkg: self.run(pkg))
 
-        self.window.show_input_panel("New Help File", "",
+        if help_index_list().get(package, None) is None:
+            return log("Cannot add help file; package '%s' unknown", package,
+                       dialog=True)
+
+        self.window.show_input_panel("New Help File (%s)" % package, "",
                                      lambda file: self.create_file(package, file),
                                      None, None)
 
@@ -70,9 +75,7 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
             return log("No help file given; skipping creation", status=True)
 
         pkg_info = help_index_list().get(package)
-        local_path = os.path.join(sublime.packages_path(),
-                                 pkg_info.doc_root,
-                                 file)
+        local_path = local_help_filename(pkg_info, file)
 
         help_file = os.path.split(local_path)
 
@@ -91,6 +94,39 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
             """ % datetime.date.today().strftime("%Y-%m-%d"))
 
         view.run_command("insert_snippet", {"contents": template})
+
+
+class HyperhelpAuthorEditHelp(sublime_plugin.WindowCommand):
+    """
+    Open an existing help file from the package provided. If no package is
+    given and one cannot be inferred from the current help view, the user will
+    be prompted to supply one. The prompt always occurs if the argument asks.
+    """
+    def run(self, package=None, prompt=False):
+        package = package or current_help_package(window=self.window)
+        if package is None or prompt:
+            return help_package_prompt(help_index_list(),
+                                       on_select=lambda pkg: self.run(pkg))
+
+        pkg_info = help_index_list().get(package, None)
+        if pkg_info is None:
+            return log("Cannot edit help file; package '%s' unknown", package,
+                       dialog=True)
+
+        files = pkg_info.help_files
+        items = [[key, files[key]] for key in files]
+
+        if not items:
+            return log("The help index for '%s' lists no help files", package,
+                       dialog=True )
+
+        self.window.show_quick_panel(
+            items=items,
+            on_select=lambda i: self.edit_file(pkg_info, items, i))
+
+    def edit_file(self, pkg_info, items, index):
+        if index >= 0:
+            open_local_help(pkg_info, items[index][0], window=self.window)
 
 
 class HyperhelpAuthorReloadHelpCommand(sublime_plugin.TextCommand):

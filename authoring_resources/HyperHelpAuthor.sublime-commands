@@ -1,4 +1,5 @@
 [
+    { "caption": "HyperHelpAuthor: Edit Help File",          "command": "hyperhelp_author_edit_help" },
     { "caption": "HyperHelpAuthor: Create New Help File",    "command": "hyperhelp_author_create_help" },
     { "caption": "HyperHelpAuthor: Update File Header Date", "command": "hyperhelp_author_update_header"},
 

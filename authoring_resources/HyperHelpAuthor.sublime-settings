@@ -2,5 +2,16 @@
     // When set to True, every time you save a HyperHelp source file, the date
     // header will be checked to see if it is the current date or not, and if
     // not it will be updated to the current date.
-    "update_header_on_save": true
+    "update_header_on_save": true,
+
+    // The settings here are applied to help views after they are opened for
+    // editing and have the usual syntax settings applied to them.
+    //
+    // The settings here can be used to override the syntax to make editing
+    // easier, for example enabling the ruler
+    "author_view_settings": {
+        "rulers": [80],
+        "match_selection": true,
+        "draw_indent_guides": true,
+    }
 }
