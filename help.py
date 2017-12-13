@@ -40,7 +40,16 @@ def _load_help_file(pkg_info, help_file):
     Returns None if the help file cannot be loaded.
     """
     try:
-        return sublime.load_resource(_resource_for_help(pkg_info, help_file))
+        text = sublime.load_resource(_resource_for_help(pkg_info, help_file))
+
+        if '\r\n' in text:
+            return text.replace('\r', '')
+
+        if '\r' in text:
+            return text.replace('\r', '\n')
+
+        return text
+
     except:
         pass
 
