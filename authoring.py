@@ -8,7 +8,7 @@ import re
 from .common import log, hh_syntax, current_help_package, help_package_prompt
 from .authoring_common import format_template, is_authoring_source
 from .authoring_common import local_help_filename, open_local_help
-from .authoring_common import open_help_index
+from .authoring_common import open_help_index, apply_authoring_settings
 from .core import help_index_list
 from .core import reload_help_file
 
@@ -85,7 +85,7 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
         view = self.window.new_file()
         view.settings().set("default_dir", help_file[0])
         view.set_name(help_file[1])
-        view.assign_syntax(hh_syntax("HyperHelp.sublime-syntax"))
+        apply_authoring_settings(view)
 
         template = format_template(
             """
