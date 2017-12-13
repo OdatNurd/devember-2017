@@ -8,6 +8,7 @@ import re
 from .common import log, hh_syntax, current_help_package, help_package_prompt
 from .authoring_common import format_template, is_authoring_source
 from .authoring_common import local_help_filename, open_local_help
+from .authoring_common import open_help_index
 from .core import help_index_list
 from .core import reload_help_file
 
@@ -127,6 +128,26 @@ class HyperhelpAuthorEditHelp(sublime_plugin.WindowCommand):
     def edit_file(self, pkg_info, items, index):
         if index >= 0:
             open_local_help(pkg_info, items[index][0], window=self.window)
+
+
+class HyperhelpAuthorEditIndex(sublime_plugin.WindowCommand):
+    """
+    Open the index for the help package provided. If no package is given and one
+    cannot be inferred from the current help view, the user will be prompted to
+    supply one. The prompt always occurs if the argument asks.
+    """
+    def run(self, package=None, prompt=False):
+        package = package or current_help_package(window=self.window)
+        if package is None or prompt:
+            return help_package_prompt(help_index_list(),
+                                       on_select=lambda pkg: self.run(pkg))
+
+        pkg_info = help_index_list().get(package, None)
+        if pkg_info is None:
+            return log("Cannot edit help file; package '%s' unknown", package,
+                       dialog=True)
+
+        open_help_index(pkg_info)
 
 
 class HyperhelpAuthorReloadHelpCommand(sublime_plugin.TextCommand):

@@ -76,14 +76,36 @@ def open_local_help(pkg_info, help_file, window=None):
             """
             Specified help file does not exist; cannot open.
 
-            Note: HyperHelpAuthor can not currently open help files from
-            packed packages for editing.
+            Note: HyperHelpAuthor can not currently open help
+            files from packed packages for editing.
             """), dialog=True)
 
     view = window.open_file(local_path)
     view.settings().set("_hh_auth", True)
     if not view.is_loading():
         apply_authoring_settings(view)
+
+
+def open_help_index(pkg_info, window=None):
+    """
+    Attempt to open the provided help index file localy for editing.
+    """
+    window = window if window is not None else sublime.active_window()
+
+    # The index file is stored as a resource file spec, so strip the prefix
+    local_path = os.path.join(sublime.packages_path(),
+                              pkg_info.index_file[len("Packages/"):])
+
+    if not os.path.exists(local_path):
+        return log(format_template(
+            """
+            Specified help index does not exist; cannot open.
+
+            Note: HyperHelpAuthor can not currently open help
+            indexes from packed packages for editing.
+            """), dialog=True)
+
+    window.open_file(local_path)
 
 
 def apply_authoring_settings(view):
