@@ -1,4 +1,35 @@
 [
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "hyperhelp",
+                        "children":
+                        [
+                            {
+                                "caption": "Key Bindings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/hyperhelp/resources/Default ($platform).sublime-keymap",
+                                    "default": "[\n\t$0\n]\n"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+
    // {
    //      "id": "help",
    //      "children":
