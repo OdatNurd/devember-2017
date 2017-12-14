@@ -2,8 +2,9 @@ import sublime
 import sublime_plugin
 
 from .common import log
-
 from .core import load_help_index, display_help_file
+from .authoring import _global_package_list
+
 
 ###----------------------------------------------------------------------------
 
@@ -30,8 +31,10 @@ def _help_load_index():
 
 class HelpTestCommand(sublime_plugin.WindowCommand):
     def run(self):
-        _test_help()
+        # _test_help()
         # _help_load_index()
+        for pkg in _global_package_list():
+            print(pkg)
 
 
 ###----------------------------------------------------------------------------

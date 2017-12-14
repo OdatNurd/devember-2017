@@ -48,5 +48,18 @@
             { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help meta.link" },
             { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
         ]
+    },
+
+    // Open the command palette with all help commands displayed.
+    {
+        "keys": ["ctrl+alt+h"], "command": "show_overlay",
+        "args": {
+            "overlay": "command_palette",
+            "text" : "HyperHelp: "
+        }
+    },
+    // Run the latest help test
+    {
+        "keys": ["ctrl+alt+t"], "command": "help_test"
     }
 ]
