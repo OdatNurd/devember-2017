@@ -53,7 +53,7 @@ def local_help_filename(pkg_info, help_file):
     return os.path.join(sublime.packages_path(), pkg_info.doc_root, help_file)
 
 
-def format_template(template):
+def format_template(template, *args):
     """
     Given incoming text, remove all common indent, then strip away the leading
     and trailing whitespace from it.
@@ -61,7 +61,7 @@ def format_template(template):
     This is a modified version of code from Default/new_templates.py from the
     core Sublime code.
     """
-    return textwrap.dedent(template).strip()
+    return textwrap.dedent(template % args).strip()
 
 
 def open_local_help(pkg_info, help_file, window=None):

@@ -126,7 +126,8 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
             %%hyperhelp title="${1:Title}" date="${2:%s}"
 
             $0
-            """ % datetime.date.today().strftime("%Y-%m-%d"))
+            """,
+            datetime.date.today().strftime("%Y-%m-%d"))
 
         view.run_command("insert_snippet", {"contents": template})
 
