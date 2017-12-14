@@ -23,6 +23,13 @@ _header_date_re = re.compile(r'^(%hyperhelp.*\bdate=")(\d{4}-\d{2}-\d{2})(".*)')
 ###----------------------------------------------------------------------------
 
 
+def _error_dialog(message, *args):
+    """
+    Simple local helper for displaying an error dialog using the log function.
+    """
+    log(format_template(message, *args), dialog=True)
+
+
 def _global_package_list(filter_with_help=True):
     """
     Yield a list of packages that Sublime currently knows about (those that
@@ -48,6 +55,55 @@ def _global_package_list(filter_with_help=True):
 
     if "User" in pkg_set:
         yield "User"
+
+
+def _make_help_index(package, doc_root, index_path):
+    """
+    Create an empty help index for the provided package at the given index
+    path location.
+    """
+    template = format_template(
+        """
+        {
+            "description": "Help for %s Package",
+            "doc_root": "%s",
+            "help_files": {
+                "index.txt": [
+                    "Index file for %s package",
+
+                    {
+                        "topic": "index.txt",
+                        "caption": "Index file"
+                    }
+                ]
+            },
+            "help_contents": [
+                "index.txt"
+            ]
+        }
+        """,
+        package, doc_root, package)
+
+    with open(index_path, 'w') as handle:
+        handle.write(template)
+
+
+def _make_root_help(package, help_path):
+    """
+    Create a stub root help file (index.txt) at the provided help path.
+    """
+    template = format_template(
+        """
+        %%hyperhelp title="Index file for %s package" date="%s"
+
+        This is the root help file for the '%s' package.
+        """,
+        package,
+        datetime.date.today().strftime("%Y-%m-%d"),
+        package)
+
+    with open(help_path, 'w') as handle:
+        handle.write(template)
 
 
 ###----------------------------------------------------------------------------
@@ -166,6 +222,135 @@ class HyperhelpAuthorEditHelp(sublime_plugin.WindowCommand):
         self.window.show_quick_panel(
             items=items,
             on_select=lambda index: pick(index))
+
+
+class HyperhelpAuthorCreateIndex(sublime_plugin.WindowCommand):
+    """
+    Create a new empty help system in the package provided, prompting for the
+    package if none is given. This will create the package index and a stub
+    help file and reload the help index.
+    """
+    def run(self, package=None, doc_root=None):
+        if package is None:
+            items = list(_global_package_list())
+
+            def pick(i):
+                if i >= 0:
+                    self.run(items[i], doc_root)
+
+            return self.window.show_quick_panel(items=items,
+                                                on_select=lambda i: pick(i))
+
+        if package in help_index_list():
+            return _error_dialog(
+                """
+                Specified package already has help defined:
+                    '%s'
+
+                Use the Edit Help Index command to edit the
+                existing help system in this package.
+                """, package)
+
+        if doc_root is not None:
+            return self.create_index(package, doc_root)
+
+        self.window.show_input_panel("Document Root: Packages/%s/" % package,
+                                     "help/",
+                                     lambda r: self.create_index(package, r),
+                                     None, None)
+
+    def create_index(self, package, doc_root):
+        root_path = self.make_document_root(package, doc_root)
+        if root_path is not None:
+            index_path = os.path.join(root_path, "hyperhelp.json")
+            help_path = os.path.join(root_path, "index.txt")
+
+            if os.path.exists(index_path):
+                return _error_dialog(
+                    """
+                    Help index file already exists in package:
+                        '%s'
+
+                    This may indicate that the index is broken and
+                    cannot be loaded.
+                    """, package)
+
+            if os.path.exists(help_path):
+                return _error_dialog(
+                    """
+                    Root help file already exists in package:
+                        '%s'
+
+                    This may indicate that an existing help index
+                    for this package is broken and cannot be
+                    loaded.
+                    """, package)
+
+            try:
+                os.makedirs(root_path, exist_ok=True)
+                _make_help_index(package, doc_root, index_path)
+                _make_root_help(package, help_path)
+
+                msg = format_template(
+                    """
+                    Initial help files created for package:
+                       '%s'
+                          -> %s/hyperhelp.json
+                          -> %s/index.txt
+
+                    """,
+                    package,
+                    doc_root,
+                    doc_root)
+
+                # WARNING: The below is a bit fragile in that Sublime needs time
+                # to notice that the new index is a resource. A better approach
+                # might be to tell the user to restart Sublime, or use a
+                # background thread to poll to see when it's done or something.
+
+                # Wait one second before reloading the indexes
+                sublime.set_timeout(lambda: help_index_list(reload=True), 1000)
+
+                # If the user wants to, wait one second to ensure the above
+                # timeout expires first.
+                if sublime.ok_cancel_dialog(msg, "Open created files"):
+                    def open_files():
+                        self.window.run_command("hyperhelp_author_edit_index",
+                                               {"package": package})
+                        self.window.run_command("hyperhelp_author_edit_help",
+                                                {"package": package,
+                                                "file": "index.txt"})
+                        sublime.run_command("hyperhelp_topic",
+                                            {"package": package,
+                                            "topic": "index.txt"})
+                    sublime.set_timeout(lambda: open_files(), 1000)
+
+
+            except:
+                return _error_dialog(
+                    """
+                    Error adding help to package:
+                        '%s'
+
+                    Unable to create the document root, index file
+                    or root help file.
+                    """, package)
+
+    def make_document_root(self, package, doc_root):
+        help_path = os.path.join(sublime.packages_path(), package, doc_root)
+        help_path = os.path.normpath(help_path)
+
+        if not help_path.startswith(sublime.packages_path()):
+            return _error_dialog(
+                """
+                Invalid document root specified:
+                    '%s'
+
+                The document root must be contained within the
+                package itself.
+                """, doc_root)
+
+        return help_path
 
 
 class HyperhelpAuthorEditIndex(sublime_plugin.WindowCommand):

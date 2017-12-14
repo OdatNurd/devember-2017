@@ -2,6 +2,7 @@
     { "caption": "HyperHelpAuthor: Edit Help File",          "command": "hyperhelp_author_edit_help" },
     { "caption": "HyperHelpAuthor: Edit Help Index",         "command": "hyperhelp_author_edit_index" },
 
+    { "caption": "HyperHelpAuthor: Add Help to Package",     "command": "hyperhelp_author_create_index" },
     { "caption": "HyperHelpAuthor: Create New Help File",    "command": "hyperhelp_author_create_help" },
     { "caption": "HyperHelpAuthor: Update File Header Date", "command": "hyperhelp_author_update_header"},
 
