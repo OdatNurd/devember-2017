@@ -57,15 +57,18 @@ class HyperhelpAuthorCreateHelp(sublime_plugin.WindowCommand):
     one cannot be inferred from the current help view, the user will be
     prompted to supply one. The prompt always occurs if the argument asks.
     """
-    def run(self, package=None, prompt=False):
+    def run(self, package=None, file=None, prompt=False):
         package = package or current_help_package(window=self.window)
         if package is None or prompt:
             return help_package_prompt(help_index_list(),
-                                       on_select=lambda pkg: self.run(pkg))
+                                       on_select=lambda p: self.run(p, file))
 
         if help_index_list().get(package, None) is None:
             return log("Cannot add help file; package '%s' unknown", package,
                        dialog=True)
+
+        if file is not None:
+            return self.create_file(package, file)
 
         self.window.show_input_panel("New Help File (%s)" % package, "",
                                      lambda file: self.create_file(package, file),
@@ -104,11 +107,11 @@ class HyperhelpAuthorEditHelp(sublime_plugin.WindowCommand):
     given and one cannot be inferred from the current help view, the user will
     be prompted to supply one. The prompt always occurs if the argument asks.
     """
-    def run(self, package=None, prompt=False):
+    def run(self, package=None, file=None, prompt=False):
         package = package or current_help_package(window=self.window)
         if package is None or prompt:
             return help_package_prompt(help_index_list(),
-                                       on_select=lambda pkg: self.run(pkg))
+                                       on_select=lambda p: self.run(p, file))
 
         pkg_info = help_index_list().get(package, None)
         if pkg_info is None:
@@ -120,15 +123,18 @@ class HyperhelpAuthorEditHelp(sublime_plugin.WindowCommand):
 
         if not items:
             return log("The help index for '%s' lists no help files", package,
-                       dialog=True )
+                       dialog=True)
+
+        if file is not None:
+            return open_local_help(pkg_info, file, window=self.window)
+
+        def pick(index):
+            if index >= 0:
+                open_local_help(pkg_info, items[index][0], window=self.window)
 
         self.window.show_quick_panel(
             items=items,
-            on_select=lambda i: self.edit_file(pkg_info, items, i))
-
-    def edit_file(self, pkg_info, items, index):
-        if index >= 0:
-            open_local_help(pkg_info, items[index][0], window=self.window)
+            on_select=lambda index: pick(index))
 
 
 class HyperhelpAuthorEditIndex(sublime_plugin.WindowCommand):
