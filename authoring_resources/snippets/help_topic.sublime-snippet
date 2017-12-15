@@ -1,0 +1,11 @@
+<snippet>
+    <content><![CDATA[
+{
+    "topic": "${1:topic text}",
+    "caption": "${2:caption text}"
+},$0
+]]></content>
+    <tabTrigger>ht</tabTrigger>
+    <description>Insert help topic</description>
+    <scope>text.hyperhelp.index</scope>
+</snippet>

@@ -1,0 +1,14 @@
+<snippet>
+    <content><![CDATA[
+"${1:help_file}.txt": [
+    "${2:Help File Caption}",
+    {
+        "topic": "${1:help_file}.txt",
+        "caption": "${2:Help File Caption}"
+    },
+],$0
+]]></content>
+    <tabTrigger>hf</tabTrigger>
+    <description>Insert help file entry</description>
+    <scope>text.hyperhelp.index</scope>
+</snippet>
