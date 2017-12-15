@@ -9,8 +9,7 @@ from .common import log, hh_syntax, current_help_package, help_package_prompt
 from .authoring_common import format_template, is_authoring_source
 from .authoring_common import local_help_filename, open_local_help
 from .authoring_common import open_help_index, apply_authoring_settings
-from .core import help_index_list
-from .core import reload_help_file
+from .core import help_index_list, load_help_index, reload_help_file
 
 
 ###----------------------------------------------------------------------------
@@ -291,6 +290,14 @@ class HyperhelpAuthorCreateIndex(sublime_plugin.WindowCommand):
                 _make_help_index(package, doc_root, index_path)
                 _make_root_help(package, help_path)
 
+                # Manually add the new index to the package since Sublime has
+                # to notice that the new resource esists.
+                new_pkg_info = load_help_index(index_path)
+                if new_pkg_info is None:
+                    raise IOError("Unable to load new help index")
+
+                help_index_list()[package] = new_pkg_info
+
                 msg = format_template(
                     """
                     Initial help files created for package:
@@ -303,27 +310,22 @@ class HyperhelpAuthorCreateIndex(sublime_plugin.WindowCommand):
                     doc_root,
                     doc_root)
 
-                # WARNING: The below is a bit fragile in that Sublime needs time
-                # to notice that the new index is a resource. A better approach
-                # might be to tell the user to restart Sublime, or use a
-                # background thread to poll to see when it's done or something.
-
-                # Wait one second before reloading the indexes
-                sublime.set_timeout(lambda: help_index_list(reload=True), 1000)
-
-                # If the user wants to, wait one second to ensure the above
-                # timeout expires first.
+                # Prompt the user to see if they want to open the files just
+                # created or not.
                 if sublime.ok_cancel_dialog(msg, "Open created files"):
-                    def open_files():
-                        self.window.run_command("hyperhelp_author_edit_index",
-                                               {"package": package})
-                        self.window.run_command("hyperhelp_author_edit_help",
-                                                {"package": package,
-                                                "file": "index.txt"})
-                        sublime.run_command("hyperhelp_topic",
+                    self.window.run_command("hyperhelp_author_edit_index",
+                                           {"package": package})
+                    self.window.run_command("hyperhelp_author_edit_help",
                                             {"package": package,
-                                            "topic": "index.txt"})
-                    sublime.set_timeout(lambda: open_files(), 1000)
+                                            "file": "index.txt"})
+
+                    # This relies on load_resource() being able to load a
+                    # resource that find_resources() can't find yet; might
+                    # need to make help loading open local files as for
+                    # indexes.
+                    sublime.run_command("hyperhelp_topic",
+                                        {"package": package,
+                                        "topic": "index.txt"})
 
 
             except:
