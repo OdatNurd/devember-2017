@@ -139,7 +139,7 @@ def show_help_topic(package, topic):
     inner_topic = topic.replace(" ", "\t").casefold()
     help_file = pkg_info.help_topics.get(inner_topic, {}).get("file", None)
     if help_file is None:
-        log("Unknown help topic '%s", topic, status=True)
+        log("Unknown help topic '%s'", topic, status=True)
         return False
 
     help_view = display_help_file(pkg_info, help_file)
