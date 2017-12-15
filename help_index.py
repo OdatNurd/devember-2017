@@ -4,6 +4,7 @@ import sublime_plugin
 # Inside packages, paths are always posix regardless of the platform in use.
 import posixpath as path
 from collections import OrderedDict, namedtuple
+import os
 
 from .validictory import validate
 from .validictory import SchemaError, ValidationError
@@ -208,23 +209,55 @@ def _get_toc_metadata(help_toc_list, topics, package):
     return expand_topic_list(help_toc_list)
 
 
-def _load_help_index(index_res):
+def _get_index_content(file_spec):
+    """
+    Load the index file content from the given file specification, if possible.
+    The file spec can be an absolute path to a package file or a package
+    resource specification pointing to one.
+
+    Return is a tuple with the associated resource name and the content that
+    was loaded, if any.
+    """
+    content = None
+    if file_spec.startswith(sublime.packages_path()):
+        index_res = os.path.relpath(file_spec, sublime.packages_path())
+        index_res = os.path.join("Packages", index_res)
+
+        try:
+            with open(file_spec, 'r') as file:
+                content = file.read()
+        except:
+            pass
+    else:
+        index_res = file_spec
+        try:
+            content = sublime.load_resource(index_res)
+        except:
+            pass
+
+    return (index_res, content)
+
+
+def _load_help_index(file_spec):
     """
     Given a package name and the resource filename of the hyperhelp json file,
     load the help index and return it. The return value is None on failure or
     HelpData on success.
     """
+    index_res, content = _get_index_content(file_spec)
     if not index_res.casefold().startswith("packages/"):
-        return log("Index resource is not in a package: %s", index_res)
+        return log("Index source is not in a package: %s", index_res)
 
     package = path.split(index_res)[0].split("/")[1]
 
+    if content is None:
+        return log("Unable to load index information for '%s'", package)
+
     try:
         log("Loading help index for package '%s'", package)
-        json = sublime.load_resource(index_res)
-        raw_dict = sublime.decode_value(json)
+        raw_dict = sublime.decode_value(content)
     except:
-        return log("Unable to load help index information for '%s'", package)
+        return log("Unable to parse index information for '%s'", package)
 
     try:
         validate(raw_dict, index_schema)
