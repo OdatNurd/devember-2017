@@ -1,0 +1,20 @@
+%hyperhelp title="HyperHelp Style Conventions" date="2017-12-14"
+
+*|Style	Conventions|*
+=================
+
+HyperHelp imposes some limitations on the layout of your help in order to
+ensure that all help is presented in as consistent a manner as possible.
+
+Word wrap is disabled, so all help should optimally be presentable in no more
+than 80 characters. Although you are free to make your help as wide or as
+narrow as you like, a single style is more cohesive for the user.
+
+Indenting via tabs is discouraged (due to holy wars on the One True Tab Width)
+by forcing tabs to be a single character and disabling tab-to-space
+translations in help files.
+
+This ensures that your help lays out the way you intended it to regardless of
+the tab style employed by the end user of your help. Additionally although
+various constructs do not allow spaces inside of them (for example |anchors|),
+tabs are allowed.

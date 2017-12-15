@@ -1,0 +1,11 @@
+%hyperhelp title="Authoring Help Files" date="2017-12-14"
+
+This is a stub page for authoring text. This would be the main hub for pointing
+out the commands that are available for help authoring.
+
+This should also link off to other pages that provide information about the
+format of help index files in the same way as the syntax file talks about the
+markup allowed.
+
+Once that's done, we can strip the explanatory comments out of the help
+index.

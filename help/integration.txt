@@ -1,10 +1,23 @@
-%hyperhelp title="Integrating HyperHelp" date="2017-12-09"
+%hyperhelp title="Integrating HyperHelp" date="2017-12-14"
 
 *|Integration|*
 ===========
 
-HyperHelp is designed to be easy to integrate into your package so that you
-can focus on writing help and not worry about the interior details.
+One of the main design goals of HyperHelp is to be as easy as possible to
+integrate into packages, to promote simple, easily accessible and useful help
+for packages from directly within Sublime Text.
 
-More help on this will be developed as the package matures. For now all there
-is to see here is this link back to the |intro|.
+In the future, HyperHelp will be a dependency package that your package can
+depend on. A simple change in the Package Control channel entry for your
+package will be enough to ensure Package Control also installs HyperHelp if it
+is not already installed.
+
+Currently HyperHelp is under development as a part of Devember 2017. At the end
+of December 2017 it will be split out back into the repository of the initial
+prototype.
+
+Until that time, the package is not ready for third parties to integrate yet
+and features are still in a state of flux. However, you can check out the rest
+of this sample help for more information on what is currently possible.
+
+For more information on writing help text in HyperHelp, see |authoring.txt|.

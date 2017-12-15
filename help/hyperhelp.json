@@ -18,7 +18,7 @@
         "index.txt": [
             // Required; The title of the help file, for use in various display
             // locations.
-            "HyperHelp Sample Help File",
+            "HyperHelp: What is it?",
 
             // Required: One or more dictionaries that indicate a topic that
             // appears in this help file along with a descriptive caption for
@@ -27,12 +27,66 @@
             // The topic is required, but the caption is optional; a default
             // will be created if it is missing.
             {
-                "topic": "intro",
-                "caption": "HyperHelp Introduction"
+                "topic": "index.text",
+                "caption": "HyperHelp: What is it?"
             },
             {
-                "topic": "style conventions",
-                "caption": "Help File Style Conventions"
+                "topic": "what is hyperhelp",
+                "caption": "HyperHelp: What is it?"
+            },
+            {
+                "topic": "how it works",
+                "caption": "How it works"
+            },
+            {
+                "topic": "integration",
+                "caption": "Integrating Hyperhelp in your Package"
+            }
+        ],
+        "help_on_help.txt": [
+            "How to use HyperHelp",
+            {
+                "topic": "help_on_help.txt",
+                "caption": "How to use HyperHelp"
+            },
+            {
+                "topic": "introduction",
+                "caption": "Introduction to HyperHelp"
+            },
+            {
+                "topic": "navigating",
+                "caption": "Navigating Help"
+            },
+            {
+                "topic": "links and anchors",
+                "caption": "Links and Anchors"
+            },
+            {
+                "topic": "here",
+                "caption": "Sample anchor"
+            },
+            {
+                "topic": "help view",
+                "caption": "The Help view"
+            },
+            {
+                "topic": "opening",
+                "caption": "Opening HyperHelp"
+            },
+            {
+                "topic": "next steps",
+                "caption": "Next Steps"
+            },
+        ],
+        "syntax.txt": [
+            "HyperHelp Help Syntax",
+            {
+                "topic": "syntax.txt",
+                "caption": "HyperHelp Help Syntax"
+            },
+            {
+                "topic": "file header",
+                "caption": "Help Header Definition"
             },
             {
                 "topic": "markup",
@@ -51,17 +105,27 @@
                 "caption": "HyperHelp Markup - Anchors"
             },
             {
-                "topic": "link",
+                "topic": "links",
                 "caption": "HyperHelp Markup - Links"
             },
             {
                 "topic": "separators",
                 "caption": "Hyperhelp Markup - Visual Separators"
             },
+        ],
+        "style.txt": [
+            "HyperHelp Style Conventions",
             {
-                "topic": "integration",
-                "caption": "Integrating Hyperhelp in your Package"
-            }
+                "topic": "style.txt",
+                "caption": "HyperHelp Style Conventions"
+            },
+        ],
+        "authoring.txt": [
+            "Authoring Help Files",
+            {
+                "topic": "authoring.txt",
+                "caption": "Authoring Help Files"
+            },
         ],
         "integration.txt": [
             "Developer Info: Integrating HyperHelp",
@@ -89,14 +153,23 @@
     // If this key is not present, a default is created which contains all of
     // the available help topics.
     "help_contents": [
-        "intro",
-        "style conventions",
         {
-            "topic": "markup",
+            "topic": "index.txt",
+            "caption": "HyperHelp: What is it?"
+        },
+        "help_on_help.txt",
+        "introduction",
+        "navigating",
+        {
+            "topic": "syntax.txt",
             "children": [
                 {
-                    "topic": "markup",
+                    "topic": "syntax.txt",
                     "caption": "Overview"
+                },
+                {
+                    "topic": "file header",
+                    "caption": "File Header"
                 },
                 {
                     "topic": "key bindings",
@@ -111,7 +184,7 @@
                     "caption": "Anchors"
                 },
                 {
-                    "topic": "link",
+                    "topic": "links",
                     "caption": "Links"
                 },
                 {
@@ -120,6 +193,8 @@
                 },
             ]
         },
+        "style.txt",
+        "authoring.txt",
         "integration.txt",
     ]
 }
