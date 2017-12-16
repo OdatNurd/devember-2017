@@ -134,11 +134,11 @@ def _import_topics(package, topics, help_topic_dict):
                 }
 
         # All help sources should be in the topic list so you can jump to a
-        # file by name.
+        # file by name. The help file name is the default.
         if help_source not in topics:
             topics[help_source] = {
                 "topic": help_source,
-                "caption": "Help file %s" % help_source,
+                "caption": topic_list[0],
                 "file": help_source
             }
 
@@ -271,6 +271,14 @@ def _load_help_index(file_spec):
     except ValidationError as error:
         return log("Error validating help index for '%s' in %s: %s",
                    package, error.fieldname, error)
+
+    # Seems like validictory has a bug in which if you tell it to verify an
+    # array has contents but the array is empty, it blows up. This can happen
+    # if the array that provides the contents of a help file is empty, for
+    # example.
+    except Exception as error:
+        return log("Error validating help index for '%s': %s",
+                   package, error)
 
     # Top level index keys
     description = raw_dict.pop("description", "Help for %s" % package)

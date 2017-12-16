@@ -27,10 +27,6 @@
             // The topic is required, but the caption is optional; a default
             // will be created if it is missing.
             {
-                "topic": "index.text",
-                "caption": "HyperHelp: What is it?"
-            },
-            {
                 "topic": "what is hyperhelp",
                 "caption": "HyperHelp: What is it?"
             },
@@ -45,10 +41,7 @@
         ],
         "help_on_help.txt": [
             "How to use HyperHelp",
-            {
-                "topic": "help_on_help.txt",
-                "caption": "How to use HyperHelp"
-            },
+
             {
                 "topic": "introduction",
                 "caption": "Introduction to HyperHelp"
@@ -80,10 +73,7 @@
         ],
         "syntax.txt": [
             "HyperHelp Help Syntax",
-            {
-                "topic": "syntax.txt",
-                "caption": "HyperHelp Help Syntax"
-            },
+
             {
                 "topic": "file header",
                 "caption": "Help Header Definition"
@@ -115,20 +105,15 @@
         ],
         "style.txt": [
             "HyperHelp Style Conventions",
-            {
-                "topic": "style.txt",
-                "caption": "HyperHelp Style Conventions"
-            },
         ],
         "authoring.txt": [
             "Authoring Help Files",
-            {
-                "topic": "authoring.txt",
-                "caption": "Authoring Help Files"
-            },
         ],
         "integration.txt": [
             "Developer Info: Integrating HyperHelp",
+
+            // This is an example of the default topic for a file being given
+            // a caption different than the title for the help page.
             {
                 "topic": "integration.txt",
                 "caption": "Integrating HyperHelp into your Package"
