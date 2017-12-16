@@ -40,7 +40,7 @@
                 "mnemonic": "y",
                 "children": [
                     {
-                        "caption": "Help on Help",
+                        "caption": "Help on help",
                         "command": "hyperhelp_topic",
                         "args": {
                             "package": "hyperhelp",
@@ -48,7 +48,7 @@
                         }
                     },
                     {
-                        "caption": "Packages with Help",
+                        "caption": "Packages with help",
                         "command": "hyperhelp_contents",
                         "args": { "prompt": true }
                     },
@@ -56,8 +56,12 @@
                     { "caption": "-" },
 
                     {
-                        "caption": "Table of Contents for current Help",
+                        "caption": "Table of Contents for current help",
                         "command": "hyperhelp_contents",
+                    },
+                    {
+                        "caption": "Topic Index for current help",
+                        "command": "hyperhelp_index",
                     }
                 ]
             }
