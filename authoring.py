@@ -403,12 +403,9 @@ class HyperhelpAuthorReloadIndexCommand(sublime_plugin.TextCommand):
         filename = os.path.relpath(filename, sublime.packages_path())
         package = os.path.split(filename)[0].split(os.sep)[0]
 
+        # If package is missing, force a complete rescan.
         if package not in help_index_list():
-            log("Package index for '%s' not previously loaded; reloading all indexes",
-                package, status=True)
             package = None
-        else:
-            log("Reloading help index for package '%s'", package, status=True)
 
         help_index_list(reload=True, package=package)
 
