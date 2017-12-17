@@ -1,5 +1,7 @@
 import sublime
 
+import webbrowser
+
 from .common import log, hh_syntax
 from .view import find_help_view, update_help_view, focus_on
 
@@ -130,30 +132,42 @@ def show_help_topic(package, topic):
     (both strings). This will transparently create a new help view if needed, as
     well as loading the appropriate help file before jumping to the topic.
 
-    The return value is True if the topic was displayed or False otherwise.
+    The return value is None on error or a string that represents the results
+    of the operation.
     """
     pkg_info = help_index_list().get(package, None)
     if pkg_info is None:
-        return False
+        return None
 
     inner_topic = topic.replace(" ", "\t").casefold()
     help_file = pkg_info.help_topics.get(inner_topic, {}).get("file", None)
     if help_file is None:
         log("Unknown help topic '%s'", topic, status=True)
-        return False
+        return None
+
+    if help_file in pkg_info.urls:
+        webbrowser.open_new_tab(help_file)
+        return "url"
+
+    if help_file in pkg_info.package_files:
+        help_file = help_file.replace("Packages/", "${packages}/")
+        window = sublime.active_window()
+        window.run_command("open_file", {"file": help_file})
+        return "pkg_file"
 
     help_view = display_help_file(pkg_info, help_file)
     if help_view is None:
         log("Unable to load help file '%s'", help_file, status=True)
-        return False
+        return None
 
     anchors = help_view.settings().get("_hh_nav", [])
     for anchor in anchors:
         if inner_topic == anchor[0].casefold():
             focus_on(help_view, anchor[1], at_center=True)
-            return True
+            return "file"
 
     log("Unable to find topic '%s' in help file '%s'", topic, help_file)
+    return "file"
 
 
 ###----------------------------------------------------------------------------
