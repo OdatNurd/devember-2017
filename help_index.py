@@ -5,6 +5,7 @@ import sublime_plugin
 import posixpath as path
 from collections import OrderedDict, namedtuple
 import os
+import re
 
 from .validictory import validate
 from .validictory import SchemaError, ValidationError
@@ -21,8 +22,10 @@ from .common import log
 # load time so that we don't need to look it up later.
 HelpData = namedtuple("HelpData", [
     "package", "index_file", "description", "doc_root", "help_topics",
-    "help_files", "help_toc"
+    "help_files", "package_files", "urls", "help_toc"
 ])
+
+_url_prefix_re = re.compile(r'^https?://')
 
 
 ###----------------------------------------------------------------------------
@@ -90,6 +93,30 @@ help_contents_schema = {
 # format as the top level key.
 help_contents_schema["items"]["type"][1]["properties"]["children"] = help_contents_schema
 
+# The schema to validate that the list of external resources in the "externals"
+# key of the help index is properly formatted.
+externals_schema = {
+    "type": "object",
+    "required": False,
+
+    # Any key is allowed, but all must have values which are arrays. The first
+    # item in the array must be a string and the remainder must be topic
+    # dictionaries.
+    "additionalProperties": {
+        "type": "array",
+        "items": [ { "type": "string", "required": True } ],
+
+        "additionalItems": {
+            "type": "object",
+            "properties": {
+                "topic":   { "type": "string", "required": True  },
+                "caption": { "type": "string", "required": False }
+            },
+            "additionalProperties": False
+        }
+    }
+}
+
 # The overall schema used to validate a hyperhelp index file.
 index_schema = {
     "type": "object",
@@ -98,27 +125,44 @@ index_schema = {
         "doc_root":    { "type": "string", "required": False },
 
         "help_files":    help_file_schema,
-        "help_contents": help_contents_schema
-    }
+        "help_contents": help_contents_schema,
+        "externals":     externals_schema
+    },
+    "additionalProperties": False
 }
 
 
 ###----------------------------------------------------------------------------
 
 
-def _import_topics(package, topics, help_topic_dict):
+def _import_topics(package, topics, help_topic_dict, external=False):
     """
     Parse out a dictionary of help topics from the help index and store all
     topics into the topic dictionary passed in. During the parsing, the
     contents are validated.
+
+    When def_captions is True, topics that don't have a caption use the document
+    title as the caption by default.
     """
     for help_source in help_topic_dict:
         topic_list = help_topic_dict[help_source]
 
+        # Don't include topics from invalid externals.
+        if (external
+            and not _url_prefix_re.match(help_source)
+            and not help_source.startswith("Packages/")):
+                log("Discarding invalid external '%s' in %s",
+                    help_source, package)
+                continue
+
+        default_caption = topic_list[0] if external else None
+
         # Skip the first entry since it's the title of the help source
         for topic_entry in topic_list[1:]:
             name = topic_entry.get("topic")
-            caption = topic_entry.get("caption", "Topic %s in help source %s" % (name, help_source))
+            caption = topic_entry.get("caption", None)
+            if caption is None:
+                caption = default_caption or "Topic %s in help source %s" % (name, help_source)
 
             # Turn spaces in the topic name into tabs so they match what's in
             # the buffer at run time. Saves forcing tabs in the index file.
@@ -144,6 +188,26 @@ def _import_topics(package, topics, help_topic_dict):
             }
 
     return topics
+
+
+def _merge_externals(package, externals, topics, package_files, urls):
+    """
+    Merge the externals into the topic list provided. This ensures that there
+    are no duplicate topics during the merge (discarding the external) while
+    also splitting the externals into package file specifications and urls.
+    """
+    for topic, entry in externals.items():
+        if topic in topics:
+            log("Discarding duplicate external topic '%s' in %s:%s",
+                topic, package, entry["file"])
+            continue
+
+        file = entry["file"]
+        file_list = urls if _url_prefix_re.match(file) else package_files
+        if file not in file_list:
+            file_list.append(file)
+
+        topics[topic] = entry
 
 
 def _get_file_metadata(help_topic_dict):
@@ -265,7 +329,7 @@ def _load_help_index(file_spec):
 
     # The schema provided is itself broken.
     except SchemaError as error:
-        return log("Invalid help validation schema: %s", error)
+        return log("Error validating '%s': Invalid schema: %s", package, error)
 
     # One of the fields failed to validate. This generates extremely messy
     # output, but this can be fixed later.
@@ -286,8 +350,9 @@ def _load_help_index(file_spec):
     doc_root = raw_dict.pop("doc_root", None)
     help_files = raw_dict.pop("help_files", dict())
     help_toc = raw_dict.pop("help_contents", None)
+    externals = raw_dict.pop("externals", None)
 
-    # Warn if the dictionary has too many  keys
+    # Warn if the dictionary has too many keys
     for key in raw_dict.keys():
         log("Ignoring unknown key '%s' in index file %s", key, package)
 
@@ -302,9 +367,16 @@ def _load_help_index(file_spec):
     topic_list = dict()
     _import_topics(package, topic_list, help_files)
 
+    externals_list = dict()
+    package_files = list()
+    urls = list()
+    if externals is not None:
+        _import_topics(package, externals_list, externals, external=True)
+        _merge_externals(package, externals_list, topic_list, package_files, urls)
+
     # Everything has succeeded.
     return HelpData(package, index_res, description, doc_root, topic_list,
-        _get_file_metadata(help_files),
+        _get_file_metadata(help_files), package_files, urls,
         _get_toc_metadata(help_toc, topic_list, package))
 
 

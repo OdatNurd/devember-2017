@@ -20,12 +20,15 @@
             // locations.
             "HyperHelp: What is it?",
 
-            // Required: One or more dictionaries that indicate a topic that
+            // Optional: One or more dictionaries that indicate a topic that
             // appears in this help file along with a descriptive caption for
             // the item.
             //
             // The topic is required, but the caption is optional; a default
             // will be created if it is missing.
+            //
+            // A help file always has an implicit topic based on it's name and
+            // title if you don't specify one.
             {
                 "topic": "what is hyperhelp",
                 "caption": "HyperHelp: What is it?"
@@ -118,6 +121,36 @@
                 "topic": "integration.txt",
                 "caption": "Integrating HyperHelp into your Package"
             }
+        ]
+    },
+
+    // Optional; A dictionary that represents all of the external resources
+    // that can be referenced from within this package.
+    "externals": {
+        // Required; the name of the external resource. This may be an http or
+        // https URL or a package file. Package files must be specified as a
+        // package resource, e.g. "Packages/Default/exec.py"
+        "https://odatnurd.net/overrideaudit/": [
+            // Required; The title of the external resource, for use in various
+            // display locations.
+            "OverrideAudit Home Page",
+
+            // Optional; One or more dictionaries that indicate a topic that
+            // will link to this external resource along with a descriptive
+            // caption. The title of the resource is used if a caption is not
+            // provided.
+            {
+                "topic": "OverrideAudit",
+            },
+        ],
+
+        "Packages/Default/exec.py": [
+            "The default exec command",
+
+            {
+                "topic": "exec.py"
+            }
+
         ]
     },
 

@@ -29,6 +29,9 @@ def _help_load_index():
         log("Help description: '%s'", info.description)
         log("Document root: '%s'", info.doc_root)
         log("Available help topics:\n%s", pformat(info.help_topics))
+        log("Help Files: '%s'", info.help_files)
+        log("Package Files: '%s'", info.package_files)
+        log("URLs: '%s'", info.urls)
         log("Package TOC:\n%s", pformat(info.help_toc))
     else:
         log("Unable to load help index")

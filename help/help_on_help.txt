@@ -1,4 +1,4 @@
-%hyperhelp title="How to use HyperHelp" date="2017-12-14"
+%hyperhelp title="How to use HyperHelp" date="2017-12-16"
 
 *|Introduction|*
 ============
@@ -54,6 +54,13 @@ or in some other file in the help system. Anchors are text surrounded by two
 asterisk (`*`) characters.
 
 For example, |here| is a link that jumps to the anchor *here*.
+
+It is possible for a link to open up not only another help file but also
+a web page or a local package file.
+
+For example, here is a shameless plug for my other package, |OverrideAudit|
+and here is a link that will open up the |exec.py| plugin that ships with
+Sublime in `Default/exec.py`.
 
 
 *|Help	View|*
