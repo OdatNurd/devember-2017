@@ -115,14 +115,14 @@ def _import_topics(package, topics, help_topic_dict):
     for help_source in help_topic_dict:
         topic_list = help_topic_dict[help_source]
 
-        # Skip the first entry since it's the name of the help file
+        # Skip the first entry since it's the title of the help source
         for topic_entry in topic_list[1:]:
             name = topic_entry.get("topic")
-            caption = topic_entry.get("caption", "Topic %s in help file %s" % (name, help_source))
+            caption = topic_entry.get("caption", "Topic %s in help source %s" % (name, help_source))
 
             # Turn spaces in the topic name into tabs so they match what's in
-            # the buffer at run time. Saves forcing tabs in the index.
-            name = name.replace(" ", "\t")
+            # the buffer at run time. Saves forcing tabs in the index file.
+            name = name.replace(" ", "\t").casefold()
             if name in topics:
                 log("Skipping duplicate topic %s in %s:%s",
                     name, package, help_source)
@@ -135,9 +135,10 @@ def _import_topics(package, topics, help_topic_dict):
 
         # All help sources should be in the topic list so you can jump to a
         # file by name. The help file name is the default.
-        if help_source not in topics:
-            topics[help_source] = {
-                "topic": help_source,
+        name = help_source.casefold()
+        if name not in topics:
+            topics[name] = {
+                "topic": name,
                 "caption": topic_list[0],
                 "file": help_source
             }
@@ -176,7 +177,7 @@ def _get_toc_metadata(help_toc_list, topics, package):
             return entry, topics.get(entry.replace(" ", "\t"), None)
 
         topic = entry["topic"]
-        base_obj = topics.get(topic.replace(" ", "\t"), None)
+        base_obj = topics.get(topic.replace(" ", "\t").casefold(), None)
         if base_obj is None:
             return topic, None
 

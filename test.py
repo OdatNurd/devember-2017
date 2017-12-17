@@ -13,7 +13,8 @@ from .authoring import _global_package_list
 
 def _test_help():
     help_index = load_help_index("Packages/hyperhelp/help/hyperhelp.json")
-    display_help_file(help_index, "index.txt")
+    for topic, entry in help_index.help_topics.items():
+        log("'%s': '%s'", topic, entry["file"])
 
 
 def _help_load_index():
@@ -36,8 +37,8 @@ def _help_load_index():
 
 class HelpTestCommand(sublime_plugin.WindowCommand):
     def run(self):
-        # _test_help()
-        _help_load_index()
+        _test_help()
+        # _help_load_index()
         # for pkg in _global_package_list():
         #     print(pkg)
 
