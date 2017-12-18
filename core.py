@@ -8,7 +8,7 @@ from .view import find_help_view, update_help_view, focus_on
 from .help_index import _load_help_index, _scan_help_packages
 from .help import _post_process_links, _resource_for_help
 from .help import _load_help_file, _display_help_file, _reload_help_file
-from .help import _update_help_history
+from .help import HistoryData, _update_help_history
 
 
 ###----------------------------------------------------------------------------
@@ -187,6 +187,47 @@ def show_help_topic(package, topic, history):
         log("Unable to find topic '%s' in help file '%s'", topic, help_file,
             status=True)
     return "file"
+
+
+def navigate_help_history(help_view, prev):
+    """
+    Navigate through the help history for the provided help view, either going
+    forward or backward as appropriate. This will update the current history
+    entry before displaying the historic topic.
+
+    If no help view is provided, the current help view is used instead, if any.
+
+    Returns a boolean to tell you if the history position changed or not.
+    """
+    help_view = help_view or find_help_view()
+    if help_view is None:
+        return False
+
+    hist_pos = help_view.settings().get("_hh_hist_pos")
+    hist_info = help_view.settings().get("_hh_hist")
+
+    if (prev and hist_pos == 0) or (not prev and hist_pos == len(hist_info) - 1):
+        log("Cannot navigate %s through history; already at the end",
+            "backwards" if prev else "forwards", status=True)
+        return False
+
+    hist_pos = (hist_pos - 1) if prev else (hist_pos + 1)
+    entry = HistoryData._make(hist_info[hist_pos])
+
+    # Update the current history entry's viewport and caret location
+    _update_help_history(help_view)
+
+    # Navigate to the destination file in the history; need to manually set
+    # the cursor position
+    if show_help_topic(entry.package, entry.file, history=False) is not None:
+        help_view.sel().clear()
+        help_view.sel().add(sublime.Region(entry.caret[0], entry.caret[1]))
+        help_view.set_viewport_position(entry.viewport, False)
+
+        help_view.settings().set("_hh_hist_pos", hist_pos)
+        return True
+
+    return False
 
 
 ###----------------------------------------------------------------------------
