@@ -61,6 +61,48 @@ def _load_help_file(pkg_info, help_file):
     return None
 
 
+def _update_help_history(view, append=False, selection=None):
+    """
+    Update the help history for the provided view by either updating the
+    contents of the current history entry or adding a new entry to the end of
+    the history list.
+
+    When appending a new history entry, any history after the current position
+    in the list is truncated away.
+
+    The selection used to capture the cursor is the first selection in the
+    view unless a selection region is provided.
+    """
+    if view is None:
+        return
+
+    selection = view.sel()[0] if selection is None else selection
+    settings = view.settings()
+
+    hist_pos = settings.get("_hh_hist_pos", 0)
+    hist_info = settings.get("_hh_hist", [])
+
+    if append:
+        # Truncate all history after this point; new timeline branches out.
+        if hist_pos != len(hist_info) - 1:
+            hist_info = hist_info[:hist_pos + 1]
+
+        # Should probably truncate in the other direction to keep history in
+        # check.
+        hist_pos += 1
+
+    history = HistoryData(settings.get("_hh_pkg"), settings.get("_hh_file"),
+                          view.viewport_position(), (selection.a, selection.b))
+
+    if hist_pos >= len(hist_info):
+        hist_info.append(history)
+    else:
+        hist_info[hist_pos] = history
+
+    settings.set("_hh_hist_pos", hist_pos)
+    settings.set("_hh_hist", hist_info)
+
+
 def _display_help_file(pkg_info, help_file):
     """
     Load and display the help file contained in the provided help package. The
@@ -90,6 +132,10 @@ def _display_help_file(pkg_info, help_file):
     if help_text is not None:
         view = update_help_view(help_text, pkg_info.package, help_file,
                                 hh_syntax("HyperHelp.sublime-syntax"))
+
+        # if there is no history yet, add one selection the start of the file.
+        if not view.settings().has("_hh_hist_pos"):
+            _update_help_history(view, selection=sublime.Region(0))
 
         _post_process_header(view)
         _post_process_links(view)
