@@ -16,6 +16,11 @@ from .common import log, hh_syntax
 # header. This is used to construct a more human readable header.
 HeaderData = namedtuple("HeaderData", ["file", "title", "date"])
 
+# A representation of a history node that tracks what help topics have been
+# viewed and where the viewport was left.
+HistoryData = namedtuple("HistoryData", ["package", "file", "viewport",
+                                         "caret"])
+
 _header_prefix_re = re.compile(r'^%hyperhelp(\b|$)')
 _header_keypair_re = re.compile(r'\b([a-z]+)\b="([^"]*)"')
 
