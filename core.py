@@ -8,6 +8,7 @@ from .view import find_help_view, update_help_view, focus_on
 from .help_index import _load_help_index, _scan_help_packages
 from .help import _post_process_links, _resource_for_help
 from .help import _load_help_file, _display_help_file, _reload_help_file
+from .help import _update_help_history
 
 
 ###----------------------------------------------------------------------------
@@ -126,14 +127,19 @@ def reload_help_file(help_list, help_view):
     return _reload_help_file(help_list, help_view)
 
 
-def show_help_topic(package, topic):
+def show_help_topic(package, topic, history):
     """
     Attempt to display the help for the provided topic in the given package
-    (both strings). This will transparently create a new help view if needed, as
-    well as loading the appropriate help file before jumping to the topic.
+    (both strings) as appropriate. This will transparently create a new help
+    view, open the underlying package file or open the URL as needed.
 
-    The return value is None on error or a string that represents the results
-    of the operation.
+    If history is True, the history for the help view is updated after a
+    successful help navigation to a help file; otherwise the history is left
+    untouched. history is implicitly True when this has to create a help view
+    for the first time so that history is properly initialized.
+
+    The return value is None on error or a string that represents the kind of
+    topic that was navigated to ("file", "pkg_file" or "url")
     """
     pkg_info = help_index_list().get(package, None)
     if pkg_info is None:
@@ -155,18 +161,31 @@ def show_help_topic(package, topic):
         window.run_command("open_file", {"file": help_file})
         return "pkg_file"
 
+    # Update the current history entry if there is a help view.
+    if history:
+        _update_help_history(find_help_view())
+
+    existing_view = True if find_help_view() is not None else False
     help_view = display_help_file(pkg_info, help_file)
     if help_view is None:
         log("Unable to load help file '%s'", help_file, status=True)
         return None
 
+    found = False
     anchors = help_view.settings().get("_hh_nav", [])
     for anchor in anchors:
         if inner_topic == anchor[0].casefold():
             focus_on(help_view, anchor[1], at_center=True)
-            return "file"
+            found = True
 
-    log("Unable to find topic '%s' in help file '%s'", topic, help_file)
+    # Update history to track the new file, but only if the help view already
+    # existed; otherwise its creation set up the default history already.
+    if history and existing_view:
+        _update_help_history(help_view, append=True)
+
+    if not found:
+        log("Unable to find topic '%s' in help file '%s'", topic, help_file,
+            status=True)
     return "file"
 
 

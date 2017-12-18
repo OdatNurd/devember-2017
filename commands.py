@@ -25,7 +25,7 @@ class HyperhelpTopicCommand(sublime_plugin.ApplicationCommand):
             return log("Cannot display topic '%s'; cannot determine package",
                 topic, status=True)
 
-        show_help_topic(package, topic)
+        show_help_topic(package, topic, history=True)
 
 
 class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
@@ -89,7 +89,7 @@ class HyperhelpContentsCommand(sublime_plugin.ApplicationCommand):
                 stack.append(items)
                 return self.show_toc(pkg_info, children, stack)
 
-            show_help_topic(pkg_info.package, entry["topic"])
+            show_help_topic(pkg_info.package, entry["topic"], history=True)
 
 
 class HyperhelpIndexCommand(sublime_plugin.ApplicationCommand):
@@ -133,7 +133,7 @@ class HyperhelpIndexCommand(sublime_plugin.ApplicationCommand):
 
     def select(self, pkg_info, items, index):
         if index >= 0:
-            show_help_topic(pkg_info.package, items[index][1])
+            show_help_topic(pkg_info.package, items[index][1], history=True)
 
 
 class HyperhelpNavigateCommand(sublime_plugin.TextCommand):
@@ -174,7 +174,7 @@ class HyperhelpNavigateCommand(sublime_plugin.TextCommand):
             topic = self.view.substr(self.view.extract_scope(point))
 
             package = self.view.settings().get("_hh_pkg")
-            show_help_topic(package, topic)
+            show_help_topic(package, topic, history=True)
 
 
 ###----------------------------------------------------------------------------
