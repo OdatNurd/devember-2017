@@ -1,4 +1,4 @@
-%hyperhelp title="How to use HyperHelp" date="2017-12-16"
+%hyperhelp title="How to use HyperHelp" date="2017-12-17"
 
 *|Introduction|*
 ============
@@ -34,6 +34,9 @@ various actions:
 
     <Enter>/<Double	Click>
         Follow a |link| to another |anchor| somewhere in the help system
+
+    <Alt+Left>/<Alt+Right>
+    				Navigate forward and backward through the help history
 
 
 *|Links	and	Anchors|*

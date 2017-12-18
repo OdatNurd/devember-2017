@@ -6,7 +6,7 @@ import os
 from .common import log, current_help_package, help_package_prompt
 from .view import focus_on
 from .core import help_index_list
-from .core import show_help_topic
+from .core import show_help_topic, navigate_help_history
 
 
 ###----------------------------------------------------------------------------
@@ -140,18 +140,32 @@ class HyperhelpNavigateCommand(sublime_plugin.TextCommand):
     """
     Perform navigation from within a help file
     """
-    available_nav = ["find_anchor", "follow_link"]
+    available_nav = ["find_anchor", "follow_link", "follow_history"]
 
     def run(self, edit, nav, prev=False):
         if nav == "find_anchor":
             return self.anchor_nav(prev)
+        elif nav == "follow_link":
+            return self.follow_link()
 
-        return self.follow_link()
+        log("navigating history")
+        navigate_help_history(self.view, prev)
 
     def is_enabled(self, nav, prev=False):
         settings = self.view.settings()
-        return (nav in self.available_nav and
-                settings.has("_hh_pkg") and settings.has("_hh_file"))
+        if (nav in self.available_nav and
+                settings.has("_hh_pkg") and settings.has("_hh_file")):
+
+            if nav != "follow_history":
+                return True
+
+            hist_pos = settings.get("_hh_hist_pos")
+            hist_info = settings.get("_hh_hist")
+
+            if (prev and hist_pos > 0) or (not prev and hist_pos < len(hist_info) - 1):
+                return True
+
+        return False
 
     def anchor_nav(self, prev):
         anchors = self.view.settings().get("_hh_nav")

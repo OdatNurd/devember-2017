@@ -50,6 +50,28 @@
         ]
     },
 
+    // Navigate through the topic history
+    {
+        "keys": ["alt+left"], "command": "hyperhelp_navigate", "args": {
+            "nav": "follow_history",
+            "prev": true,
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
+        ]
+    },
+    {
+        "keys": ["alt+right"], "command": "hyperhelp_navigate", "args": {
+            "nav": "follow_history",
+            "prev": false,
+        },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help" },
+            { "key": "hyperhelp.is_authoring", "operator": "equal", "operand": false }
+        ]
+    },
+
     // Open the command palette with all help commands displayed.
     {
         "keys": ["ctrl+alt+h"], "command": "show_overlay",
