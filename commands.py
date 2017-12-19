@@ -4,7 +4,7 @@ import sublime_plugin
 import os
 
 from .common import log, current_help_package, help_package_prompt
-from .view import focus_on
+from .view import find_help_view, focus_on
 from .core import help_index_list
 from .core import show_help_topic, navigate_help_history
 
@@ -136,58 +136,58 @@ class HyperhelpIndexCommand(sublime_plugin.ApplicationCommand):
             show_help_topic(pkg_info.package, items[index][1], history=True)
 
 
-class HyperhelpNavigateCommand(sublime_plugin.TextCommand):
+class HyperhelpNavigateCommand(sublime_plugin.WindowCommand):
     """
     Perform navigation from within a help file
     """
     available_nav = ["find_anchor", "follow_link", "follow_history"]
 
-    def run(self, edit, nav, prev=False):
+    def run(self, nav, prev=False):
         if nav == "find_anchor":
             return self.anchor_nav(prev)
         elif nav == "follow_link":
             return self.follow_link()
 
-        log("navigating history")
-        navigate_help_history(self.view, prev)
+        navigate_help_history(find_help_view(), prev)
 
     def is_enabled(self, nav, prev=False):
-        settings = self.view.settings()
-        if (nav in self.available_nav and
-                settings.has("_hh_pkg") and settings.has("_hh_file")):
+        help_view = find_help_view()
+        if help_view is None or nav not in self.available_nav:
+            return False
 
-            if nav != "follow_history":
-                return True
+        if nav == "follow_history":
+            settings = help_view.settings()
+            h_pos = settings.get("_hh_hist_pos")
+            h_len = len(settings.get("_hh_hist"))
 
-            hist_pos = settings.get("_hh_hist_pos")
-            hist_info = settings.get("_hh_hist")
+            if (prev and h_pos == 0) or (not prev and h_pos == h_len - 1):
+                return False
 
-            if (prev and hist_pos > 0) or (not prev and hist_pos < len(hist_info) - 1):
-                return True
-
-        return False
+        return True
 
     def anchor_nav(self, prev):
-        anchors = self.view.settings().get("_hh_nav")
+        help_view = find_help_view()
+        anchors = help_view.settings().get("_hh_nav")
         if not anchors:
             return
 
-        point = self.view.sel()[0].begin()
+        point = help_view.sel()[0].begin()
         fallback = anchors[-1] if prev else anchors[0]
 
         pick = lambda p: (point < p[1][0]) if not prev else (point > p[1][0])
         for pos in reversed(anchors) if prev else anchors:
             if pick(pos):
-                return focus_on(self.view, pos[1])
+                return focus_on(help_view, pos[1])
 
-        focus_on(self.view, fallback[1])
+        focus_on(help_view, fallback[1])
 
     def follow_link(self):
-        point = self.view.sel()[0].begin()
-        if self.view.match_selector(point, "text.hyperhelp meta.link"):
-            topic = self.view.substr(self.view.extract_scope(point))
+        help_view = find_help_view()
+        point = help_view.sel()[0].begin()
+        if help_view.match_selector(point, "text.hyperhelp meta.link"):
+            topic = help_view.substr(help_view.extract_scope(point))
 
-            package = self.view.settings().get("_hh_pkg")
+            package = help_view.settings().get("_hh_pkg")
             show_help_topic(package, topic, history=True)
 
 
