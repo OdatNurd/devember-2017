@@ -30,7 +30,8 @@ class HyperhelpEventListener(sublime_plugin.EventListener):
         user double clicked, see if they're double clicking on a link so we
         know if we should try to follow it or not.
         """
-        if command == "drag_select" and args.get("by", None) == "words":
+        if (view.is_read_only() and command == "drag_select" and
+                args.get("by", None) == "words"):
             event = args["event"]
             point = view.window_to_text((event["x"], event["y"]))
 
