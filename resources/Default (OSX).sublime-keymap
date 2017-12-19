@@ -52,7 +52,7 @@
 
     // Navigate through the topic history
     {
-        "keys": ["alt+left"], "command": "hyperhelp_navigate", "args": {
+        "keys": ["super+["], "command": "hyperhelp_navigate", "args": {
             "nav": "follow_history",
             "prev": true,
         },
@@ -62,7 +62,7 @@
         ]
     },
     {
-        "keys": ["alt+right"], "command": "hyperhelp_navigate", "args": {
+        "keys": ["super+]"], "command": "hyperhelp_navigate", "args": {
             "nav": "follow_history",
             "prev": false,
         },
