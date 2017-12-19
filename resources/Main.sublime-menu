@@ -48,7 +48,7 @@
                         }
                     },
                     {
-                        "caption": "Packages with help",
+                        "caption": "Browse Available Help…",
                         "command": "hyperhelp_contents",
                         "args": { "prompt": true }
                     },
@@ -56,11 +56,11 @@
                     { "caption": "-" },
 
                     {
-                        "caption": "Table of Contents for current help",
+                        "caption": "Table of Contents",
                         "command": "hyperhelp_contents",
                     },
                     {
-                        "caption": "Topic Index for current help",
+                        "caption": "Help Index",
                         "command": "hyperhelp_index",
                     },
 
