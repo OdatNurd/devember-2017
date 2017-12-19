@@ -170,7 +170,7 @@ class HyperhelpNavigateCommand(sublime_plugin.WindowCommand):
         if nav != "follow_history":
             return ""
 
-        template = "Previous Topic" if prev else "Next Topic"
+        template = "Back" if prev else "Forward"
         help_view = find_help_view()
 
         if help_view is None:
@@ -184,7 +184,7 @@ class HyperhelpNavigateCommand(sublime_plugin.WindowCommand):
             return template
 
         entry = HistoryData._make(h_info[h_pos + (-1 if prev else 1)])
-        return "%s [%s: %s]" % (template, entry.package, entry.file)
+        return "%s: %s" % (template, entry.file)
 
     def anchor_nav(self, prev):
         help_view = find_help_view()
@@ -210,6 +210,23 @@ class HyperhelpNavigateCommand(sublime_plugin.WindowCommand):
 
             package = help_view.settings().get("_hh_pkg")
             show_help_topic(package, topic, history=True)
+
+
+class HyperhelpCurrentHelpCommand(sublime_plugin.WindowCommand):
+    """
+    This command does nothing, but it's description method tells you what
+    help package is currently being browsed, if any.
+    """
+    def is_enabled(self):
+        return False
+
+    def description(self):
+        help_view = find_help_view()
+        if help_view is None:
+            return "No help currently open"
+
+        pkg = help_view.settings().get("_hh_pkg")
+        return "Viewing help for: %s" % pkg
 
 
 ###----------------------------------------------------------------------------

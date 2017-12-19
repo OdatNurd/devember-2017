@@ -55,6 +55,11 @@
 
                     { "caption": "-" },
 
+                    { "command": "hyperhelp_current_help" },
+
+                    { "caption": "-" },
+
+
                     {
                         "caption": "Table of Contents",
                         "command": "hyperhelp_contents",
@@ -63,8 +68,6 @@
                         "caption": "Help Index",
                         "command": "hyperhelp_index",
                     },
-
-                    { "caption": "-" },
 
                     {
                         "command": "hyperhelp_navigate",
