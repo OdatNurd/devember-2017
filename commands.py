@@ -7,7 +7,7 @@ from .common import log, current_help_package, help_package_prompt
 from .view import find_help_view, focus_on
 from .core import help_index_list
 from .core import show_help_topic, navigate_help_history
-
+from .help import HistoryData
 
 ###----------------------------------------------------------------------------
 
@@ -164,6 +164,27 @@ class HyperhelpNavigateCommand(sublime_plugin.WindowCommand):
                 return False
 
         return True
+
+    def description(self, nav, prev=False):
+        # Docs say to return None, but that makes Sublime log an error.
+        if nav != "follow_history":
+            return ""
+
+        template = "Previous Topic" if prev else "Next Topic"
+        help_view = find_help_view()
+
+        if help_view is None:
+            return template
+
+        settings = help_view.settings()
+        h_pos = settings.get("_hh_hist_pos")
+        h_info = settings.get("_hh_hist")
+
+        if (prev and h_pos == 0) or (not prev and h_pos == len(h_info) - 1):
+            return template
+
+        entry = HistoryData._make(h_info[h_pos + (-1 if prev else 1)])
+        return "%s [%s: %s]" % (template, entry.package, entry.file)
 
     def anchor_nav(self, prev):
         help_view = find_help_view()

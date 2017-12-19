@@ -62,6 +62,23 @@
                     {
                         "caption": "Topic Index for current help",
                         "command": "hyperhelp_index",
+                    },
+
+                    { "caption": "-" },
+
+                    {
+                        "command": "hyperhelp_navigate",
+                        "args": {
+                            "nav": "follow_history",
+                            "prev": true
+                        }
+                    },
+                    {
+                        "command": "hyperhelp_navigate",
+                        "args": {
+                            "nav": "follow_history",
+                            "prev": false
+                        }
                     }
                 ]
             }
