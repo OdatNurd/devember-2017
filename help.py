@@ -5,7 +5,7 @@ import re
 import time
 
 from .view import find_help_view, update_help_view
-from .common import log, hh_syntax
+from .common import log, hh_syntax, current_help_file, current_help_package
 from .data import HeaderData, HistoryData
 
 
@@ -82,8 +82,10 @@ def _update_help_history(view, append=False, selection=None):
         # check.
         hist_pos += 1
 
-    history = HistoryData(settings.get("_hh_pkg"), settings.get("_hh_file"),
-                          view.viewport_position(), (selection.a, selection.b))
+    history = HistoryData(current_help_package(view),
+                          current_help_file(view),
+                          view.viewport_position(),
+                          (selection.a, selection.b))
 
     if hist_pos >= len(hist_info):
         hist_info.append(history)
@@ -113,8 +115,8 @@ def _display_help_file(pkg_info, help_file):
     if view is not None:
         window.focus_view(view)
 
-        current_pkg = view.settings().get("_hh_pkg")
-        current_file = view.settings().get("_hh_file")
+        current_pkg = current_help_package(view)
+        current_file = current_help_file(view)
 
         if help_file == current_file and pkg_info.package == current_pkg:
             return view
@@ -149,17 +151,17 @@ def _reload_help_file(help_list, help_view):
         log("No help topic is visible; cannot reload")
         return False
 
-    settings = help_view.settings()
-    package = settings.get("_hh_pkg", None)
-    file = settings.get("_hh_file", None)
+    package = current_help_package(help_view)
+    file = current_help_file(help_view)
     pkg_info = help_list.get(package, None)
 
     if pkg_info is not None and file is not None:
         # Remove the file setting so the view will reload; put it back if the
         # reload fails so we can still track what the file used to be.
-        help_view.settings().set("_hh_file", "")
+        settings = help_view.settings()
+        settings.set("_hh_file", "")
         if _display_help_file(pkg_info, file) is None:
-            help_view.settings().set("_hh_file", file)
+            settings.set("_hh_file", file)
             return false
 
         return True
@@ -202,7 +204,7 @@ def _post_process_header(help_view):
     replaced with a version that more explicitly describes the help. This
     includes a link to the top level of the help file itself.
     """
-    help_file = help_view.settings().get("_hh_file")
+    help_file = current_help_file(help_view)
     first_line = help_view.substr(help_view.full_line(0))
 
     header = _parse_header(help_file, first_line)

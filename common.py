@@ -43,6 +43,18 @@ def current_help_package(view=None, window=None):
     return (view.settings().get("_hh_pkg") if view is not None else None)
 
 
+def current_help_file(view=None, window=None):
+    """
+    Obtain the file that is currently being displayed in the help view or None
+    if help is not visible.
+
+    Looks in the help view provided, or the help view in the passed in window,
+    or the help view in the currently active window.
+    """
+    view = view or find_help_view(window)
+    return (view.settings().get("_hh_file") if view is not None else None)
+
+
 def help_package_prompt(help_list, on_select, on_cancel=None):
     """
     Given a list of loaded help indexes, prompt the user to select one of the
