@@ -3,7 +3,7 @@ import sublime_plugin
 
 # Inside packages, paths are always posix regardless of the platform in use.
 import posixpath as path
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 import os
 import re
 
@@ -11,19 +11,11 @@ from .validictory import validate
 from .validictory import SchemaError, ValidationError
 
 from .common import log
+from .data import HelpData
 
 
 ###----------------------------------------------------------------------------
 
-
-# A representation of all of the help available for a particular package.
-#
-# This tells us all of the information we need about the help for a package at
-# load time so that we don't need to look it up later.
-HelpData = namedtuple("HelpData", [
-    "package", "index_file", "description", "doc_root", "help_topics",
-    "help_files", "package_files", "urls", "help_toc"
-])
 
 _url_prefix_re = re.compile(r'^https?://')
 
