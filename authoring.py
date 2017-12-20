@@ -394,10 +394,14 @@ class HyperhelpAuthorReloadIndexCommand(sublime_plugin.TextCommand):
     """
     If the current view is a hyperhelp index view, this will attempt to reload
     the help index so that the current changes will immediately take effect.
+
+    This will work both for an index file that is directly contained within
+    the Packages folder as well as for any file that is a symlink to a file
+    in the Packages folder.
     """
     def run(self, edit):
-        filename = os.path.realpath(self.view.file_name())
-        if not filename.startswith(sublime.packages_path()):
+        filename = self.filename()
+        if filename is None:
             return log("Cannot reload help index; not in package", status=True)
 
         filename = os.path.relpath(filename, sublime.packages_path())
@@ -412,6 +416,15 @@ class HyperhelpAuthorReloadIndexCommand(sublime_plugin.TextCommand):
     def is_enabled(self):
         return (self.view.match_selector(0, "text.hyperhelp.index") and
                 self.view.file_name() is not None)
+
+    def filename(self):
+        filename = self.view.file_name()
+        if filename.startswith(sublime.packages_path()):
+            return filename
+
+        filename = os.path.realpath(filename)
+        if filename.startswith(sublime.packages_path()):
+            return filename
 
 
 ###----------------------------------------------------------------------------
