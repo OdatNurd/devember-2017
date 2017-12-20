@@ -12,7 +12,8 @@ def log(message, *args, status=False, dialog=False):
     status bar and a dialog box.
     """
     message = message % args
-    print("HyperHelp:", message)
+    for line in message.splitlines():
+        print("HyperHelp:", line)
     if status:
         sublime.status_message(message)
     if dialog:
