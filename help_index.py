@@ -7,121 +7,15 @@ from collections import OrderedDict
 import os
 import re
 
-from .validictory import validate
-from .validictory import SchemaError, ValidationError
-
 from .common import log
 from .data import HelpData
+from .index_validator import validate_index
 
 
 ###----------------------------------------------------------------------------
 
 
 _url_prefix_re = re.compile(r'^https?://')
-
-
-###----------------------------------------------------------------------------
-
-
-# The schema to validate that a help file entry in the "help_files" key of the
-# help index is properly formattted.
-help_file_schema = {
-    "type": "object",
-    "required": True,
-
-    # Any key is allowed, but all must have values which are arrays. The first
-    # item in the array must be a string and the remainder must be topic
-    # dictionaries.
-    "additionalProperties": {
-        "type": "array",
-        "items": [ { "type": "string", "required": True } ],
-
-        "additionalItems": {
-            "type": "object",
-            "properties": {
-                "topic":   { "type": "string", "required": True  },
-                "caption": { "type": "string", "required": False }
-            },
-            "additionalProperties": False
-        }
-    }
-}
-
-# The schema to validate that the help table of contents in the "help_contents"
-# key of the help index is properly formattted.
-#
-# NOTE: This recursively references itself in the children element. See the
-# following line of code.
-help_contents_schema = {
-    "type": "array",
-    "required": False,
-
-    # Items must be topic dictionaries or strings. Topic dictionaries require
-    # a topic key but may also contain a caption key and a children key which
-    # is an array that is recursively identical to this one.
-    #
-    # Values that are strings are expanded to be topic dictionaries with no
-    # children and an inherited caption.
-    "items": {
-        "type": [
-            {"type": "string", "required": True },
-            {
-                "type": "object",
-                "required": True,
-                "properties": {
-                    "topic":   { "type": "string", "required": True },
-                    "caption": { "type": "string", "required": False },
-
-                    # This is recursive; see below
-                    "children": "help_contents_schema"
-                },
-                "additionalProperties": False
-            }
-        ]
-    }
-}
-
-# The second type of item is a dictionary with a property that has the same
-# format as the top level key.
-help_contents_schema["items"]["type"][1]["properties"]["children"] = help_contents_schema
-
-# The schema to validate that the list of external resources in the "externals"
-# key of the help index is properly formatted.
-externals_schema = {
-    "type": "object",
-    "required": False,
-
-    # Any key is allowed, but all must have values which are arrays. The first
-    # item in the array must be a string and the remainder must be topic
-    # dictionaries.
-    "additionalProperties": {
-        "type": "array",
-        "items": [ { "type": "string", "required": True } ],
-
-        "additionalItems": {
-            "type": "object",
-            "properties": {
-                "topic":   { "type": "string", "required": True  },
-                "caption": { "type": "string", "required": False }
-            },
-            "additionalProperties": False
-        }
-    }
-}
-
-# The overall schema used to validate a hyperhelp index file.
-index_schema = {
-    "type": "object",
-    "properties": {
-        "description": { "type": "string", "required": False },
-        "doc_root":    { "type": "string", "required": False },
-
-        "help_files":    help_file_schema,
-        "help_contents": help_contents_schema,
-        "externals":     externals_schema
-    },
-    "additionalProperties": False
-}
 
 
 ###----------------------------------------------------------------------------
@@ -310,32 +204,9 @@ def _load_help_index(file_spec):
     if content is None:
         return log("Unable to load index information for '%s'", package)
 
-    try:
-        log("Loading help index for package '%s'", package)
-        raw_dict = sublime.decode_value(content)
-    except:
-        return log("Unable to parse index information for '%s'", package)
-
-    try:
-        validate(raw_dict, index_schema)
-
-    # The schema provided is itself broken.
-    except SchemaError as error:
-        return log("Error validating '%s': Invalid schema: %s", package, error)
-
-    # One of the fields failed to validate. This generates extremely messy
-    # output, but this can be fixed later.
-    except ValidationError as error:
-        return log("Error validating help index for '%s' in %s: %s",
-                   package, error.fieldname, error)
-
-    # Seems like validictory has a bug in which if you tell it to verify an
-    # array has contents but the array is empty, it blows up. This can happen
-    # if the array that provides the contents of a help file is empty, for
-    # example.
-    except Exception as error:
-        return log("Error validating help index for '%s': %s",
-                   package, error)
+    raw_dict = validate_index(content, package)
+    if raw_dict is None:
+        return None
 
     # Top level index keys
     description = raw_dict.pop("description", "Help for %s" % package)
