@@ -5,9 +5,10 @@ import os
 import datetime
 import re
 
-from hyperhelp.common import log, hh_syntax
-from hyperhelp.common import current_help_package, help_package_prompt
+from hyperhelp.common import log, hh_syntax, help_package_prompt
+from hyperhelp.common import current_help_package, current_help_file
 from hyperhelp.core import help_index_list, load_help_index, reload_help_file
+from hyperhelp.view import find_help_view
 
 from .common import format_template, is_authoring_source
 from .common import local_help_filename, open_local_help
@@ -383,13 +384,33 @@ class HyperhelpAuthorReloadHelpCommand(sublime_plugin.TextCommand):
     currently being displayed in the view.
     """
     def run(self, edit):
-        help_file = self.view.settings().get("_hh_file", None)
-        if reload_help_file(help_index_list(), self.view):
-            log("Reloaded help file '%s'", help_file, status=True)
+        # Running directly on the help view
+        settings = self.view.settings()
+        if settings.has("_hh_pkg") and settings.has("_hh_file"):
+            return self.reload(self.view, current_help_file())
+
+        # File must have a name and be in the packages folder.
+        name = self.view.file_name()
+        if name is None or not name.startswith(sublime.packages_path()):
+            return log("Unable to reload help; help file is not in a package",
+                       status=True)
+
+        name = os.path.relpath(name, sublime.packages_path())
+        pkg = name.split(os.sep)[0]
+        file = os.path.split(name)[1]
+
+        if pkg == current_help_package() and file == current_help_file():
+            return self.reload(find_help_view(), file)
+
+        log("Unable to reload help; this is not the current help file",
+            status=True)
 
     def is_enabled(self):
-        settings = self.view.settings()
-        return settings.has("_hh_pkg") and settings.has("_hh_file")
+        return find_help_view() is not None
+
+    def reload(self, help_view, help_file):
+        if reload_help_file(help_index_list(), help_view):
+            log("Reloaded help file '%s'", help_file, status=True)
 
 
 class HyperhelpAuthorReloadIndexCommand(sublime_plugin.TextCommand):
