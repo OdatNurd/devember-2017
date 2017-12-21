@@ -79,9 +79,5 @@
             "overlay": "command_palette",
             "text" : "HyperHelp: "
         }
-    },
-    // Run the latest help test
-    {
-        "keys": ["ctrl+alt+t"], "command": "help_test"
     }
 ]
