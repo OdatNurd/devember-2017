@@ -1,0 +1,13 @@
+%hyperhelp title="HyperHelp Authoring Tools" date="2017-12-20"
+
+This package provides some simple authoring tools for `hyperhelp` that simplify
+the creation of help files, allowing you to focus on the content of the help
+you provide for your package instead of focusing on how the system works.
+
+HyperHelpAuthor provides you with commands for easily adding help to a package
+by automatically creating the core directory structure and a minimal set of
+help files to get you up and running.
+
+Once you have some help files, additional functionality such as snippets and
+automatic updating of help files comes into play to help you finish your help
+masterpiece.

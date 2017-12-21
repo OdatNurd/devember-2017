@@ -1,0 +1,16 @@
+{
+    "description": "HyperHelp Authoring Tools",
+
+    "doc_root": "help/",
+
+    "help_files": {
+        "index.txt": [
+            "HyperHelp Authoring Tools",
+
+        ]
+    },
+
+    "help_contents": [
+        "index.txt"
+    ]
+}
