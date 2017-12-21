@@ -1,6 +1,49 @@
 import sublime
 import sublime_plugin
 
+from .core import help_index_list
+
+
+###----------------------------------------------------------------------------
+
+
+_help_popup = """
+<body id="hyperhelp-link-caption">
+    <style>
+        body {
+            font-family: system;
+            margin: 0.5rem 1rem;
+        }
+        h1 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0 0 1rem 0;
+            border-bottom: 2px solid var(--foreground);
+        }
+        p {
+            font-size: 1.05rem;
+            margin: 0;
+        }
+        .indent {
+            margin-left: 1.5rem;
+        }
+     </style>
+     %s
+</body>
+"""
+
+_topic_body = """
+<h1>%s</h1>
+<p>%s</p>
+<p class="indent">%s</p>
+"""
+
+_missing_body = """
+<h1>Missing Topic</h1>
+<p>Topic not in help index:</p>
+<p class="indent">%s</p>
+"""
+
 
 ###----------------------------------------------------------------------------
 
@@ -41,6 +84,49 @@ class HyperhelpEventListener(sublime_plugin.EventListener):
                 return ("noop")
 
         return None
+
+    def on_hover(self, view, point, hover_zone):
+        """
+        If the mouse hovers over a link in a help view, show a popup that
+        says where the link goes.
+        """
+        if hover_zone != sublime.HOVER_TEXT:
+            return
+
+        pkg = view.settings().get("_hh_pkg", None)
+        if pkg is None or not view.score_selector(point, "meta.link"):
+            return
+
+        pkg_info = help_index_list().get(pkg, None)
+        if pkg_info is None:
+            return
+
+        topic = view.substr(view.extract_scope(point))
+        info = pkg_info.help_topics.get(topic.casefold(), None)
+        if info is None:
+            popup = _missing_body % topic
+        else:
+            caption = info["caption"]
+            file = info["file"]
+
+            if file in pkg_info.urls:
+                link_type = "Opens URL: "
+            elif file in pkg_info.package_files:
+                link_type = "Opens File: "
+            else:
+                link_type = "Links To: "
+                current_file = view.settings().get("_hh_file", None)
+                print(current_file, file)
+                if file == current_file:
+                    file = "this file"
+
+            popup = _topic_body % (caption, link_type, file)
+
+        view.show_popup(
+            _help_popup % popup,
+            flags=sublime.HIDE_ON_MOUSE_MOVE_AWAY,
+            location=point,
+            max_width=1024)
 
 
 ###----------------------------------------------------------------------------
