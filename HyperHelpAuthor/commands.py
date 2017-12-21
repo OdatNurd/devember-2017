@@ -5,11 +5,13 @@ import os
 import datetime
 import re
 
-from .common import log, hh_syntax, current_help_package, help_package_prompt
-from .authoring_common import format_template, is_authoring_source
-from .authoring_common import local_help_filename, open_local_help
-from .authoring_common import open_help_index, apply_authoring_settings
-from .core import help_index_list, load_help_index, reload_help_file
+from hyperhelp.common import log, hh_syntax
+from hyperhelp.common import current_help_package, help_package_prompt
+from hyperhelp.core import help_index_list, load_help_index, reload_help_file
+
+from .common import format_template, is_authoring_source
+from .common import local_help_filename, open_local_help
+from .common import open_help_index, apply_authoring_settings
 
 
 ###----------------------------------------------------------------------------

@@ -3,7 +3,7 @@ import sublime
 import os
 import textwrap
 
-from .common import log, hh_syntax
+from hyperhelp.common import log, hh_syntax
 
 
 ###----------------------------------------------------------------------------
