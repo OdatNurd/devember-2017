@@ -30,10 +30,10 @@
         ]
     },
 
-   // {
-   //      "id": "help",
-   //      "children":
-   //      [
+   {
+        "id": "help",
+        "children":
+        [
             {
                 "id": "hyperhelp",
                 "caption": "HyperHelp",
@@ -85,6 +85,6 @@
                     }
                 ]
             }
-    //     ]
-    // }
+        ]
+    }
 ]
