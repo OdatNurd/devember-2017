@@ -1,5 +1,37 @@
 [
     {
+        "id": "tools",
+        "children":
+        [
+            {
+                "caption": "HyperHelpAuthor",
+                "children":
+                [
+                    { "caption": "Add help to package…",     "command": "hyperhelp_author_create_index" },
+                    { "caption": "Add help file to package", "command": "hyperhelp_author_create_help" },
+                    { "caption": "Update help file header",  "command": "hyperhelp_author_update_header" },
+
+                    { "caption": "-" },
+
+                    { "caption": "Edit help index…",         "command": "hyperhelp_author_edit_index" },
+                    { "caption": "Edit help file…",          "command": "hyperhelp_author_edit_help" },
+
+                    { "caption": "-" },
+
+                    { "caption": "Reload help index",        "command": "hyperhelp_author_reload_index" },
+                    { "caption": "Reload help file",         "command": "hyperhelp_author_reload_help" },
+
+                    { "caption": "-" },
+
+                    { "caption": "Find problems in help",    "command": "hyperhelp_author_lint" },
+
+                    { "caption": "-" }
+                ]
+            }
+        ]
+    },
+
+    {
         "caption": "Preferences",
         "mnemonic": "n",
         "id": "preferences",

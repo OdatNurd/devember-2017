@@ -1,13 +1,13 @@
 [
-    { "caption": "HyperHelpAuthor: Add Help to Package",     "command": "hyperhelp_author_create_index" },
-    { "caption": "HyperHelpAuthor: Add Help File",           "command": "hyperhelp_author_create_help" },
-    { "caption": "HyperHelpAuthor: Update File Header Date", "command": "hyperhelp_author_update_header"},
+    { "caption": "HyperHelpAuthor: Add help to package",     "command": "hyperhelp_author_create_index" },
+    { "caption": "HyperHelpAuthor: Add help file",           "command": "hyperhelp_author_create_help" },
+    { "caption": "HyperHelpAuthor: Update File header date", "command": "hyperhelp_author_update_header"},
 
-    { "caption": "HyperHelpAuthor: Edit Help File",          "command": "hyperhelp_author_edit_help" },
-    { "caption": "HyperHelpAuthor: Edit Help Index",         "command": "hyperhelp_author_edit_index" },
+    { "caption": "HyperHelpAuthor: Edit help file",          "command": "hyperhelp_author_edit_help" },
+    { "caption": "HyperHelpAuthor: Edit help index",         "command": "hyperhelp_author_edit_index" },
 
-    { "caption": "HyperHelpAuthor: Reload Help Index", "command": "hyperhelp_author_reload_index" },
-    { "caption": "HyperHelpAuthor: Reload Help File",  "command": "hyperhelp_author_reload_help"  },
+    { "caption": "HyperHelpAuthor: Reload help index", "command": "hyperhelp_author_reload_index" },
+    { "caption": "HyperHelpAuthor: Reload help file",  "command": "hyperhelp_author_reload_help"  },
 
-    { "caption": "HyperHelpAuthor: Lint Help File/Index", "command": "hyperhelp_author_lint" }
+    { "caption": "HyperHelpAuthor: Lint help file/index", "command": "hyperhelp_author_lint" }
 ]
