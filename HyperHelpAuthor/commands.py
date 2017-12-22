@@ -407,7 +407,7 @@ class HyperhelpAuthorReloadHelpCommand(sublime_plugin.TextCommand):
             status=True)
 
     def is_enabled(self):
-        return find_help_view() is not None
+        return self.view.match_selector(0, "text.hyperhelp.help")
 
     def reload(self, help_view, help_file):
         if reload_help_file(help_index_list(), help_view):
