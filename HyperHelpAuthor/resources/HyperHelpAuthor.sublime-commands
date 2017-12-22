@@ -8,4 +8,6 @@
 
     { "caption": "HyperHelpAuthor: Reload Help Index", "command": "hyperhelp_author_reload_index" },
     { "caption": "HyperHelpAuthor: Reload Help File",  "command": "hyperhelp_author_reload_help"  },
+
+    { "caption": "HyperHelpAuthor: Lint Help File/Index", "command": "hyperhelp_author_lint" }
 ]
