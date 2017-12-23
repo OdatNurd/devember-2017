@@ -1,4 +1,4 @@
-%hyperhelp title="HyperHelp: What is it?" date="2017-12-14"
+%hyperhelp title="HyperHelp: What is it?" date="2017-12-22"
 
 *|What	Is	HyperHelp|*
 =================
@@ -42,7 +42,7 @@ help appear within HyperHelp. More information on this process can be found in
 |authoring.txt|.
 
 
-*|Integration|* with Packages
+*|Integration	with	Packages|*
 =========================
 
 HyperHelp is designed to be easy to integrate into your package so that you can

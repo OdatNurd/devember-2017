@@ -1,4 +1,4 @@
-%hyperhelp title="How to use HyperHelp" date="2017-12-17"
+%hyperhelp title="How to use HyperHelp" date="2017-12-22"
 
 *|Introduction|*
 ============
@@ -14,7 +14,7 @@ of hyperlinked notes or items that you refer to often, without having to leave
 Sublime.
 
 
-*|Navigating|* Help
+*|Navigating	Help|*
 ===============
 
 This tab contains a HyperHelp |Help	View| for displaying help text. Every
@@ -82,7 +82,7 @@ readable as possible. With the help being text, most of the features of Sublime
 that you already use to move around inside of a file are available to you.
 
 
-*|Opening|* Help
+*|Opening	Help|*
 ============
 
 Opening the initial help view in a window can be accomplished by:

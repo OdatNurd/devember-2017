@@ -38,8 +38,9 @@
                 "caption": "How it works"
             },
             {
-                "topic": "integration",
-                "caption": "Integrating Hyperhelp in your Package"
+                "topic": "integration with packages",
+                "caption": "Integrating HyperHelp in your Package",
+                "aliases": ["integration"]
             }
         ],
         "help_on_help.txt": [
@@ -50,8 +51,9 @@
                 "caption": "Introduction to HyperHelp"
             },
             {
-                "topic": "navigating",
-                "caption": "Navigating Help"
+                "topic": "navigating help",
+                "caption": "Navigating Help",
+                "aliases": ["navigating"]
             },
             {
                 "topic": "links and anchors",
@@ -66,8 +68,9 @@
                 "caption": "The Help view"
             },
             {
-                "topic": "opening",
-                "caption": "Opening HyperHelp"
+                "topic": "opening help",
+                "caption": "Opening HyperHelp",
+                "aliases": ["opening"]
             },
             {
                 "topic": "next steps",
@@ -95,15 +98,17 @@
             },
             {
                 "topic": "anchors",
-                "caption": "HyperHelp Markup - Anchors"
+                "caption": "HyperHelp Markup - Anchors",
+                "aliases": ["anchor"]
             },
             {
                 "topic": "links",
-                "caption": "HyperHelp Markup - Links"
+                "caption": "HyperHelp Markup - Links",
+                "aliases": ["link"]
             },
             {
                 "topic": "separators",
-                "caption": "Hyperhelp Markup - Visual Separators"
+                "caption": "HyperHelp Markup - Visual Separators"
             },
         ],
         "style.txt": [
