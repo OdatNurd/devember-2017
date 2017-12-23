@@ -21,7 +21,7 @@ _url_prefix_re = re.compile(r'^https?://')
 ###----------------------------------------------------------------------------
 
 
-def _import_topics(package, topics, help_topic_dict, external=False):
+def _import_topics(package, topics, aliases, help_topic_dict, external=False):
     """
     Parse out a dictionary of help topics from the help index and store all
     topics into the topic dictionary passed in. During the parsing, the
@@ -47,14 +47,19 @@ def _import_topics(package, topics, help_topic_dict, external=False):
         for topic_entry in topic_list[1:]:
             name = topic_entry.get("topic")
             caption = topic_entry.get("caption", None)
+            alias_list = topic_entry.get("aliases", [])
             if caption is None:
                 caption = default_caption or "Topic %s in help source %s" % (name, help_source)
 
             # Turn spaces in the topic name into tabs so they match what's in
             # the buffer at run time. Saves forcing tabs in the index file.
+            # TODO: This could be a lot cleaner
             name = name.replace(" ", "\t").casefold()
             if name in topics:
-                log("Skipping duplicate topic %s in %s:%s",
+                log("Skipping duplicate topic '%s' in %s:%s",
+                    name, package, help_source)
+            elif name in aliases:
+                log("Topic %s is already an alias in %s:%s",
                     name, package, help_source)
             else:
                 topics[name] = {
@@ -62,6 +67,16 @@ def _import_topics(package, topics, help_topic_dict, external=False):
                     "caption": caption,
                     "file": help_source
                 }
+
+            for new_name in [name.replace(" ", "\t") for name in alias_list]:
+                if new_name in topics:
+                    log("Alias '%s' is already a topic in %s:%s",
+                        new_name, package, help_source)
+                elif new_name in aliases:
+                    log("Skipping duplicate alias '%s' in %s:%s",
+                        new_name, package, help_source)
+                else:
+                    aliases[new_name] = name
 
         # All help sources should be in the topic list so you can jump to a
         # file by name. The help file name is the default.
@@ -228,17 +243,19 @@ def _load_help_index(file_spec):
 
     # Gather the unique list of topics.
     topic_list = dict()
-    _import_topics(package, topic_list, help_files)
+    alias_list = dict()
+    _import_topics(package, topic_list, alias_list, help_files)
 
     externals_list = dict()
     package_files = list()
     urls = list()
     if externals is not None:
-        _import_topics(package, externals_list, externals, external=True)
+        _import_topics(package, externals_list, alias_list, externals, external=True)
         _merge_externals(package, externals_list, topic_list, package_files, urls)
 
     # Everything has succeeded.
-    return HelpData(package, index_res, description, doc_root, topic_list,
+    return HelpData(package, index_res, description, doc_root,
+        topic_list, alias_list,
         _get_file_metadata(help_files), package_files, urls,
         _get_toc_metadata(help_toc, topic_list, package))
 

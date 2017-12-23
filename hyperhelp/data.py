@@ -22,7 +22,7 @@ HistoryData = namedtuple("HistoryData", [
 # load time so that we don't need to look it up later.
 HelpData = namedtuple("HelpData", [
     "package", "index_file", "description", "doc_root", "help_topics",
-    "help_files", "package_files", "urls", "help_toc"
+    "help_aliases", "help_files", "package_files", "urls", "help_toc"
 ])
 
 
