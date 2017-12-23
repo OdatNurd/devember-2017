@@ -142,7 +142,8 @@ def lookup_help_topic(pkg_info, topic):
 
     if pkg_info is not None:
         topic = topic.casefold().replace(" ", "\t")
-        return pkg_info.help_topics.get(topic, None)
+        alias = pkg_info.help_aliases.get(topic, None)
+        return pkg_info.help_topics.get(alias or topic, None)
 
     return None
 
