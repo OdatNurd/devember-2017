@@ -9,6 +9,7 @@ from collections import OrderedDict
 from hyperhelp.common import log, hh_syntax, help_package_prompt
 from hyperhelp.common import current_help_package, current_help_file
 from hyperhelp.core import help_index_list, load_help_index, reload_help_file
+from hyperhelp.core import lookup_help_topic
 from hyperhelp.view import find_help_view
 
 from .common import format_template, is_authoring_source
@@ -525,7 +526,7 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
         regions = view.find_by_selector("meta.link")
         for pos in regions:
             link = view.substr(pos)
-            if link.casefold() in topics:
+            if lookup_help_topic(pkg_info, link) is not None:
                 continue
 
             if link not in result:
