@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 
-from .core import help_index_list
+from .core import help_index_list, lookup_help_topic
 
 
 ###----------------------------------------------------------------------------
@@ -102,12 +102,12 @@ class HyperhelpEventListener(sublime_plugin.EventListener):
             return
 
         topic = view.substr(view.extract_scope(point))
-        info = pkg_info.help_topics.get(topic.casefold(), None)
-        if info is None:
+        topic_data = lookup_help_topic(pkg_info, topic)
+        if topic_data is None:
             popup = _missing_body % topic
         else:
-            caption = info["caption"]
-            file = info["file"]
+            caption = topic_data["caption"]
+            file = topic_data["file"]
 
             if file in pkg_info.urls:
                 link_type = "Opens URL: "
