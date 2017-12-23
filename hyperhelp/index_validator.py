@@ -26,7 +26,12 @@ _help_file_schema = {
             "type": "object",
             "properties": {
                 "topic":   { "type": "string", "required": True  },
-                "caption": { "type": "string", "required": False }
+                "caption": { "type": "string", "required": False },
+                "aliases": {
+                    "type": "array",
+                    "items": { "type": "string", "required": True },
+                    "required": False
+                }
             },
             "additionalProperties": False
         }
