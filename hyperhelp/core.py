@@ -127,6 +127,26 @@ def reload_help_file(help_list, help_view):
     return _reload_help_file(help_list, help_view)
 
 
+def lookup_help_topic(pkg_info, topic):
+    """
+    Given a help data tuple or the name of a package, look up the topic and
+    return the topic structure if needed.
+
+    This does all manipulations on the incoming topic, such as case folding and
+    space replacement.
+
+    Returns the topic structure or None.
+    """
+    if isinstance(pkg_info, str):
+        pkg_info = help_index_list().get(pkg_info, None)
+
+    if pkg_info is not None:
+        topic = topic.casefold().replace(" ", "\t")
+        return pkg_info.help_topics.get(topic, None)
+
+    return None
+
+
 def show_help_topic(package, topic, history):
     """
     Attempt to display the help for the provided topic in the given package
