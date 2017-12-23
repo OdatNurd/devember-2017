@@ -125,7 +125,7 @@ def _get_file_metadata(help_topic_dict):
     return retVal
 
 
-def _get_toc_metadata(help_toc_list, topics, package):
+def _get_toc_metadata(help_toc_list, topics, aliases, package):
     """
     Given the table of contents key from the help index and the complete list of
     known topics, return back a table of contents. This will extrapolate a list
@@ -139,10 +139,16 @@ def _get_toc_metadata(help_toc_list, topics, package):
         Expand a toc entry from the index into a full topic object.
         """
         if isinstance(entry, str):
-            return entry, topics.get(entry.replace(" ", "\t"), None)
+            # A string looks up a topic directly; this goes through the alias
+            # list if it has to.
+            topic = entry.replace(" ", "\t")
+            topic = aliases.get(topic, topic)
+            return topic, topics.get(topic, None)
 
-        topic = entry["topic"]
-        base_obj = topics.get(topic.replace(" ", "\t").casefold(), None)
+        # Use the caption for the topic being referenced if not overridden.
+        topic = entry["topic"].replace(" ", "\t").casefold()
+        alias = aliases.get(topic, None)
+        base_obj = topics.get(alias or topic, None)
         if base_obj is None:
             return topic, None
 
@@ -257,7 +263,7 @@ def _load_help_index(file_spec):
     return HelpData(package, index_res, description, doc_root,
         topic_list, alias_list,
         _get_file_metadata(help_files), package_files, urls,
-        _get_toc_metadata(help_toc, topic_list, package))
+        _get_toc_metadata(help_toc, topic_list, alias_list, package))
 
 
 def _scan_help_packages(help_list=None):
