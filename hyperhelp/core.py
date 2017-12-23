@@ -165,11 +165,12 @@ def show_help_topic(package, topic, history):
     if pkg_info is None:
         return None
 
-    inner_topic = topic.replace(" ", "\t").casefold()
-    help_file = pkg_info.help_topics.get(inner_topic, {}).get("file", None)
-    if help_file is None:
+    topic_data = lookup_help_topic(pkg_info, topic)
+    if topic_data is None:
         log("Unknown help topic '%s'", topic, status=True)
         return None
+
+    help_file = topic_data["file"]
 
     if help_file in pkg_info.urls:
         webbrowser.open_new_tab(help_file)
@@ -194,7 +195,7 @@ def show_help_topic(package, topic, history):
     found = False
     anchors = help_view.settings().get("_hh_nav", [])
     for anchor in anchors:
-        if inner_topic == anchor[0].casefold():
+        if topic_data["topic"] == anchor[0].casefold():
             focus_on(help_view, anchor[1], at_center=True)
             found = True
 
