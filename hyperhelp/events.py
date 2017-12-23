@@ -116,7 +116,6 @@ class HyperhelpEventListener(sublime_plugin.EventListener):
             else:
                 link_type = "Links To: "
                 current_file = view.settings().get("_hh_file", None)
-                print(current_file, file)
                 if file == current_file:
                     file = "this file"
 
