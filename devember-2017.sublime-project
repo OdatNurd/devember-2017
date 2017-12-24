@@ -5,7 +5,8 @@
             "path": ".",
             "folder_exclude_patterns": [
                 "hyperhelp",
-                "HyperHelpAuthor"
+                "HyperHelpAuthor",
+                "SnAPI"
             ]
         },
         {
@@ -13,6 +14,9 @@
         },
         {
             "path": "~/.config/sublime-text-3/Packages/HyperHelpAuthor/"
+        },
+        {
+            "path": "~/.config/sublime-text-3/Packages/SnAPI/"
         }
     ],
     "settings":
