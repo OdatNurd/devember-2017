@@ -948,7 +948,7 @@
             "Packages/Default/delete_word.py",
 
             {
-                "topic": "Packages/Default/delete_word.py"
+                "topic": "delete_word.py"
             }
         ],
 
@@ -956,7 +956,7 @@
             "Packages/Default/duplicate_line.py",
 
             {
-                "topic": "Packages/Default/duplicate_line.py"
+                "topic": "duplicate_line.py"
             }
         ],
 
@@ -964,7 +964,7 @@
             "Packages/Default/exec.py",
 
             {
-                "topic": "Packages/Default/exec.py"
+                "topic": "exec.py"
             }
         ],
 
@@ -972,7 +972,7 @@
             "Packages/Default/font.py",
 
             {
-                "topic": "Packages/Default/font.py"
+                "topic": "font.py"
             }
         ],
 
@@ -980,7 +980,7 @@
             "Packages/Default/goto_line.py",
 
             {
-                "topic": "Packages/Default/goto_line.py"
+                "topic": "goto_line.py"
             }
         ],
 
@@ -988,7 +988,7 @@
             "Packages/Default/mark.py",
 
             {
-                "topic": "Packages/Default/mark.py"
+                "topic": "mark.py"
             }
         ],
 
@@ -996,7 +996,7 @@
             "Packages/Default/show_scope_name.py",
 
             {
-                "topic": "Packages/Default/show_scope_name.py"
+                "topic": "show_scope_name.py"
             }
         ],
 
@@ -1004,7 +1004,7 @@
             "Packages/Default/trim_trailing_whitespace.py",
 
             {
-                "topic": "Packages/Default/trim_trailing_whitespace.py"
+                "topic": "trim_trailing_whitespace.py"
             }
         ],
 
