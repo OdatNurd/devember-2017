@@ -451,7 +451,7 @@
                 "caption": "sublime.PhantomSet Class"
             },
             {
-                "topic": "phantomSet.update"
+                "topic": "PhantomSet.update"
             },
             {
                 "topic": "Edit",
@@ -629,8 +629,9 @@
             "Plugin Extension Points",
 
             {
-                "topic": "sublime_plugin",
+                "topic": "sublime_plugin module",
                 "caption": "sublime_plugin Module",
+                "aliases": ["sublime_plugin"]
             },
             {
                 "topic": "EventListener",

@@ -4,6 +4,14 @@
 *|sublime_plugin	Module|*
 =====================
 
+This module has no direct methods; it contains the following classes:
+
+   |EventListener|
+   |ViewEventListener|
+   |ApplicationCommand|
+   |WindowCommand|
+   |TextCommand|
+
 
 --------------------------------------------------------------------------------
 
@@ -13,6 +21,8 @@
 
 Note that many of these events are triggered by the buffer underlying the view,
 and thus the method is only called once, with the first view as the parameter.
+
+This class is contained in the |sublime_plugin| module.
 
 
 *EventListener.on_new*(view)
@@ -292,6 +302,8 @@ objects are created for.
 The view is passed as a single parameter to the constructor. The default
 implementation makes the view available via `self.view`.
 
+This class is contained in the |sublime_plugin| module.
+
 
 Class Methods
 -------------
@@ -476,6 +488,11 @@ Methods
 *|ApplicationCommand|* Class
 ========================
 
+ApplicationCommands are instantiated only once.
+
+This class is contained in the |sublime_plugin| module.
+
+
 *ApplicationCommand.run*(<args>)
   Returns: None
 
@@ -521,6 +538,8 @@ Methods
 WindowCommands are instantiated once per window. The Window object may be
 retrieved via `self.window`
 
+This class is contained in the |sublime_plugin| module.
+
 
 *WindowCommand.run*(<args>)
   Returns: None
@@ -558,6 +577,8 @@ retrieved via `self.window`
 
 TextCommands are instantiated once per view. The View object may be retrieved
 via `self.view`
+
+This class is contained in the |sublime_plugin| module.
 
 
 *TextCommand.run*(edit, <args>)
