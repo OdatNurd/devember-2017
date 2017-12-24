@@ -1,6 +1,6 @@
 {
     "description": "Sublime Text 3 API Documentation",
-
+    "default_caption": "{topic}()",
     "help_files": {
         "index.txt": [
             "Sublime Text 3 API Documentation",
