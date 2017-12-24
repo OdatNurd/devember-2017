@@ -9,41 +9,53 @@
             "General Information",
 
             {
-                "topic": "example plugins"
+                "topic": "example plugins",
+                "caption": "Example Plugins"
             },
             {
-                "topic": "plugin lifecycle"
+                "topic": "plugin lifecycle",
+                "caption": "Plugin Lifecycle"
             },
             {
-                "topic": "threading"
+                "topic": "threading",
+                "caption": "Threading"
             },
             {
-                "topic": "units and coordinates"
+                "topic": "units and coordinates",
+                "caption": "Units and Coordinates"
             },
             {
-                "topic": "types"
+                "topic": "types",
+                "caption": "Types"
             },
             {
-                "topic": "location"
+                "topic": "location",
+                "caption": "Type: location"
             },
             {
-                "topic": "point"
+                "topic": "point",
+                "caption": "Type: point"
             },
             {
-                "topic": "value"
+                "topic": "value",
+                "caption": "Type: value"
             },
             {
-                "topic": "dip"
+                "topic": "dip",
+                "caption": "Type: dip"
             },
             {
-                "topic": "vector"
+                "topic": "vector",
+                "caption": "Type: vector"
             }
         ],
         "core.txt": [
             "Core Components",
 
             {
-                "topic": "sublime"
+                "topic": "sublime",
+                "caption": "sublime Module"
+
             },
             {
                 "topic": "sublime.set_timeout"
@@ -133,486 +145,496 @@
                 "topic": "sublime.arch"
             },
             {
-                "topic": "Sheet"
+                "topic": "Sheet",
+                "caption": "sublime.Sheet Class"
             },
             {
-                "topic": "Sheet.id"
+                "topic": "sheet.id"
             },
             {
-                "topic": "Sheet.window"
+                "topic": "sheet.window"
             },
             {
-                "topic": "Sheet.view"
+                "topic": "sheet.view"
             },
             {
-                "topic": "View"
+                "topic": "View",
+                "caption": "sublime.View Class"
             },
             {
-                "topic": "View.id"
+                "topic": "view.id"
             },
             {
-                "topic": "View.buffer_id"
+                "topic": "view.buffer_id"
             },
             {
-                "topic": "View.is_primary"
+                "topic": "view.is_primary"
             },
             {
-                "topic": "View.file_name"
+                "topic": "view.file_name"
             },
             {
-                "topic": "View.name"
+                "topic": "view.name"
             },
             {
-                "topic": "View.set_name"
+                "topic": "view.set_name"
             },
             {
-                "topic": "View.is_loading"
+                "topic": "view.is_loading"
             },
             {
-                "topic": "View.is_dirty"
+                "topic": "view.is_dirty"
             },
             {
-                "topic": "View.is_read_only"
+                "topic": "view.is_read_only"
             },
             {
-                "topic": "View.set_read_only"
+                "topic": "view.set_read_only"
             },
             {
-                "topic": "View.is_scratch"
+                "topic": "view.is_scratch"
             },
             {
-                "topic": "View.set_scratch"
+                "topic": "view.set_scratch"
             },
             {
-                "topic": "View.settings"
+                "topic": "view.settings"
             },
             {
-                "topic": "View.window"
+                "topic": "view.window"
             },
             {
-                "topic": "View.run_command"
+                "topic": "view.run_command"
             },
             {
-                "topic": "View.size"
+                "topic": "view.size"
             },
             {
-                "topic": "View.substr"
+                "topic": "view.substr"
             },
             {
-                "topic": "View.insert"
+                "topic": "view.insert"
             },
             {
-                "topic": "View.erase"
+                "topic": "view.erase"
             },
             {
-                "topic": "View.replace"
+                "topic": "view.replace"
             },
             {
-                "topic": "View.sel"
+                "topic": "view.sel"
             },
             {
-                "topic": "View.line"
+                "topic": "view.line"
             },
             {
-                "topic": "View.full_line"
+                "topic": "view.full_line"
             },
             {
-                "topic": "View.lines"
+                "topic": "view.lines"
             },
             {
-                "topic": "View.split_by_newlines"
+                "topic": "view.split_by_newlines"
             },
             {
-                "topic": "View.word"
+                "topic": "view.word"
             },
             {
-                "topic": "View.classify"
+                "topic": "view.classify"
             },
             {
-                "topic": "View.find_by_class"
+                "topic": "view.find_by_class"
             },
             {
-                "topic": "View.expand_by_class"
+                "topic": "view.expand_by_class"
             },
             {
-                "topic": "View.find"
+                "topic": "view.find"
             },
             {
-                "topic": "View.find_all"
+                "topic": "view.find_all"
             },
             {
-                "topic": "View.rowcol"
+                "topic": "view.rowcol"
             },
             {
-                "topic": "View.text_point"
+                "topic": "view.text_point"
             },
             {
-                "topic": "View.set_syntax_file"
+                "topic": "view.set_syntax_file"
             },
             {
-                "topic": "View.extract_scope"
+                "topic": "view.extract_scope"
             },
             {
-                "topic": "View.scope_name"
+                "topic": "view.scope_name"
             },
             {
-                "topic": "View.match_selector"
+                "topic": "view.match_selector"
             },
             {
-                "topic": "View.score_selector"
+                "topic": "view.score_selector"
             },
             {
-                "topic": "View.find_by_selector"
+                "topic": "view.find_by_selector"
             },
             {
-                "topic": "View.show"
+                "topic": "view.show"
             },
             {
-                "topic": "View.show_at_center"
+                "topic": "view.show_at_center"
             },
             {
-                "topic": "View.visible_region"
+                "topic": "view.visible_region"
             },
             {
-                "topic": "View.viewport_position"
+                "topic": "view.viewport_position"
             },
             {
-                "topic": "View.set_viewport_position"
+                "topic": "view.set_viewport_position"
             },
             {
-                "topic": "View.viewport_extent"
+                "topic": "view.viewport_extent"
             },
             {
-                "topic": "View.layout_extent"
+                "topic": "view.layout_extent"
             },
             {
-                "topic": "View.text_to_layout"
+                "topic": "view.text_to_layout"
             },
             {
-                "topic": "View.layout_to_text"
+                "topic": "view.layout_to_text"
             },
             {
-                "topic": "View.window_to_layout"
+                "topic": "view.window_to_layout"
             },
             {
-                "topic": "View.window_to_text"
+                "topic": "view.window_to_text"
             },
             {
-                "topic": "View.line_height"
+                "topic": "view.line_height"
             },
             {
-                "topic": "View.em_width"
+                "topic": "view.em_width"
             },
             {
-                "topic": "View.add_regions"
+                "topic": "view.add_regions"
             },
             {
-                "topic": "View.get_regions"
+                "topic": "view.get_regions"
             },
             {
-                "topic": "View.erase_regions"
+                "topic": "view.erase_regions"
             },
             {
-                "topic": "View.set_status"
+                "topic": "view.set_status"
             },
             {
-                "topic": "View.get_status"
+                "topic": "view.get_status"
             },
             {
-                "topic": "View.erase_status"
+                "topic": "view.erase_status"
             },
             {
-                "topic": "View.command_history"
+                "topic": "view.command_history"
             },
             {
-                "topic": "View.change_count"
+                "topic": "view.change_count"
             },
             {
-                "topic": "View.fold"
+                "topic": "view.fold"
             },
             {
-                "topic": "View.unfold"
+                "topic": "view.unfold"
             },
             {
-                "topic": "View.encoding"
+                "topic": "view.encoding"
             },
             {
-                "topic": "View.set_encoding"
+                "topic": "view.set_encoding"
             },
             {
-                "topic": "View.line_endings"
+                "topic": "view.line_endings"
             },
             {
-                "topic": "View.set_line_endings"
+                "topic": "view.set_line_endings"
             },
             {
-                "topic": "View.overwrite_status"
+                "topic": "view.overwrite_status"
             },
             {
-                "topic": "View.set_overwrite_status"
+                "topic": "view.set_overwrite_status"
             },
             {
-                "topic": "View.symbols"
+                "topic": "view.symbols"
             },
             {
-                "topic": "View.show_popup_menu"
+                "topic": "view.show_popup_menu"
             },
             {
-                "topic": "View.show_popup"
+                "topic": "view.show_popup"
             },
             {
-                "topic": "View.update_popup"
+                "topic": "view.update_popup"
             },
             {
-                "topic": "View.is_popup_visible"
+                "topic": "view.is_popup_visible"
             },
             {
-                "topic": "View.hide_popup"
+                "topic": "view.hide_popup"
             },
             {
-                "topic": "View.is_auto_complete_visible"
+                "topic": "view.is_auto_complete_visible"
             },
             {
-                "topic": "Selection"
+                "topic": "Selection",
+                "caption": "sublime.Selection Class"
             },
             {
-                "topic": "Selection.clear"
+                "topic": "selection.clear"
             },
             {
-                "topic": "Selection.add"
+                "topic": "selection.add"
             },
             {
-                "topic": "Selection.add_all"
+                "topic": "selection.add_all"
             },
             {
-                "topic": "Selection.subtract"
+                "topic": "selection.subtract"
             },
             {
-                "topic": "Selection.contains"
+                "topic": "selection.contains"
             },
             {
-                "topic": "Region"
+                "topic": "Region",
+                "caption": "sublime.Region Class"
             },
             {
-                "topic": "Region.a"
+                "topic": "region.a"
             },
             {
-                "topic": "Region.b"
+                "topic": "region.b"
             },
             {
-                "topic": "Region.xpos"
+                "topic": "region.xpos"
             },
             {
-                "topic": "Region.begin"
+                "topic": "region.begin"
             },
             {
-                "topic": "Region.end"
+                "topic": "region.end"
             },
             {
-                "topic": "Region.size"
+                "topic": "region.size"
             },
             {
-                "topic": "Region.empty"
+                "topic": "region.empty"
             },
             {
-                "topic": "Region.cover"
+                "topic": "region.cover"
             },
             {
-                "topic": "Region.intersection"
+                "topic": "region.intersection"
             },
             {
-                "topic": "Region.intersects"
+                "topic": "region.intersects"
             },
             {
-                "topic": "Region.contains"
+                "topic": "region.contains"
             },
             {
-                "topic": "Phantom"
+                "topic": "Phantom",
+                "caption": "sublime.Phantom Class"
             },
             {
-                "topic": "PhantomSet"
+                "topic": "PhantomSet",
+                "caption": "sublime.PhantomSet Class"
             },
             {
-                "topic": "PhantomSet.update"
+                "topic": "phantomSet.update"
             },
             {
-                "topic": "Edit"
+                "topic": "Edit",
+                "caption": "sublime.Edit Class"
             },
             {
-                "topic": "Window"
+                "topic": "Window",
+                "caption": "sublime.Window Class"
             },
             {
-                "topic": "Window.id"
+                "topic": "window.id"
             },
             {
-                "topic": "Window.new_file"
+                "topic": "window.new_file"
             },
             {
-                "topic": "Window.open_file"
+                "topic": "window.open_file"
             },
             {
-                "topic": "Window.find_open_file"
+                "topic": "window.find_open_file"
             },
             {
-                "topic": "Window.active_sheet"
+                "topic": "window.active_sheet"
             },
             {
-                "topic": "Window.active_view"
+                "topic": "window.active_view"
             },
             {
-                "topic": "Window.active_sheet_in_group"
+                "topic": "window.active_sheet_in_group"
             },
             {
-                "topic": "Window.active_view_in_group"
+                "topic": "window.active_view_in_group"
             },
             {
-                "topic": "Window.sheets"
+                "topic": "window.sheets"
             },
             {
-                "topic": "Window.sheets_in_group"
+                "topic": "window.sheets_in_group"
             },
             {
-                "topic": "Window.views"
+                "topic": "window.views"
             },
             {
-                "topic": "Window.views_in_group"
+                "topic": "window.views_in_group"
             },
             {
-                "topic": "Window.num_groups"
+                "topic": "window.num_groups"
             },
             {
-                "topic": "Window.active_group"
+                "topic": "window.active_group"
             },
             {
-                "topic": "Window.focus_group"
+                "topic": "window.focus_group"
             },
             {
-                "topic": "Window.focus_sheet"
+                "topic": "window.focus_sheet"
             },
             {
-                "topic": "Window.focus_view"
+                "topic": "window.focus_view"
             },
             {
-                "topic": "Window.get_sheet_index"
+                "topic": "window.get_sheet_index"
             },
             {
-                "topic": "Window.set_sheet_index"
+                "topic": "window.set_sheet_index"
             },
             {
-                "topic": "Window.get_view_index"
+                "topic": "window.get_view_index"
             },
             {
-                "topic": "Window.set_view_index"
+                "topic": "window.set_view_index"
             },
             {
-                "topic": "Window.status_message"
+                "topic": "window.status_message"
             },
             {
-                "topic": "Window.is_menu_visible"
+                "topic": "window.is_menu_visible"
             },
             {
-                "topic": "Window.set_menu_visible"
+                "topic": "window.set_menu_visible"
             },
             {
-                "topic": "Window.is_sidebar_visible"
+                "topic": "window.is_sidebar_visible"
             },
             {
-                "topic": "Window.set_sidebar_visible"
+                "topic": "window.set_sidebar_visible"
             },
             {
-                "topic": "Window.get_tabs_visible"
+                "topic": "window.get_tabs_visible"
             },
             {
-                "topic": "Window.set_tabs_visible"
+                "topic": "window.set_tabs_visible"
             },
             {
-                "topic": "Window.is_minimap_visible"
+                "topic": "window.is_minimap_visible"
             },
             {
-                "topic": "Window.set_minimap_visible"
+                "topic": "window.set_minimap_visible"
             },
             {
-                "topic": "Window.is_status_bar_visible"
+                "topic": "window.is_status_bar_visible"
             },
             {
-                "topic": "Window.set_status_bar_visible"
+                "topic": "window.set_status_bar_visible"
             },
             {
-                "topic": "Window.folders"
+                "topic": "window.folders"
             },
             {
-                "topic": "Window.project_file_name"
+                "topic": "window.project_file_name"
             },
             {
-                "topic": "Window.project_data"
+                "topic": "window.project_data"
             },
             {
-                "topic": "Window.set_project_data"
+                "topic": "window.set_project_data"
             },
             {
-                "topic": "Window.run_command"
+                "topic": "window.run_command"
             },
             {
-                "topic": "Window.show_quick_panel"
+                "topic": "window.show_quick_panel"
             },
             {
-                "topic": "Window.show_input_panel"
+                "topic": "window.show_input_panel"
             },
             {
-                "topic": "Window.create_output_panel"
+                "topic": "window.create_output_panel"
             },
             {
-                "topic": "Window.find_output_panel"
+                "topic": "window.find_output_panel"
             },
             {
-                "topic": "Window.destroy_output_panel"
+                "topic": "window.destroy_output_panel"
             },
             {
-                "topic": "Window.active_panel"
+                "topic": "window.active_panel"
             },
             {
-                "topic": "Window.panels"
+                "topic": "window.panels"
             },
             {
-                "topic": "Window.lookup_symbol_in_index"
+                "topic": "window.lookup_symbol_in_index"
             },
             {
-                "topic": "Window.lookup_symbol_in_open_files"
+                "topic": "window.lookup_symbol_in_open_files"
             },
             {
-                "topic": "Window.extract_variables"
+                "topic": "window.extract_variables"
             },
             {
-                "topic": "Settings"
+                "topic": "Settings",
+                "caption": "sublime.Settings Class"
             },
             {
-                "topic": "Settings.get"
+                "topic": "settings.get"
             },
             {
-                "topic": "Settings.set"
+                "topic": "settings.set"
             },
             {
-                "topic": "Settings.erase"
+                "topic": "settings.erase"
             },
             {
-                "topic": "Settings.has"
+                "topic": "settings.has"
             },
             {
-                "topic": "Settings.add_on_change"
+                "topic": "settings.add_on_change"
             },
             {
-                "topic": "Settings.clear_on_change"
+                "topic": "settings.clear_on_change"
             },
         ],
         "extension.txt": [
             "Plugin Extension Points",
 
             {
-                "topic": "sublime_plugin module",
-                "aliases": ["sublime_plugin"]
+                "topic": "sublime_plugin",
+                "caption": "sublime_plugin Module",
             },
             {
-                "topic": "EventListener"
+                "topic": "EventListener",
+                "caption": "sublime_plugin.EventListener Class"
             },
             {
                 "topic": "EventListener.on_new"
@@ -696,7 +718,8 @@
                 "topic": "EventListener.on_post_window_command"
             },
             {
-                "topic": "ViewEventListener"
+                "topic": "ViewEventListener",
+                "caption": "sublime_plugin.ViewEventListener Class"
             },
             {
                 "topic": "ViewEventListener.is_applicable"
@@ -738,7 +761,8 @@
                 "topic": "ViewEventListener.on_query_completions"
             },
             {
-                "topic": "ApplicationCommand"
+                "topic": "ApplicationCommand",
+                "caption": "sublime_plugin.ApplicationCommand Class"
             },
             {
                 "topic": "ApplicationCommand.run"
@@ -756,7 +780,8 @@
                 "topic": "ApplicationCommand.description"
             },
             {
-                "topic": "WindowCommand"
+                "topic": "WindowCommand",
+                "caption": "sublime_plugin.WindowCommand Class"
             },
             {
                 "topic": "WindowCommand.run"
@@ -771,7 +796,8 @@
                 "topic": "WindowCommand.description"
             },
             {
-                "topic": "TextCommand"
+                "topic": "TextCommand",
+                "caption": "sublime_plugin.TextCommand Class"
             },
             {
                 "topic": "TextCommand.run"
