@@ -21,7 +21,8 @@ _url_prefix_re = re.compile(r'^https?://')
 ###----------------------------------------------------------------------------
 
 
-def _import_topics(package, topics, aliases, help_topic_dict, external=False):
+def _import_topics(package, topics, aliases, help_topic_dict, caption_tpl,
+                   external=False):
     """
     Parse out a dictionary of help topics from the help index and store all
     topics into the topic dictionary passed in. During the parsing, the
@@ -30,6 +31,9 @@ def _import_topics(package, topics, aliases, help_topic_dict, external=False):
     When def_captions is True, topics that don't have a caption use the document
     title as the caption by default.
     """
+    def _make_caption(topic, source):
+        return caption_tpl.format(topic=topic, source=source, package=package)
+
     for help_source in help_topic_dict:
         topic_list = help_topic_dict[help_source]
 
@@ -49,7 +53,7 @@ def _import_topics(package, topics, aliases, help_topic_dict, external=False):
             caption = topic_entry.get("caption", None)
             alias_list = topic_entry.get("aliases", [])
             if caption is None:
-                caption = default_caption or "Topic %s in help source %s" % (name, help_source)
+                caption = default_caption or _make_caption(name, help_source)
 
             # Turn spaces in the topic name into tabs so they match what's in
             # the buffer at run time. Saves forcing tabs in the index file.
@@ -235,6 +239,8 @@ def _load_help_index(file_spec):
     help_files = raw_dict.pop("help_files", dict())
     help_toc = raw_dict.pop("help_contents", None)
     externals = raw_dict.pop("externals", None)
+    caption_tpl = raw_dict.pop("default_caption",
+                                    "Topic {topic} in help source {source}")
 
     # Warn if the dictionary has too many keys
     for key in raw_dict.keys():
@@ -250,13 +256,13 @@ def _load_help_index(file_spec):
     # Gather the unique list of topics.
     topic_list = dict()
     alias_list = dict()
-    _import_topics(package, topic_list, alias_list, help_files)
+    _import_topics(package, topic_list, alias_list, help_files, caption_tpl)
 
     externals_list = dict()
     package_files = list()
     urls = list()
     if externals is not None:
-        _import_topics(package, externals_list, alias_list, externals, external=True)
+        _import_topics(package, externals_list, alias_list, externals, caption_tpl, external=True)
         _merge_externals(package, externals_list, topic_list, package_files, urls)
 
     # Everything has succeeded.

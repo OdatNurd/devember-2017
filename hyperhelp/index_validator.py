@@ -104,8 +104,9 @@ _externals_schema = {
 _index_schema = {
     "type": "object",
     "properties": {
-        "description": { "type": "string", "required": False },
-        "doc_root":    { "type": "string", "required": False },
+        "description":     { "type": "string", "required": False },
+        "doc_root":        { "type": "string", "required": False },
+        "default_caption": { "type": "string", "required": False },
 
         "help_files":    _help_file_schema,
         "help_contents": _help_contents_schema,

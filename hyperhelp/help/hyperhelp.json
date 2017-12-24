@@ -10,6 +10,11 @@
     // If not given, the package location of the help index is used.
     "doc_root": "help/",
 
+    // Optional; the caption to use for any help topic that doesn't have one
+    // explicitly defined. The value seen here is the default, and the place
+    // holders {topic}, {source} and {package} are allowed.
+    "default_caption": "Topic {topic} in help source {source}",
+
     // Required; A dictionary that represents all of the help files that can be
     // referenced from within this package.
     "help_files": {
