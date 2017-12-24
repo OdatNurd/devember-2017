@@ -1,0 +1,7 @@
+[
+    // Open the help index on SnAPI, to browse the API
+    {
+        "keys": ["super+shift+h"], "command": "hyperhelp_index",
+        "args": { "package": "SnAPI" }
+    }
+]
