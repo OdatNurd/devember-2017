@@ -54,19 +54,19 @@ contexts:
       push: code_block
     - match: '{{hyperlink}}'
       captures:
-        1: storage
+        1: storage punctuation.link.begin
         2: storage meta.link
-        3: storage
+        3: storage punctuation.link.end
     - match: '{{anchor}}'
       captures:
-        1: string.unquoted
+        1: string.unquoted punctuation.anchor.begin
         2: string.unquoted meta.anchor
-        3: string.unquoted
+        3: string.unquoted punctuation.anchor.end
     - match: '{{hidden_anchor}}'
       captures:
-        1: string.unquoted
+        1: string.unquoted punctuation.anchor.begin
         2: string.unquoted meta.anchor.hidden
-        3: string.unquoted
+        3: string.unquoted punctuation.anchor.end
     - match: '{{separator}}'
       scope: storage.what meta.separator
   code_block:

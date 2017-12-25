@@ -13,6 +13,14 @@
         ]
     },
 
+    // Insert a tab when spacebar is pressed inside links and anchors
+    {
+        "keys": [" "], "command": "insert", "args": { "characters": "\t" },
+        "context": [
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help & (meta.link | punctuation.link.end | meta.anchor | punctuation.anchor.end)" }
+        ]
+    },
+
     // Auto pair characters in key bindings.
     { "keys": ["<"], "command": "insert_snippet", "args": {"contents": "<$0>"}, "context":
         [
