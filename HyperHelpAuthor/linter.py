@@ -13,7 +13,7 @@ from hyperhelp.core import help_index_list, lookup_help_topic
 
 class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
     def run(self):
-        pkg_info, targets = self.get_lint_targets()
+        pkg_info, lint_type, targets = self.get_lint_targets()
         if pkg_info is None:
             return log("Unable to lint; package is not in help index",
                        status=True)
@@ -44,12 +44,12 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
 
         pkg_info = help_index_list().get(pkg_name, None)
         if pkg_info is None:
-            return (None, None)
+            return (None, None, None)
 
         if view.match_selector(0, "text.hyperhelp.help"):
-            return (pkg_info, [target])
+            return (pkg_info, "single", [target])
 
-        return (pkg_info, list(pkg_info.help_files))
+        return (pkg_info, "package", list(pkg_info.help_files))
 
     def get_temp_view(self, filename):
         content = None
