@@ -1,4 +1,4 @@
-%hyperhelp title="sublime_plugin.ViewEventListener Class" date="2017-12-23"
+%hyperhelp title="sublime_plugin.ViewEventListener Class" date="2017-12-24"
 
 
 *|ViewEventListener|* Class
@@ -159,18 +159,22 @@ Methods
       The trigger may contain a tab character (`\t`) followed by a hint to display
       in the right-hand side of the completion box.
 
-      `return [`
-      `    ["me1\tmethod", "method1()"],`
-      `    ["me2\tmethod", "method2()"]`
-      `]`
+      ```
+      return [
+          ["me1\tmethod", "method1()"],
+          ["me2\tmethod", "method2()"]
+      ]
+      ```
 
       The replacement text may contain dollar-numeric fields such as a snippet
       does, e.g. `$0`, `$1`.
 
-      `return [`
-      `    ["fn", "def ${1:name}($2) { $0 }"],`
-      `    ["for", "for ($1; $2; $3) { $0 }"]`
-      `]`
+      ```
+      return [
+          ["fn", "def ${1:name}($2) { $0 }"],
+          ["for", "for ($1; $2; $3) { $0 }"]
+      ]
+      ```
 
     * A 2-element tuple with the first element being the list format documented
       above, and the second element being bit flags from the following list:
@@ -181,15 +185,17 @@ Methods
       * `sublime.INHIBIT_EXPLICIT_COMPLETIONS`: prevent Sublime Text from
         showing completions based on `.sublime-completions` files
 
-        `return (`
-        `    [`
-        `        ["me1", "method1()"],`
-        `        ["me2", "method2()"]`
-        `    ],`
-        `    sublime.INHIBIT_WORD_COMPLETIONS | `
-        `    sublime.INHIBIT_EXPLICIT_COMPLETIONS`
-        `)`
 
+        ```
+        return (
+            [
+                ["me1", "method1()"],
+                ["me2", "method2()"]
+            ],
+            sublime.INHIBIT_WORD_COMPLETIONS |
+            sublime.INHIBIT_EXPLICIT_COMPLETIONS
+        )
+        ```
 
 --------------------------------------------------------------------------------
 API Help Copyright © Sublime HQ Pty Ltd                     |api_reference.html|

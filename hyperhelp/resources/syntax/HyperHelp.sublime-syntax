@@ -7,6 +7,7 @@ hidden: true
 variables:
   key_binding: '<[^> ]*>\t?>?'
   code_markup: '`[^`]*`'
+  block_markup: '^\s*```\s*$'
   hyperlink: '(\|)([^|\t\* ][^|\* ]*)(\|)'
   anchor: '(\*)([^*\|\t ][^*\| ]+)(\*)'
   hidden_anchor: '(\*\|)([^* ]+)(\|\*)'
@@ -49,6 +50,8 @@ contexts:
       scope: variable.language meta.keybind
     - match: '{{code_markup}}'
       scope: markup.raw meta.code
+    - match: '{{block_markup}}'
+      push: code_block
     - match: '{{hyperlink}}'
       captures:
         1: storage
@@ -66,3 +69,7 @@ contexts:
         3: string.unquoted
     - match: '{{separator}}'
       scope: storage.what meta.separator
+  code_block:
+    - meta_scope: markup.raw meta.code
+    - match: '{{block_markup}}'
+      pop: true
