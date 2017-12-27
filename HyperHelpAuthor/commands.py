@@ -293,9 +293,8 @@ class HyperhelpAuthorCreateIndex(sublime_plugin.WindowCommand):
                 _make_help_index(package, doc_root, index_path)
                 _make_root_help(package, help_path)
 
-                # Manually add the new index to the package since Sublime has
-                # to notice that the new resource esists.
-                new_pkg_info = load_help_index(index_path)
+                res = "Packages/%s/%shyperhelp.json" % (package, doc_root)
+                new_pkg_info = load_help_index(res)
                 if new_pkg_info is None:
                     raise IOError("Unable to load new help index")
 

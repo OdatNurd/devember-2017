@@ -186,35 +186,17 @@ def _get_toc_metadata(help_toc_list, topics, aliases, package):
     return expand_topic_list(help_toc_list)
 
 
-def _get_index_content(file_spec):
-    """
-    Load the index file content from the given file specification, if possible.
-    The file spec can be an absolute path to a package file or a package
-    resource specification pointing to one.
-
-    Return is a tuple with the associated resource name and the content that
-    was loaded, if any.
-    """
-    if file_spec.startswith(sublime.packages_path()):
-        index_res = os.path.relpath(file_spec, sublime.packages_path())
-        index_res = os.path.join("Packages", index_res)
-    else:
-        index_res = file_spec
-
-    return (index_res, load_resource(file_spec))
-
-
-def _load_help_index(file_spec):
+def _load_help_index(index_res):
     """
     Given a package name and the resource filename of the hyperhelp json file,
     load the help index and return it. The return value is None on failure or
     HelpData on success.
     """
-    index_res, content = _get_index_content(file_spec)
     if not index_res.casefold().startswith("packages/"):
         return log("Index source is not in a package: %s", index_res)
 
     package = path.split(index_res)[0].split("/")[1]
+    content = load_resource(index_res)
 
     if content is None:
         return log("Unable to load index information for '%s'", package)
