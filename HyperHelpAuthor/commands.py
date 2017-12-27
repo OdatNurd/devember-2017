@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 
 import os
+import codecs
 import datetime
 import re
 
@@ -86,7 +87,7 @@ def _make_help_index(package, doc_root, index_path):
         """,
         package, doc_root, package)
 
-    with open(index_path, 'w') as handle:
+    with codecs.open(index_path, 'w', 'utf-8') as handle:
         handle.write(template)
 
 
@@ -104,7 +105,7 @@ def _make_root_help(package, help_path):
         datetime.date.today().strftime("%Y-%m-%d"),
         package)
 
-    with open(help_path, 'w') as handle:
+    with codecs.open(help_path, 'w', 'utf-8') as handle:
         handle.write(template)
 
 
