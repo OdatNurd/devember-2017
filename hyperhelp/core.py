@@ -36,6 +36,16 @@ def load_help_index(index_resource):
     return _load_help_index(index_resource)
 
 
+def load_help_file(pkg_info, help_file):
+    """
+    Load the contents of a help file contained in the provided help package.
+    The help file should be relative to the document root of the package.
+
+    Returns None if the help file cannot be loaded.
+    """
+    return _load_help_file(pkg_info, help_file)
+
+
 def help_index_list(reload=False, package=None):
     """
     Obtain or reload the help index information for all packages. This demand

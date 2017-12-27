@@ -6,6 +6,7 @@ import time
 
 from .view import find_help_view, update_help_view
 from .common import log, hh_syntax, current_help_file, current_help_package
+from .common import load_resource
 from .data import HeaderData, HistoryData
 
 
@@ -35,21 +36,7 @@ def _load_help_file(pkg_info, help_file):
 
     Returns None if the help file cannot be loaded.
     """
-    try:
-        text = sublime.load_resource(_resource_for_help(pkg_info, help_file))
-
-        if '\r\n' in text:
-            return text.replace('\r', '')
-
-        if '\r' in text:
-            return text.replace('\r', '\n')
-
-        return text
-
-    except:
-        pass
-
-    return None
+    return load_resource(_resource_for_help(pkg_info, help_file))
 
 
 def _update_help_history(view, append=False, selection=None):
