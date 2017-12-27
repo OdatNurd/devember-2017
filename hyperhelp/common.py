@@ -32,6 +32,29 @@ def hh_syntax(base_file):
     log("Unable to locate unique syntax '%s'", base_file)
 
 
+def load_resource(res_name):
+    """
+    Attempt to load the resource provided as UTF-8 text, normalizing the line
+    endings to allow the results to be displayed in a Sublime view, which uses
+    Unix line ends by default.
+
+    Returns the decoded string or None if the resource could not be found or
+    could not be decoded.
+    """
+    try:
+        data = sublime.load_binary_resource(res_name)
+        text = data.decode("utf-8")
+        return text.replace('\r\n', '\n').replace('\r', '\n')
+
+    except OSError:
+        log("Unable to load '%s'; resource not found" % res_name)
+
+    except UnicodeError:
+        print("Unable to decode '%s'; resource is not UTF-8" % res_name)
+
+    return None
+
+
 def current_help_package(view=None, window=None):
     """
     Obtain the package that contains the currently displayed help file or None
