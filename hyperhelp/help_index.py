@@ -195,26 +195,13 @@ def _get_index_content(file_spec):
     Return is a tuple with the associated resource name and the content that
     was loaded, if any.
     """
-    content = None
     if file_spec.startswith(sublime.packages_path()):
         index_res = os.path.relpath(file_spec, sublime.packages_path())
         index_res = os.path.join("Packages", index_res)
-
-        try:
-            with codecs.open(file_spec, 'r', "utf-8") as file:
-                content = file.read()
-
-        except OSError:
-            log("Unable to load '%s'; resource not found" % file_spec)
-
-        except UnicodeError:
-            log("Unable to decode '%s'; resource is not UTF-8" % file_spec)
-
     else:
         index_res = file_spec
-        content = load_resource(index_res)
 
-    return (index_res, content)
+    return (index_res, load_resource(file_spec))
 
 
 def _load_help_index(file_spec):

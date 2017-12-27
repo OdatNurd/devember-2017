@@ -1,5 +1,7 @@
 import sublime
 
+import codecs
+
 from .view import find_help_view
 
 
@@ -34,16 +36,20 @@ def hh_syntax(base_file):
 
 def load_resource(res_name):
     """
-    Attempt to load the resource provided as UTF-8 text, normalizing the line
-    endings to allow the results to be displayed in a Sublime view, which uses
-    Unix line ends by default.
+    Attempt to load and decode the UTF-8 encoded string with normalized line
+    endings, returning the string on success or None on error.
 
-    Returns the decoded string or None if the resource could not be found or
-    could not be decoded.
+    This works with regular resource specifications as well as local file names,
+    so long as the file is contained in the Sublime package directory.
     """
     try:
-        data = sublime.load_binary_resource(res_name)
-        text = data.decode("utf-8")
+        if res_name.startswith(sublime.packages_path()):
+            with codecs.open(res_name, 'r', 'utf-8') as file:
+                text = file.read()
+
+        else:
+            text = sublime.load_binary_resource(res_name).decode("utf-8")
+
         return text.replace('\r\n', '\n').replace('\r', '\n')
 
     except OSError:
