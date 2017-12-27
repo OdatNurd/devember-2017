@@ -1,5 +1,6 @@
 import sublime
 
+import os
 import codecs
 
 from .view import find_help_view
@@ -39,26 +40,31 @@ def load_resource(res_name):
     Attempt to load and decode the UTF-8 encoded string with normalized line
     endings, returning the string on success or None on error.
 
-    This works with regular resource specifications as well as local file names,
-    so long as the file is contained in the Sublime package directory.
+    If no resource can be found with the resource specification provided, the
+    call tries to load a file by this name from the packages folder instead.
     """
     try:
-        if res_name.startswith(sublime.packages_path()):
-            with codecs.open(res_name, 'r', 'utf-8') as file:
-                text = file.read()
-
-        else:
-            text = sublime.load_binary_resource(res_name).decode("utf-8")
-
+        text = sublime.load_binary_resource(res_name).decode("utf-8")
         return text.replace('\r\n', '\n').replace('\r', '\n')
 
     except OSError:
-        log("Unable to load '%s'; resource not found" % res_name)
+        pass
 
     except UnicodeError:
-        print("Unable to decode '%s'; resource is not UTF-8" % res_name)
+        return log("Unable to decode '%s'; resource is not UTF-8" % res_name)
 
-    return None
+    try:
+        spp = os.path.split(sublime.packages_path())[0]
+        file_name = os.path.join(spp, res_name)
+
+        with codecs.open(file_name, 'r', 'utf-8') as file:
+            return file.read().replace('\r\n', '\n').replace('\r', '\n')
+
+    except OSError:
+        return log("Unable to load '%s'; resource not found" % res_name)
+
+    except UnicodeError:
+        return log("Unable to decode '%s'; resource is not UTF-8" % res_name)
 
 
 def current_help_package(view=None, window=None):
