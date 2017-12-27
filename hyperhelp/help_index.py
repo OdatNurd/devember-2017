@@ -6,8 +6,9 @@ import posixpath as path
 from collections import OrderedDict
 import os
 import re
+import codecs
 
-from .common import log
+from .common import log, load_resource
 from .data import HelpData
 from .index_validator import validate_index
 
@@ -200,16 +201,18 @@ def _get_index_content(file_spec):
         index_res = os.path.join("Packages", index_res)
 
         try:
-            with open(file_spec, 'r') as file:
+            with codecs.open(file_spec, 'r', "utf-8") as file:
                 content = file.read()
-        except:
-            pass
+
+        except OSError:
+            log("Unable to load '%s'; resource not found" % file_spec)
+
+        except UnicodeError:
+            log("Unable to decode '%s'; resource is not UTF-8" % file_spec)
+
     else:
         index_res = file_spec
-        try:
-            content = sublime.load_resource(index_res)
-        except:
-            pass
+        content = load_resource(index_res)
 
     return (index_res, content)
 
