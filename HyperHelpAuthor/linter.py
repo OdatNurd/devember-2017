@@ -17,6 +17,55 @@ LintTarget = namedtuple("LintTarget", [
 ])
 
 
+# Linters produce an array of these tuples to indicate problems found in files.
+# type can be one of "info", "warning" or "error".
+LintResult = namedtuple("LintResult", [
+    "type", "file", "line", "column", "message"
+])
+
+
+###----------------------------------------------------------------------------
+
+
+class LinterBase():
+    """
+    The base class for all lint operations in the help linter.
+    """
+    def __init__(self, pkg_info):
+        self.pkg_info = pkg_info
+        self.issues = list()
+
+    def lint(self, view, file_name):
+        """
+        This is invoked with a view that contains raw help text from the help
+        file, which is contained in the help index given in the constructor.
+
+        This will be invoked for each file to be linted.
+        """
+        pass
+
+    def add(self, view, type, file, point, msg, *args):
+        """
+        Add a result to the internal result list. point is the location that
+        is the focus of the error.
+        """
+        pos = view.rowcol(point)
+        msg = msg % args
+        self.issues.append(LintResult(type, file, pos[0] + 1, pos[1]+1, msg))
+
+    def results(self):
+        """
+        This is invoked after all calls to the lint() method have finished to
+        collect the final results of the lint operation.
+
+        This should return a list of LintResult tuples that indicate the issues
+        that have been found or an empty list if there are no issues.
+
+        The default is to return the results instance variable.
+        """
+        return self.issues
+
+
 ###----------------------------------------------------------------------------
 
 
