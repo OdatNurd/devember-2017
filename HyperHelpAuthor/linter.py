@@ -139,6 +139,39 @@ def _get_lint_file(filename):
     return None
 
 
+def _format_lint(pkg_info, issues):
+    """
+    Takes a list of LintResult issues for a package and returns back output
+    suitable for passing to _display_lint().
+    """
+    files = OrderedDict()
+    for issue in issues:
+        if issue.file not in files:
+            files[issue.file] = []
+        files[issue.file].append(issue)
+
+    output = ["Linting in help package: %s\n" % pkg_info.package]
+
+    warn = 0
+    err = 0
+    for file in files:
+        output.append("%s:" % file)
+
+        for issue in files[file]:
+            output.append("    %s %d:%d %s" % (
+                issue.type, issue.line, issue.column, issue.message))
+
+            if issue.type == "warn":
+                warn += 1
+            elif issue.type == "err":
+                err += 1
+
+        output.append("")
+
+    output.append("%d warnings, %d errors" % (warn, err))
+    return output
+
+
 def _display_lint(window, pkg_info, output):
     """
     Display the lint output provided into the given window. The output is
@@ -153,7 +186,8 @@ def _display_lint(window, pkg_info, output):
 
     settings = view.settings()
     settings.set("result_base_dir", basedir)
-    settings.set("result_file_regex", r"^\s+([^:]+):(\d+):(\d+): (.*)$")
+    settings.set("result_file_regex", r"^([^:]+):$")
+    settings.set("result_line_regex", r"^\D+(\d+):(\d+) (.*)")
 
     view.set_read_only(False)
     view.run_command("select_all")
