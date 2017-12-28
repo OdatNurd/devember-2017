@@ -201,57 +201,76 @@ def _display_lint(window, pkg_info, output):
 ###----------------------------------------------------------------------------
 
 
-class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
-    def run(self):
-        lint = _find_lint_target(self.window.active_view())
-        output = ["Linting package: %s\n" % lint.pkg_info.package]
-
-        for file in lint.files:
-            self.lint_file(lint.pkg_info, file, output)
-
-        _display_lint(self.window, lint.pkg_info, output)
-
-    def is_enabled(self):
-        return _can_lint_view(self.window.active_view())
-
-    def lint_file(self, pkg_info, target, output):
-        name = os.path.join(sublime.packages_path(), pkg_info.doc_root, target)
-        view = _get_lint_file(name)
-        if view is None:
-            return log("Unable to lint '%s' in '%s'", target, pkg_info.package,
-                       status=True)
-
-        output.append("%s:" % target)
-
-        topics = pkg_info.help_topics
-        result = OrderedDict()
+class BrokenLinkLint(LinterBase):
+    """
+    Lint one or more help files to find all links that are currently broken
+    because their targets are not known.
+    """
+    def lint(self, view, file_name):
+        topics = self.pkg_info.help_topics
 
         regions = view.find_by_selector("meta.link")
         for pos in regions:
             link = view.substr(pos)
-            if lookup_help_topic(pkg_info, link) is not None:
+            if lookup_help_topic(self.pkg_info, link) is not None:
                 continue
 
-            if link not in result:
-                result[link] = list()
+            self.add(view, "warn", file_name, pos.begin(),
+                     "link references unknown anchor '%s'" %
+                        link.replace("\t", " "))
 
-            result[link].append(view.rowcol(pos.begin()))
 
-        count = len(result)
-        if count == 0:
-            return output.append("    No problems detected\n")
+class UnlistedAnchorLint(LinterBase):
+    """
+    Lint one or more help files to find all anchors that are not currently
+    listed in the help index.
+    """
+    def lint(self, view, file_name):
+        topics = self.pkg_info.help_topics
 
-        for link in result.keys():
-            display_link = link.replace("\t", " ")
-            locs = result[link]
-            for loc in locs:
-                output.append("    %s:%d:%d: could not find '%s'" % (
-                    target, loc[0] + 1, loc[1] + 1, display_link, ))
+        regions = view.find_by_selector("meta.anchor")
+        for pos in regions:
+            link = view.substr(pos)
+            if lookup_help_topic(self.pkg_info, link) is not None:
+                continue
 
-        output.append("")
-        output.append("    %d anchor%s not in the help index" % (
-            count, "" if count == 1 else "s"))
-        output.append("")
+            self.add(view, "warn", file_name, pos.begin(),
+                     "anchor '%s' is not in the help index" %
+                        link.replace("\t", " "))
+
+
+###----------------------------------------------------------------------------
+
+
+class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
+    def run(self):
+        target = _find_lint_target(self.window.active_view())
+
+        linters = []
+        linters.append(BrokenLinkLint(target.pkg_info))
+        linters.append(UnlistedAnchorLint(target.pkg_info))
+
+        spp = sublime.packages_path()
+        doc_root = target.pkg_info.doc_root
+
+        for file in target.files:
+            view = _get_lint_file(os.path.join(spp, doc_root, file))
+            if view is not None:
+                for linter in linters:
+                    linter.lint(view, file)
+
+            else:
+                log("Unable to lint '%s' in '%s'", file, pkg_info.package)
+
+        issues = list()
+        for linter in linters:
+            issues += linter.results()
+
+        _display_lint(self.window, target.pkg_info,
+                      _format_lint(target.pkg_info, issues))
+
+    def is_enabled(self):
+        return _can_lint_view(self.window.active_view())
 
 
 ###----------------------------------------------------------------------------
