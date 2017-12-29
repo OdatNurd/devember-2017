@@ -205,8 +205,6 @@ def _display_lint(window, pkg_info, output):
     settings.set("result_line_regex", r"^\D+(\d+):(\d+) (.*)")
 
     view.set_read_only(False)
-    view.run_command("select_all")
-    view.run_command("delete_left")
     view.run_command("append", {"characters": output})
     view.set_read_only(True)
 
