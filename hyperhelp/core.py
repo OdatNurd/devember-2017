@@ -14,20 +14,6 @@ from .help import HistoryData, _update_help_history
 ###----------------------------------------------------------------------------
 
 
-def plugin_loaded():
-    """
-    On plugin load, find all help views and make sure that their link text is
-    underlined.
-    """
-    for window in sublime.windows():
-        help_view = find_help_view(window)
-        if help_view is not None:
-            _post_process_links(help_view)
-
-
-###----------------------------------------------------------------------------
-
-
 def load_help_index(index_resource):
     """
     Given an index resource that points to a hyperhelp.json file, load the help

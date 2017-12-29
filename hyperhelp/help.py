@@ -275,7 +275,8 @@ def _post_process_links(help_view):
     """
     regions = help_view.find_by_selector("meta.link")
     help_view.add_regions("_hh_links", regions, "storage",
-        flags=sublime.DRAW_SOLID_UNDERLINE|sublime.DRAW_NO_FILL|sublime.DRAW_NO_OUTLINE)
+        flags=sublime.DRAW_SOLID_UNDERLINE | sublime.PERSISTENT |
+              sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE)
 
 
 ###----------------------------------------------------------------------------
