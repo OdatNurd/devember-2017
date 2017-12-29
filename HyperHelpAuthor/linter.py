@@ -69,7 +69,7 @@ class LinterBase():
 ###----------------------------------------------------------------------------
 
 
-def _can_lint_view(view):
+def can_lint_view(view):
     """
     Determine if the provided view can be the source of a lint. To be valid
     the view must represent a hyperhelp data file that has a path rooted in the
@@ -86,12 +86,12 @@ def _can_lint_view(view):
     return False
 
 
-def _find_lint_target(view):
+def find_lint_target(view):
     """
     Examine a given view and return a LintTarget that describes what is being
     linted. None is returned if the view is not a valid lint target.
     """
-    if not _can_lint_view(view):
+    if not can_lint_view(view):
         return None
 
     name = view.file_name()
@@ -108,7 +108,7 @@ def _find_lint_target(view):
     return LintTarget("package", pkg_info, list(pkg_info.help_files))
 
 
-def _get_linters(target):
+def get_linters(target):
     """
     Given a LintTarget, return back an array of all of the linters that should
     be run for that target.
@@ -123,7 +123,7 @@ def _get_linters(target):
     return linters
 
 
-def _get_lint_file(filename):
+def get_lint_file(filename):
     """
     Return a view that that contains the contents of the provided file name.
     If the file is not aready loaded, it is loaded into a hidden view and that
@@ -154,10 +154,13 @@ def _get_lint_file(filename):
     return None
 
 
-def _format_lint(pkg_info, issues):
+def format_lint(pkg_info, issues, window=None):
     """
     Takes a list of LintResult issues for a package and returns back output
-    suitable for passing to _display_lint().
+    suitable for passing to display_lint().
+
+    If a window is provided, display_lint() is called prior to returning in
+    order to display the output first.
     """
     files = OrderedDict()
     for issue in issues:
@@ -184,10 +187,14 @@ def _format_lint(pkg_info, issues):
         output.append("")
 
     output.append("%d warnings, %d errors" % (warn, err))
+
+    if window:
+        display_lint(window, pkg_info, output)
+
     return output
 
 
-def _display_lint(window, pkg_info, output):
+def display_lint(window, pkg_info, output):
     """
     Display the lint output provided into the given window. The output is
     assumed to have been generated from the provided package, which is used to
@@ -241,15 +248,14 @@ class MissingLinkAnchorLinter(LinterBase):
 
 class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
     def run(self):
-        target = _find_lint_target(self.window.active_view())
-
-        linters = _get_linters(target)
+        target = find_lint_target(self.window.active_view())
+        linters = get_linters(target)
 
         spp = sublime.packages_path()
         doc_root = target.pkg_info.doc_root
 
         for file in target.files:
-            view = _get_lint_file(os.path.join(spp, doc_root, file))
+            view = get_lint_file(os.path.join(spp, doc_root, file))
             if view is not None:
                 for linter in linters:
                     linter.lint(view, file)
@@ -261,11 +267,10 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
         for linter in linters:
             issues += linter.results()
 
-        _display_lint(self.window, target.pkg_info,
-                      _format_lint(target.pkg_info, issues))
+        format_lint(target.pkg_info, issues, self.window)
 
     def is_enabled(self):
-        return _can_lint_view(self.window.active_view())
+        return can_lint_view(self.window.active_view())
 
 
 ###----------------------------------------------------------------------------
