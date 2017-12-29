@@ -415,7 +415,7 @@
             { "topic": "TextCommand.is_enabled" },
             { "topic": "TextCommand.is_visible" },
             { "topic": "TextCommand.description" },
-            { "topic": "TextCommand.want_event "}
+            { "topic": "TextCommand.want_event" }
         ],
     },
 
