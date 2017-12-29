@@ -108,6 +108,21 @@ def _find_lint_target(view):
     return LintTarget("package", pkg_info, list(pkg_info.help_files))
 
 
+def _get_linters(target):
+    """
+    Given a LintTarget, return back an array of all of the linters that should
+    be run for that target.
+
+    Some targets may only be run on the package as a whole while others may be
+    allowed on a file by file basis. The returned linters may also be affected
+    by user settings.
+    """
+    linters = []
+    linters.append(MissingLinkAnchorLinter(target.pkg_info))
+
+    return linters
+
+
 def _get_lint_file(filename):
     """
     Return a view that that contains the contents of the provided file name.
@@ -230,8 +245,7 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
     def run(self):
         target = _find_lint_target(self.window.active_view())
 
-        linters = []
-        linters.append(MissingLinkAnchorLinter(target.pkg_info))
+        linters = _get_linters(target)
 
         spp = sublime.packages_path()
         doc_root = target.pkg_info.doc_root
