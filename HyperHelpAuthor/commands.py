@@ -15,6 +15,9 @@ from .common import format_template, is_authoring_source
 from .common import local_help_filename, open_local_help
 from .common import open_help_index, apply_authoring_settings
 
+from .linter import can_lint_view, find_lint_target, get_linters
+from .linter import get_lint_file, format_lint
+
 
 ###----------------------------------------------------------------------------
 
@@ -448,6 +451,33 @@ class HyperhelpAuthorReloadIndexCommand(sublime_plugin.TextCommand):
         filename = os.path.realpath(filename)
         if filename.startswith(sublime.packages_path()):
             return filename
+
+
+class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
+    def run(self):
+        target = find_lint_target(self.window.active_view())
+        linters = get_linters(target)
+
+        spp = sublime.packages_path()
+        doc_root = target.pkg_info.doc_root
+
+        for file in target.files:
+            view = get_lint_file(os.path.join(spp, doc_root, file))
+            if view is not None:
+                for linter in linters:
+                    linter.lint(view, file)
+
+            else:
+                log("Unable to lint '%s' in '%s'", file, pkg_info.package)
+
+        issues = list()
+        for linter in linters:
+            issues += linter.results()
+
+        format_lint(target.pkg_info, issues, self.window)
+
+    def is_enabled(self):
+        return can_lint_view(self.window.active_view())
 
 
 ###----------------------------------------------------------------------------

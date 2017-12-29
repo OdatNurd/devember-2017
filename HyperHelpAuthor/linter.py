@@ -244,33 +244,3 @@ class MissingLinkAnchorLinter(LinterBase):
 
 
 ###----------------------------------------------------------------------------
-
-
-class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
-    def run(self):
-        target = find_lint_target(self.window.active_view())
-        linters = get_linters(target)
-
-        spp = sublime.packages_path()
-        doc_root = target.pkg_info.doc_root
-
-        for file in target.files:
-            view = get_lint_file(os.path.join(spp, doc_root, file))
-            if view is not None:
-                for linter in linters:
-                    linter.lint(view, file)
-
-            else:
-                log("Unable to lint '%s' in '%s'", file, pkg_info.package)
-
-        issues = list()
-        for linter in linters:
-            issues += linter.results()
-
-        format_lint(target.pkg_info, issues, self.window)
-
-    def is_enabled(self):
-        return can_lint_view(self.window.active_view())
-
-
-###----------------------------------------------------------------------------
