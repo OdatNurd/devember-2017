@@ -176,17 +176,22 @@ def format_lint(pkg_info, issues, window=None):
         output.append("%s:" % file)
 
         for issue in files[file]:
-            output.append("    %s %d:%d %s" % (
-                issue.type, issue.line, issue.column, issue.message))
+            issue_pos = "%d:%d" % (issue.line, issue.column)
+            output.append("    %-7s @ %-7s %s" % (
+                issue.type, issue_pos, issue.message))
 
-            if issue.type == "warn":
+            if issue.type == "warning":
                 warn += 1
-            elif issue.type == "err":
+            elif issue.type == "error":
                 err += 1
 
         output.append("")
 
-    output.append("%d warnings, %d errors" % (warn, err))
+    output.append("%d warning%s, %d error%s" % (
+        warn,
+        "" if warn == 1 else "s",
+        err,
+        "" if err == 1 else "s"))
 
     if window:
         display_lint(window, pkg_info, output)
@@ -206,10 +211,12 @@ def display_lint(window, pkg_info, output):
     if not isinstance(output, str):
         output = "\n".join(output)
 
+    view.assign_syntax(hh_syntax("HyperHelpLinter.sublime-syntax"))
+
     settings = view.settings()
     settings.set("result_base_dir", basedir)
     settings.set("result_file_regex", r"^([^:]+):$")
-    settings.set("result_line_regex", r"^\D+(\d+):(\d+) (.*)")
+    settings.set("result_line_regex", r"^.*?@ (\d+):(\d+)\s+(.*)$")
 
     view.set_read_only(False)
     view.run_command("append", {"characters": output})
@@ -239,7 +246,7 @@ class MissingLinkAnchorLinter(LinterBase):
             if view.match_selector(pos.begin(), "meta.anchor"):
                 stub = "anchor '%s' is not in the help index"
 
-            self.add(view, "warn", file_name, pos.begin(),
+            self.add(view, "warning", file_name, pos.begin(),
                      stub % link.replace("\t", " "))
 
 

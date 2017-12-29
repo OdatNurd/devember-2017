@@ -1,0 +1,45 @@
+%YAML 1.2
+---
+name: HyperHelpLintOutput
+scope: text.authoring.lint
+hidden: true
+variables:
+  lint_file: '^(.*?):$'
+  position: '(\d+):(\d+)'
+  info: '^\s+(info)\s*@ '
+  warning: '^\s+(warning)\s*@ '
+  error: '^\s+(error)\s*@ '
+
+contexts:
+  main:
+    - match: '{{lint_file}}'
+      captures:
+        1: entity.name.filename
+
+    - match: '{{info}}'
+      captures:
+        1: entity.name.constant
+      push:
+        result
+
+    - match: '{{warning}}'
+      captures:
+        1: variable.function
+      push:
+        result
+
+
+    - match: '{{error}}'
+      captures:
+        1: storage
+      push:
+        result
+
+  result:
+    - match: '{{position}}'
+      captures:
+        1: constant.numeric
+        2: constant.numeric
+
+    - match: '$'
+      pop: true
