@@ -201,7 +201,7 @@ def _display_lint(window, pkg_info, output):
 ###----------------------------------------------------------------------------
 
 
-class BrokenLinkLint(LinterBase):
+class MissingLinkAnchorLinter(LinterBase):
     """
     Lint one or more help files to find all links that are currently broken
     because their targets are not known.
@@ -209,34 +209,18 @@ class BrokenLinkLint(LinterBase):
     def lint(self, view, file_name):
         topics = self.pkg_info.help_topics
 
-        regions = view.find_by_selector("meta.link")
+        regions = view.find_by_selector("meta.link, meta.anchor")
         for pos in regions:
             link = view.substr(pos)
             if lookup_help_topic(self.pkg_info, link) is not None:
                 continue
 
-            self.add(view, "warn", file_name, pos.begin(),
-                     "link references unknown anchor '%s'" %
-                        link.replace("\t", " "))
-
-
-class UnlistedAnchorLint(LinterBase):
-    """
-    Lint one or more help files to find all anchors that are not currently
-    listed in the help index.
-    """
-    def lint(self, view, file_name):
-        topics = self.pkg_info.help_topics
-
-        regions = view.find_by_selector("meta.anchor")
-        for pos in regions:
-            link = view.substr(pos)
-            if lookup_help_topic(self.pkg_info, link) is not None:
-                continue
+            stub = "link references unknown anchor '%s'"
+            if view.match_selector(pos.begin(), "meta.anchor"):
+                stub = "anchor '%s' is not in the help index"
 
             self.add(view, "warn", file_name, pos.begin(),
-                     "anchor '%s' is not in the help index" %
-                        link.replace("\t", " "))
+                     stub % link.replace("\t", " "))
 
 
 ###----------------------------------------------------------------------------
@@ -247,8 +231,7 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
         target = _find_lint_target(self.window.active_view())
 
         linters = []
-        linters.append(BrokenLinkLint(target.pkg_info))
-        linters.append(UnlistedAnchorLint(target.pkg_info))
+        linters.append(MissingLinkAnchorLinter(target.pkg_info))
 
         spp = sublime.packages_path()
         doc_root = target.pkg_info.doc_root
