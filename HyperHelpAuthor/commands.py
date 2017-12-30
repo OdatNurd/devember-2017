@@ -468,7 +468,7 @@ class HyperhelpAuthorLint(sublime_plugin.WindowCommand):
                     linter.lint(view, file)
 
             else:
-                log("Unable to lint '%s' in '%s'", file, pkg_info.package)
+                log("Unable to lint '%s' in '%s'", file, target.pkg_info.package)
 
         issues = list()
         for linter in linters:
