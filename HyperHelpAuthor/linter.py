@@ -44,14 +44,22 @@ class LinterBase():
         """
         pass
 
-    def add(self, view, type, file, point, msg, *args):
+    def add(self, view, m_type, file, point, msg, *args):
         """
-        Add a result to the internal result list. point is the location that
-        is the focus of the error.
+        Add a result to the internal result list. point is the location that is
+        the focus of the error. If view is None, the point is ignored and the
+        issue is added at line 1, column 1.
         """
-        pos = view.rowcol(point)
+        pos = view.rowcol(point) if view is not None else (0, 0)
         msg = msg % args
-        self.issues.append(LintResult(type, file, pos[0] + 1, pos[1]+1, msg))
+        self.issues.append(LintResult(m_type, file, pos[0] + 1, pos[1]+1, msg))
+
+    def add_index(self, m_type, msg, *args):
+        """ Add a result that is focused on the help index. As there is no way
+        to know the proper location except by hand parsing the index, no view
+        is needed and the position of the issue is always row 1, column 1.
+        """
+        return self.add(None, m_type, "hyperhelp.json", 0, msg, *args)
 
     def results(self):
         """
