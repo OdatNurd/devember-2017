@@ -35,6 +35,10 @@ class LinterBase():
         self.pkg_info = pkg_info
         self.issues = list()
 
+        self.index_file = os.path.relpath(
+                              pkg_info.index_file,
+                              "Packages/%s/" % (self.pkg_info.doc_root))
+
     def lint(self, view, file_name):
         """
         This is invoked with a view that contains raw help text from the help
@@ -55,11 +59,12 @@ class LinterBase():
         self.issues.append(LintResult(m_type, file, pos[0] + 1, pos[1]+1, msg))
 
     def add_index(self, m_type, msg, *args):
-        """ Add a result that is focused on the help index. As there is no way
-        to know the proper location except by hand parsing the index, no view
-        is needed and the position of the issue is always row 1, column 1.
         """
-        return self.add(None, m_type, "hyperhelp.json", 0, msg, *args)
+        Add a result that is focused on the help index. As there is no way to
+        know the proper location except by hand parsing the index, no view is
+        needed and the position of the issue is always row 1, column 1.
+        """
+        return self.add(None, m_type, self.index_file, 0, msg, *args)
 
     def results(self):
         """
