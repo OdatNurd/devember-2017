@@ -1,11 +1,56 @@
-%hyperhelp title="Authoring Help Files" date="2017-12-14"
+%hyperhelp title="Authoring Help" date="2017-12-30"
 
-This is a stub page for authoring text. This would be the main hub for pointing
-out the commands that are available for help authoring.
+*|Authoring	Overview|*
+==================
 
-This should also link off to other pages that provide information about the
-format of help index files in the same way as the syntax file talks about the
-markup allowed.
+In order to provide help for a package, there are two key types of files that
+need to be provided, a |help	index| and a |help	source|.  Each package that
+provides help must contain an index, which tells HyperHelp about the help that
+is available in that package. Additionally, one or more help files need to be
+provided in order to provide the actual help content.
 
-Once that's done, we can strip the explanatory comments out of the help
-index.
+Both types of files are simple text files, with the index being a specially
+structures |JSON| file and the source files being plain text along with some
+simple |markup|.
+
+
+*|Help	Index|*
+----------
+
+This section would talk about the structure of the help index and the required
+keys. It should link to a file with more complete information and an example.
+
+
+*|Table	of	Contents|*
+-----------------
+
+This section would talk about the table of contents sections of the help index
+to tell you what it's for. It should also be a separate file with more complete
+information.
+
+
+*|Help	Source|*
+-----------
+
+This section would talk about help files. I think it's enough to discuss them
+briefly and then link to the |markup| page, since that tells you the structure
+of these files.
+
+
+*|Topics|*
+------
+
+This section would talk about topics and how they are created by |anchors| and
+navigated to by keyboard and by |links|. This should also perhaps link to an
+extra file that talks about the structure of a topic, which the above topics
+could link to.
+
+This should also discuss how to set up |externals| as well.
+
+
+*|Aliases|*
+-------
+
+This section is just a simple explanation that aliases provide an extra name
+for help topics that are equivalent, so that you can alter the link text used
+and still target a specific |anchor|.

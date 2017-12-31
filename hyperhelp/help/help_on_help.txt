@@ -1,85 +1,62 @@
-%hyperhelp title="How to use HyperHelp" date="2017-12-22"
+%hyperhelp title="How to use HyperHelp" date="2017-12-30"
 
 *|Introduction|*
 ============
 
-HyperHelp is an add on dependency for Sublime Text packages that provides a
-simple text based, context sensitive help system for Sublime Text. Using
-HyperHelp, package authors can easily provide help for their packages in a more
-navigable format than just a simple `README` file.
+HyperHelp is a Sublime Text dependency package that provides a simple text
+based, context sensitive help system for Sublime Text 3. Using HyperHelp,
+package author can easily provide interactive help for their packages in a way
+that is consistent with other packages using HyperHelp.
 
-HyperHelp allows you to easily add help to any package in Sublime, which
-includes your own `User` package. This allows you to create your own custom set
-of hyperlinked notes or items that you refer to often, without having to leave
-Sublime.
+HyperHelp allows you to easily add help to any package in Sublime Text, which
+includes not only third party packages but also your own `User` package. This
+allows you to create your own custom set of user specific documentation for
+reference materials you often refer to, all without having to leave Sublime.
 
 
 *|Navigating	Help|*
 ===============
 
-This tab contains a HyperHelp |Help	View| for displaying help text. Every
-window in Sublime has it's own unique view, allowing you to display help that's
-most relevant to what you're working on within that window.
+This tab contains a HyperHelp |help view| for displaying help text. Along with
+regular text, help files can also contain some simple |markup|. The most
+important things are:
 
-In most regards this is just a regular Sublime view; you can search and copy
-text as you normally would. In addition, the following keys allow you to take
-various actions:
+    * Text within `|` characters are |links|, which take you to other
+      navigation locations in a help file.
+    * Text within `*` characters are |anchors|, which provide the destination
+      that a link jumps to.
+
+The common navigation keys you're used to using in Sublime allow you to move
+around within help files. Additionally, the following additional key bindings
+are also available:
 
     <?>
-        Open the table of contents for the help currently being displayed
+        Open the |table	of	contents| for the package currently being displayed
+        so you can navigate the logical structure of the help provided.
 
     <Tab>/<Shift+Tab>
-        Move the cursor to the next or previous |anchor| within the current
-        help file
+								Move the cursor to the next or previous |anchor| within the current
+								help file. This allows you to skip between points  of interest within
+								a help file.
 
     <Enter>/<Double	Click>
-        Follow a |link| to another |anchor| somewhere in the help system
+        Follow a |link| to an |anchor| in this or some other help file.
 
     <Alt+Left>/<Alt+Right>
-    				Navigate forward and backward through the help history
-
-
-*|Links	and	Anchors|*
-=================
-
-As the name implies, HyperHelp allows help to provide hyperlinks to related
-help in other locations. This is accomplished via the |link| and |anchor|.
-
-A link is text contained with two vertical pipe (`|`) characters. Links will
-appear visually distinct from other text in the buffe, and will also appear
-underlined.
-
-Performing a <Double Click> on a link or pressing <Enter> while the cursor is
-on one will follow the link to the destination.
-
-The destination of links is the |anchor|, which may appear in the current file
-or in some other file in the help system. Anchors are text surrounded by two
-asterisk (`*`) characters.
-
-For example, |here| is a link that jumps to the anchor *here*.
-
-It is possible for a link to open up not only another help file but also
-a web page or a local package file.
-
-For example, here is a shameless plug for my other package, |OverrideAudit|
-and here is a link that will open up the |exec.py| plugin that ships with
-Sublime in `Default/exec.py`.
+    				Navigate forward and backward through the history of topics that have
+    				been visited in this |help	view|.
 
 
 *|Help	View|*
 =========
 
-HyperHelp supports a single help view for each active Sublime Text window. Each
-view is independent of the help displayed in the help views of other windows,
-allowing you to keep the help you need most in each window handy.
+Each Sublime window has it's own `help view` with a |history| independent of
+other help views in other windows. This allows you to keep the help most
+relevant to the work at hand available.
 
 A single help view always displays help provided by one package at a time,
 although you can freely switch the help package at any time in order to see
 more relevant help.
-
-Help is generally plain text with very little |markup|, keeping it as human
-readable as possible. With the help being text, most of the features of Sublime
-that you already use to move around inside of a file are available to you.
 
 
 *|Opening	Help|*
@@ -88,30 +65,31 @@ that you already use to move around inside of a file are available to you.
 Opening the initial help view in a window can be accomplished by:
 
 
-  * Selecting `HyperHelp > Packages with Help` in the main menu or command
-    palette will show you a list of all packages that currently provide help.
+		* Selecting `HyperHelp: Browse Available Help` in the command   palette or
+  		`Help > hyperhelp > Browse Available Help...` from the menu will show you
+  		a list of all packages that currently provide help.
 
   * Custom key bindings, command palette entries or menu items that use the
-    appropriate |commands| to open help for a package. Thse can be created by
+    appropriate |commands| to open help for a package. These can be created by
     you or by a package author.
 
   * Packages can open context sensitive help to provide more information on
-    their operation at any point.
+    their operation at any point. How this works is up to the package author
+    and the package in question.
 
 
 *|Next	Steps|*
 ==========
 
 Now that you know a little bit more about HyperHelp, feel free to explore
-the help system a little bit more.
+the help system a little bit and see what you can do.
 
-To start off, you might want to use the <?> key to open the |table	of	contents|
-for this help package and explore around to get more information on how things
-work.
+To begin, use the <?> key to open the |table	of	contents| for this help and
+explore around to get more information on how things work.
 
 If you're a package author you may want to check out |integration.txt| to see
 how you can integrate HyperHelp into your own package (pro tip: it's super
 easy).
 
-You may also want to check out |authoring.txt| to see more information on the
-authoring tools that are available.
+You may also want to check out |authoring.txt| to see more information on how
+to create help files and the authoring tools that are available.

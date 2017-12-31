@@ -1,23 +1,29 @@
-%hyperhelp title="Integrating HyperHelp" date="2017-12-14"
+%hyperhelp title="Integrating HyperHelp" date="2017-12-30"
 
 *|Integration|*
 ===========
 
-One of the main design goals of HyperHelp is to be as easy as possible to
-integrate into packages, to promote simple, easily accessible and useful help
-for packages from directly within Sublime Text.
+One of the core design goals of HyperHelp is to be as easy as possible to
+integrate with any package in order to promote a simple, easily accessible and
+useful help system that provided consistency for users.
 
 In the future, HyperHelp will be a dependency package that your package can
-depend on. A simple change in the Package Control channel entry for your
-package will be enough to ensure Package Control also installs HyperHelp if it
-is not already installed.
+depend on. This requires a simple change to the entry for your package in the
+Package Control Channel in order to ensure that Package Control installs
+HyperHelp if it is not already installed.
 
-Currently HyperHelp is under development as a part of Devember 2017. At the end
-of December 2017 it will be split out back into the repository of the initial
-prototype.
+There will also be a small amount of boiler plate bootstrap code to include
+somewhere in your package in order to ensure that everything is set up as it
+should be.
 
-Until that time, the package is not ready for third parties to integrate yet
-and features are still in a state of flux. However, you can check out the rest
-of this sample help for more information on what is currently possible.
+For the time being, HyperHelp is still in active development, and so it is
+still being developed as a regular package in order to facilitate development.
+
+This file will be modified to include the full integration instructions when
+development has proceeded far enough to warrant it.
+
+In the meantime, HyperHelp remains a user facing package. You can still use it
+to create help for your package; while it remains a regular package it is
+always available with no bootstrapping required.
 
 For more information on writing help text in HyperHelp, see |authoring.txt|.

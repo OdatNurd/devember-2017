@@ -115,12 +115,51 @@
                 "topic": "separators",
                 "caption": "HyperHelp Markup - Visual Separators"
             },
+            {
+                "topic": "snake_case",
+                "caption": "Sample snake_cased Anchor"
+            },
+            {
+                "topic": "periods.as.spaces",
+                "caption": "Sample periods.as.spaces Anchor"
+            },
         ],
         "style.txt": [
             "HyperHelp Style Conventions",
+
+            {
+                "topic": "style conventions",
+                "caption": "HyperHelp Style Conventions"
+            }
         ],
         "authoring.txt": [
-            "Authoring Help Files",
+            "Authoring Help",
+
+            {
+                "topic": "authoring Overview",
+                "caption": "Authoring Help"
+            },
+            {
+                "topic": "help index",
+                "caption": "Help Index Files"
+            },
+            {
+                "topic": "table of contents",
+                "caption": "Table of Contents"
+            },
+            {
+                "topic": "help source",
+                "caption": "Help Source Files"
+            },
+            {
+                "topic": "topics",
+                "caption": "Help Topics",
+                "aliases": ["topic"]
+            },
+            {
+                "topic": "aliases",
+                "caption": "Help Topic Aliases"
+            }
         ],
         "integration.txt": [
             "Developer Info: Integrating HyperHelp",
@@ -152,6 +191,14 @@
             {
                 "topic": "OverrideAudit",
             },
+        ],
+
+        "https://json.org/": [
+            "Introducing JSON",
+
+            {
+                "topic": "json"
+            }
         ],
 
         "Packages/Default/exec.py": [

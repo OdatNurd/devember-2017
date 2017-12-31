@@ -1,59 +1,40 @@
-%hyperhelp title="HyperHelp: What is it?" date="2017-12-22"
+%hyperhelp title="HyperHelp: What is it?" date="2017-12-30"
 
-*|What	Is	HyperHelp|*
+*|What	is	HyperHelp|*
 =================
 
-This package provides a very simple help system for use inside of Sublime Text,
-with a goal of being focused on content over presentation (that is, with little
-|markup|) and an ease of |integration| with packages.
+HyperHelp is a package that provides a simple text based help system to Sublime
+Text. If you consider the spectrum of package documentation to run from
+creating a simple text file (e.g. a `README` file) to creating a complete
+documentation site in HTML, HyperHelp falls somewhere between the two.
 
-The main body of most help files is just plain text, which is simply readable
-and allows for the standard operations users are used to in Sublime text, such
-as being able to search inside the help, copy help information out, and so on.
-
-For this reason HTML markup (via phantoms) is not supported currently, although
-support for simple in-line images is planned.
+The system employed by HyperHelp uses plain text files to provide help content
+(with some minimal |markup| allowed) but provides some of the power of web
+based documentation by allowing you to navigate easily from help file to help
+file and topic to topic.
 
 
 *|How	it	works|*
 ============
+
+Help files in HyperHelp are plain text with a small amount of |markup| allowed
+to add some visual distinction as well as to allow navigation by way of
+|anchors| and |links|.
+
+`Anchors` are set navigation points within help files that the help user can
+navigate between, and define |topics|. As you might expect, `links` allow the
+user to shift the help display to any `anchor`.
 
 In order to be as easy to use as possible, HyperHelp is almost entirely
 transparent to both package authors that want to add help to their packages, as
 well as the end user of the help system.
 
 This means that as a package developer you only need to follow the simple steps
-in |integration.txt| to ensure that HyperHelp will be available, and then focus
-on writing your help.
+in |integration.txt| to ensure that HyperHelp will be available to your package
+users, and then focus on writing your help.
 
-There are two main types of files that tie together in order to create a full
-help system within your package:
+Once you've followed the integration steps, you can use Sublime itself to create
+your help content, or use the `HyperHelpAuthor` package to help you create the
+appropriate files.
 
-    1. A |Help	Index| file that provides information on the help files that
-      make up your help system.
-
-    2. One or more help files that provide the actual help. Help files use some
-       simple |markup| to provide some simple structure and emphasis to your
-       help text.
-
-
-Creating a single file of each type in your package is enough to have your
-help appear within HyperHelp. More information on this process can be found in
-|authoring.txt|.
-
-
-*|Integration	with	Packages|*
-=========================
-
-HyperHelp is designed to be easy to integrate into your package so that you can
-focus on writing help and not worry about the interior details.
-
-HyperHelp is not just for package authors! As a Sublime Text user, you may find
-that there are bits and pieces of text that you find yourself always referring
-to that you would like to be able to browse.
-
-Help can be added to your `User` package just as easily as to any other,
-allowing you full control over your own personal help system.
-
-More information on how to set up a package to support HyperHelp can be found
-in |integration.txt|.
+More information on creating help files can be found in |authoring.txt|.
