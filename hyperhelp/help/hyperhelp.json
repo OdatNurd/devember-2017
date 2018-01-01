@@ -183,6 +183,35 @@
                 "caption": "Help Caption Date Format"
             },
         ],
+        "commands.txt": [
+            "HyperHelp Commands",
+
+            {
+                "topic": "command overview",
+                "caption": "Command Overview",
+                "aliases": ["commands"]
+            },
+            {
+                "topic": "hyperhelp_topic",
+                "caption": "hyperhelp_topic"
+            },
+            {
+                "topic": "hyperhelp_contents",
+                "caption": "hyperhelp_contents"
+            },
+            {
+                "topic": "hyperhelp_index",
+                "caption": "hyperhelp_index"
+            },
+            {
+                "topic": "hyperhelp_navigate",
+                "caption": "hyperhelp_navigate"
+            },
+            {
+                "topic": "hyperhelp_current_help",
+                "caption": "hyperhelp_current_help"
+            },
+        ],
     },
 
     // Optional; A dictionary that represents all of the external resources
@@ -271,6 +300,7 @@
         "help_on_help.txt",
         "introduction",
         "navigating",
+        "settings.txt",
         {
             "topic": "syntax.txt",
             "children": [
@@ -304,6 +334,7 @@
                 },
             ]
         },
+        "commands.txt",
         "style.txt",
         "authoring.txt",
         "integration.txt",
