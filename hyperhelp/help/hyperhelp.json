@@ -170,7 +170,15 @@
                 "topic": "integration.txt",
                 "caption": "Integrating HyperHelp into your Package"
             }
-        ]
+        ],
+        "settings.txt": [
+            "HyperHelp settings",
+
+            {
+                "topic": "hyperhelp_date_format",
+                "caption": "Help Caption Date Format"
+            },
+        ],
     },
 
     // Optional; A dictionary that represents all of the external resources
@@ -201,13 +209,37 @@
             }
         ],
 
+        "https://docs.python.org/3.3/": [
+            "Python 3.3.7 documentation",
+
+            {
+                "topic": "python 3.3 docs",
+            },
+        ],
+
+        "https://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior": [
+            "strftime() and strptime() Behavior",
+
+            {
+                "topic": "strftime() and strptime() Behavior",
+            },
+        ],
+
         "Packages/Default/exec.py": [
             "The default exec command",
 
             {
                 "topic": "exec.py"
             }
+        ],
 
+        "Packages/User/Preferences.sublime-settings": [
+            "User specific Sublime Settings",
+
+            {
+                "topic": "Preferences.sublime-settings",
+                "aliases": ["your user preferences"]
+            }
         ]
     },
 
