@@ -217,16 +217,16 @@ class HyperhelpCurrentHelpCommand(sublime_plugin.WindowCommand):
     This command does nothing, but it's description method tells you what
     help package is currently being browsed, if any.
     """
-    def is_enabled(self):
+    def is_enabled(self, **kwargs):
         return False
 
-    def description(self):
-        help_view = find_help_view()
-        if help_view is None:
-            return "No help currently open"
+    def description(self, no_help_fmt="No help currently visible",
+                          help_fmt="Viewing help for: '%s'"):
+        package = current_help_package(window=self.window)
+        if package is None:
+            return no_help_fmt
 
-        pkg = help_view.settings().get("_hh_pkg")
-        return "Viewing help for: %s" % pkg
+        return help_fmt % package
 
 
 ###----------------------------------------------------------------------------
