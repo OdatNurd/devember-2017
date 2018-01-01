@@ -1,4 +1,4 @@
-%hyperhelp title="How to use HyperHelp" date="2017-12-30"
+%hyperhelp title="How to use HyperHelp" date="2017-12-31"
 
 *|Introduction|*
 ============
@@ -35,16 +35,16 @@ are also available:
         so you can navigate the logical structure of the help provided.
 
     <Tab>/<Shift+Tab>
-								Move the cursor to the next or previous |anchor| within the current
-								help file. This allows you to skip between points  of interest within
-								a help file.
+        Move the cursor to the next or previous |anchor| within the current
+        help file. This allows you to skip between points  of interest within
+        a help file.
 
     <Enter>/<Double	Click>
         Follow a |link| to an |anchor| in this or some other help file.
 
     <Alt+Left>/<Alt+Right>
-    				Navigate forward and backward through the history of topics that have
-    				been visited in this |help	view|.
+        Navigate forward and backward through the |history| of topics that have
+        been visited in this |help	view|.
 
 
 *|Help	View|*
@@ -59,15 +59,35 @@ although you can freely switch the help package at any time in order to see
 more relevant help.
 
 
+*|History|*
+=======
+
+Each |help	view| records a history of the topics that it has displayed since it
+was created. This works similarly to how history works in your web browser:
+
+    * Opening a new help file adds that file to the end of the history.
+
+    * When moving backwards and forwards through the history, the file and
+      cursor position is saved before a topic is left and restored to what it
+      was when you return.
+
+It is important to note that if you move backwards through history to a
+previous topic and then navigate to a new help file, the previous history after
+the current topic is replaced with the new topic you visited.
+
+See the section on |navigating	help| for information on how to move through
+history in the help view.
+
+
 *|Opening	Help|*
 ============
 
 Opening the initial help view in a window can be accomplished by:
 
 
-		* Selecting `HyperHelp: Browse Available Help` in the command   palette or
-  		`Help > hyperhelp > Browse Available Help...` from the menu will show you
-  		a list of all packages that currently provide help.
+  * Selecting `HyperHelp: Browse Available Help` in the command   palette or
+    `Help > hyperhelp > Browse Available Help...` from the menu will show you
+    a list of all packages that currently provide help.
 
   * Custom key bindings, command palette entries or menu items that use the
     appropriate |commands| to open help for a package. These can be created by

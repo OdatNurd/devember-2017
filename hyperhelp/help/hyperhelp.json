@@ -78,6 +78,10 @@
                 "aliases": ["opening"]
             },
             {
+                "topic": "history",
+                "caption": "Help History"
+            },
+            {
                 "topic": "next steps",
                 "caption": "Next Steps"
             },
