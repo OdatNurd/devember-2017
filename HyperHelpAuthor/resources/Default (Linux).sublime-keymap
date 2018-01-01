@@ -13,11 +13,11 @@
         ]
     },
 
-    // Insert a tab when spacebar is pressed inside links and anchors
+    // Insert a tab when spacebar is pressed inside links, anchors and key binds
     {
         "keys": [" "], "command": "insert", "args": { "characters": "\t" },
         "context": [
-            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help & (meta.link | punctuation.link.end | meta.anchor | punctuation.anchor.end)" }
+            { "key": "selector", "operator": "equal", "operand": "text.hyperhelp.help & (meta.link | punctuation.link.end | meta.anchor | punctuation.anchor.end | meta.keybind | punctuation.keybind.end)" }
         ]
     },
 
